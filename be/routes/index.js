@@ -1,0 +1,27 @@
+const express = require('express')
+const bodyParser= require('body-parser')
+const app = express()
+const cors = require('express-cors')
+const fileUpload = require('express-fileupload')
+const files = require('./api/files')
+
+app.use(bodyParser.urlencoded({extended: true}))
+app.use(cors({
+  allowedOrigins: [
+    'localhost:3000',
+    'localhost:8080'
+  ]
+}))
+app.use(fileUpload(
+  /* {
+    useTempFiles: true,
+    tempFileDir: path.join(__dirname, 'temp')
+  } */
+  ))
+app.use('/api/files', files)
+
+const port = process.env.PORT || 3000
+app.listen(port, () => {
+  console.log(`listening on port ${port}... `)
+})
+  

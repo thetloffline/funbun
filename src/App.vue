@@ -1,6 +1,7 @@
 <template>
   <div id='app'>
     <router-view/>
+    {{this.$store.state.test}}
   </div>
 </template>
 

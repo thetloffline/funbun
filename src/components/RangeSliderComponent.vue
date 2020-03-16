@@ -47,9 +47,7 @@ export default {
         error: ''
       }
     },
-    async created () {
-      try { const rangeBackgrounds = document.querySelectorAll('.card.range')} catch (err) {this.error = err.message}
-    },
+    
     methods: {
       mousePressed () {
         this.clicked = true
@@ -57,29 +55,14 @@ export default {
       mouseUp() {
         this.clicked = false
       },
-    async  getValue(event) {
-        if (await this.clicked == true) {
+      async getValue(event) {
+        if (await this.clicked === true) {
           let value = parseInt(event.target.value)
           this.$emit('input', value)
           this.rangeValue = value
-          console.log(value)
-          this.setBackgroundColor(event)
         } else {return}
-      },
-      setBackgroundColor (e) {
-        let color = this.rangeValue
-        if (color < 10) {
-          color = '0'+color
-        } else if (color > 99) {
-          color = 99
-        }
-        e.target.parentNode.style.backgroundColor = `rgba(0, 255, 0, 0.${color})`
-      } 
-    }
-     ,
-       getValue () {
-      document.querySelector('input[type="range"]').addEventListener('mousemove', function () {this.looksRangeValue = this.value})
-    },    
+      }
+    }    
 }
 </script>
 

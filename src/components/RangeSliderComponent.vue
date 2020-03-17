@@ -1,68 +1,67 @@
 <template>
-  <div class="card range">
-      <div class="label-for">
-      <label>
-        {{ label }}
-      </label>
+  <div class='card range'>
+    <div class='label-for'>
+      <label>{{ label }}</label>
     </div>
     <input
-    type="range"
-    :id='id'
-    :value='value'
-    :placeholder='label'
-    min="0"
-    max="100"
-    step="1"
-    v-on:mousemove='getValue($event)'
-    v-on:input='getValue($event)'
-    v-on:mousedown='mousePressed()'
-    v-on:mouseup='mouseUp()'/>
+      type='range'
+      :id='id'
+      :value='value'
+      :placeholder='label'
+      min='0'
+      max='100'
+      step='1'
+      v-on:mousemove='getValue($event)'
+      v-on:input='getValue($event)'
+      v-on:mousedown='mousePressed()'
+      v-on:mouseup='mouseUp()'
+    />
   </div>
 </template>
 
 <script>
 export default {
-    name: 'rangeSlider',
-    props: {
-        id: {
-            type: String
-        },
-        label: {
-            type: String
-        },
-        value: {
-            type: Number,
-            required: true
-        }
+  name: 'rangeSlider',
+  props: {
+    id: {
+      type: String
     },
-    data () {
-      return {
-        clicked: {
-          type: Boolean,
-          default: false
-        },
-        rangeValue: {
-          type: Number
-        },
-        error: ''
-      }
+    label: {
+      type: String
     },
-    
-    methods: {
-      mousePressed () {
-        this.clicked = true
+    value: {
+      type: Number,
+      required: true
+    }
+  },
+  data() {
+    return {
+      clicked: {
+        type: Boolean,
+        default: false
       },
-      mouseUp() {
-        this.clicked = false
+      rangeValue: {
+        type: Number
       },
-      async getValue(event) {
-        if (await this.clicked === true) {
-          let value = parseInt(event.target.value)
-          this.$emit('input', value)
-          this.rangeValue = value
-        } else {return}
-      }
-    }    
+      error: ''
+    }
+  },
+
+  methods: {
+    mousePressed() {
+      this.clicked = true
+    },
+    mouseUp() {
+      this.clicked = false
+    },
+    async getValue(event) {
+      if ((await this.clicked) === true) {
+        let value = parseInt(event.target.value)
+        this.$emit('input', value)
+        this.rangeValue = value
+      } 
+    }
+  }
 }
 </script>
 
@@ -75,25 +74,25 @@ input[type='range'] {
   padding: 10px 0px;
   outline: none;
 }
-input[type=range] {
+input[type='range'] {
   -webkit-appearance: none;
   margin: 18px 0;
   width: 100%;
   background-color: transparent;
 }
-input[type=range]:focus {
+input[type='range']:focus {
   outline: none;
 }
-input[type=range]::-webkit-slider-runnable-track {
+input[type='range']::-webkit-slider-runnable-track {
   width: 100%;
   height: 2px;
   cursor: pointer;
   animate: 0.2s;
- /*   box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; */
-  background:midnightblue;
+  /*   box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; */
+  background: midnightblue;
 }
-input[type=range]::-webkit-slider-thumb {
- /*   box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; */
+input[type='range']::-webkit-slider-thumb {
+  /*   box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; */
   border: 1px solid #ffffff;
   height: 18px;
   width: 18px;
@@ -103,20 +102,20 @@ input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none;
   margin-top: -8px;
 }
-input[type=range]:focus::-webkit-slider-runnable-track {
+input[type='range']:focus::-webkit-slider-runnable-track {
   background: midnightblue;
   border-color: midnightblue;
 }
-input[type=range]::-moz-range-track {
+input[type='range']::-moz-range-track {
   width: 100%;
   height: 2px;
   cursor: pointer;
   animate: 0.2s;
- /*   box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; */
-  background:midnightblue;
+  /*   box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; */
+  background: midnightblue;
 }
-input[type=range]::-moz-range-thumb {
- /*   box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; */
+input[type='range']::-moz-range-thumb {
+  /*   box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; */
   border: 1px solid #ffffff;
   height: 18px;
   width: 18px;
@@ -124,7 +123,7 @@ input[type=range]::-moz-range-thumb {
   background: midnightblue;
   cursor: pointer;
 }
-input[type=range]::-ms-track {
+input[type='range']::-ms-track {
   width: 100%;
   height: 8.4px;
   cursor: pointer;
@@ -134,20 +133,20 @@ input[type=range]::-ms-track {
   border-width: 16px 0;
   color: transparent;
 }
-input[type=range]::-ms-fill-lower {
+input[type='range']::-ms-fill-lower {
   background: #2a6495;
   border: 0.2px solid #010101;
   border-radius: 2.6px;
- /*   box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; */
+  /*   box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; */
 }
-input[type=range]::-ms-fill-upper {
+input[type='range']::-ms-fill-upper {
   background: darkgrey;
   border: 0.2px solid #010101;
   border-radius: 2.6px;
- /*   box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; */
+  /*   box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; */
 }
-input[type=range]::-ms-thumb {
- /*   box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; */
+input[type='range']::-ms-thumb {
+  /*   box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; */
   border: 1px solid #ffffff;
   height: 18px;
   width: 18px;
@@ -155,10 +154,10 @@ input[type=range]::-ms-thumb {
   background: midnightblue;
   cursor: pointer;
 }
-input[type=range]:focus::-ms-fill-lower {
+input[type='range']:focus::-ms-fill-lower {
   background: midnightblue;
 }
-input[type=range]:focus::-ms-fill-upper {
+input[type='range']:focus::-ms-fill-upper {
   background: midnightblue;
 }
 </style>

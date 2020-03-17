@@ -1,151 +1,104 @@
 <template>
-<section class="full-page-container">
-    <div class="content-center">
-      <div class="add-bun">
-      
-      <transition name="fade" mode="out-in">
-        <div v-if="!clickToShowContent" class="content" key="addBuns">
-          <h1 class="section-header">Nam-Nam Add a bun</h1>
-          <div class="btn-add-round"
-          v-on:click="showContent()">+</div>
-        </div>
-
-        <div v-else class="container" key="showBuns">
-          <h1 class="section-header">Nam-Nam Add a bun</h1>
-          <div class="upload-area card"
-            v-on:click='addFiles()'>
-            <div class="upload-text">Add a photo</div>
-            <div class="btn-add-round">+</div>
+  <section class="full-page-container">
+      <div class="content-center">
+        <div class="add-bun">
+        
+        <transition name="fade" mode="out-in">
+          <div v-if="!clickToShowContent" class="content" key="addBuns">
+            <h1 class="section-header">Nam-Nam Add a bun</h1>
+            <div class="btn-add-round"
+            v-on:click="showContent()">+</div>
           </div>
 
-          <div>
-            <input
-              type='file'
-              id='files'
-              ref='fileInput'
-              accept='.jpg, jpeg'
-              v-on:change='handleFilesUpload()'
-              name='files'/>
-          </div>
-          <transition name="fade">
-            <div  class="file-listing" v-if="files">
-              <span class="file-name">
-                {{ files.name }}
-              </span>
-              <span class='remove-file'
-                v-on:click='removeFile()'>
-                Remove
-              </span>
+          <div v-else class="container" key="showBuns">
+            <h1 class="section-header">Nam-Nam Add a bun</h1>
+            <div class="upload-area card"
+              v-on:click='addFiles()'>
+              <div class="upload-text">Add a photo</div>
+              <div class="btn-add-round">+</div>
             </div>
-          </transition>
 
-          <textInputComponent
-            v-model="cafeName"
-            label="Name of the shop"
-            :required="true"
-            id="cafeName"/>
-
-          <textInputComponent
-            v-model="location"
-            label="Address of the shop"
-            :required="true"
-            id="location"/>
-
-          <rangeSLiderComponent
-            v-model="looks"
-            label='The looks'
-            :required='true'
-            id='looks'/>
-          
-          <rangeSLiderComponent
-            v-model="taste"
-            label='The taste'
-            :required='true'
-            id='taste'/>
-          
-          <rangeSLiderComponent
-            v-model="bun"
-            label='The bun'
-            :required='true'
-            id='bun'/>
-
-          <div class="btn-container">
-            <div class='btn primary-btn'
-              v-on:click='submitFiles()'>
-              Submit
+            <div>
+              <input
+                type='file'
+                id='files'
+                ref='fileInput'
+                accept='.jpg, jpeg'
+                v-on:change='handleFilesUpload()'
+                name='files'/>
             </div>
-          </div>
-          <div class="btn-container">
-            <div class='btn secondary-btn'
-              v-on:click='cancelForm()'>
-              Cancel
+            <transition name="fade">
+              <div  class="file-listing" v-if="files">
+                <span class="file-name">
+                  {{ files.name }}
+                </span>
+                <span class='remove-file'
+                  v-on:click='removeFile()'>
+                  Remove
+                </span>
+              </div>
+            </transition>
+
+            <textInputComponent
+              v-model="cafeName"
+              label="Name of the shop"
+              :required="true"
+              id="cafeName"/>
+
+            <textInputComponent
+              v-model="location"
+              label="Address of the shop"
+              :required="true"
+              id="location"/>
+
+            <rangeSLiderComponent
+              v-model="looks"
+              label='The looks'
+              :required='true'
+              id='looks'/>
+            
+            <rangeSLiderComponent
+              v-model="taste"
+              label='The taste'
+              :required='true'
+              id='taste'/>
+            
+            <rangeSLiderComponent
+              v-model="bun"
+              label='The bun'
+              :required='true'
+              id='bun'/>
+
+            <div class="btn-container">
+              <div class='btn primary-btn'
+                v-on:click='submitFiles()'>
+                Submit
+              </div>
             </div>
-          </div>
-        </div> 
-      </transition>
-
-      </div>
-    </div>
-
-<!-- 
-    <div class='cakes-container'>
-      <section class="sort-controls">
-        <h3>Sort the cakes by</h3>
-        <ul>
-          <li class="checked-sort" @click="sortCakes('taste'); selected(this)">The Taste</li>
-          <li class="checked-sort" @click="sortCakes('looks'); selected(this)">The Looks</li>
-          <li class="checked-sort" @click="sortCakes('bun'); selected(this)">The Bun</li>
-        </ul>  
-      </section>
-      <div>{{sortedCakes}}</div>
-
-      <div class='cake card'
-        v-for='(cake, index) in cakes'
-        v-bind:item='cake'
-        v-bind:index='index'
-        v-bind:key='cake._id'>
-
-        <button class='btn-small' v-on:click='deleteCake(cake._id)'>Delete</button>
-       <div class="cake-photo" :style="{ backgroundImage: `url('${getImagePath(cake.imagePath)}')` }"></div>
-         <div class="cake-stats">
-          <p class=''>{{cake.looks}}</p>
-          <p class=''>{{cake.taste}}</p>
-          <p class=''>{{cake.bun}}</p>
-          <p class='date' v-if='cake.modified'>{{cake.modified}}</p>
-          <p class='date' v-else-if='cake.createdAt'>{{cake.createdAt}}</p>
-        </div>
-        <div class="cake-description">
-          <div class='cake-cafe-name'>{{cake.cafeName}}</div>
-          <div class='cake-location'>{{cake.location}}</div>
+            <div class="btn-container">
+              <div class='btn secondary-btn'
+                v-on:click='cancelForm()'>
+                Cancel
+              </div>
+            </div>
+          </div> 
+        </transition>
 
         </div>
       </div>
-    </div>
-  
-  </div> -->
-</section>
-  <!-- cakes -->
+  </section>
 </template>
 
 <script>
 import FileUploadService from '../FileUploadService.js'
-//import cakeservice from '../cakeservice.js'
 import newImage from './newImage.vue'
 import textInputComponent from './textInputComponent.vue'
 import RangeSLiderComponent from './RangeSLiderComponent.vue'
 
 export default {
-  /*
-      Defines the data used by the component
-    */
   name: 'fileUpload',
-  props: {
-    cakes: []
-  },
   data () {
     return {
-      cakes: [],
-      sortParam: '',
       files: '',
       cafeName: '',
       location: '',
@@ -168,11 +121,6 @@ export default {
   },
 
   async created () {
-    try {
-      this.cakes = await FileUploadService.getCakes()
-    } catch (err) {
-      this.error = err.message
-    }
     try {
       this.addBunPosition = document.querySelector('.add-bun').offsetTop
       this.allCakesPosition = document.querySelector('.cakes-section-wrapper').offsetTop
@@ -210,9 +158,10 @@ export default {
       formData.append('taste', this.taste)
       formData.append('bun', this.bun)
       await FileUploadService.insertFile(formData)
+      await this.$store.dispatch['loadCakes']
+      /* .then(this.$store.getters['getAllCakes']) */
       await this.resetFormData()
       await this.showContent()
-      this.cakes = await FileUploadService.getCakes()
     },
     async cancelForm () {
       await this.resetFormData()
@@ -228,19 +177,6 @@ export default {
 
     removeFile () {
       this.files = ''
-    },
-
-    async deleteCake (id) {
-      await FileUploadService.deleteEntry(id)
-      this.cakes = await FileUploadService.getCakes()
-    },
-
-    getImagePath (path) {
-      return require('./../assets/' + path)
-    },
-
-    sortCakes (sortParam, item) {
-      this.sortParam = sortParam
     },
 
     scrollToPosition() {
@@ -273,25 +209,6 @@ export default {
     async showContent() {
       this.clickToShowContent = !this.clickToShowContent
       await this.scrollToPosition()
-    }
-  },
-  computed: {
-    stats: function () {
-      const cakesArr = this.cakes
-      const taste = cakesArr.reduce((sum, cake) => {
-        return sum + Number(cake.taste)}, 0)
-      return taste
-    },
-    sortedCakes: function () {
-      this.cakes.sort( (a,b) => {
-        if (a[this.sortParam] < b[this.sortParam]) {
-          return 1
-        }
-        if (a[this.sortParam] > b[this.sortParam]) {
-          return -1
-        }
-        else return 0
-      })
     }
   }
 }
@@ -494,7 +411,7 @@ input[type='file'] {
 }
 .file-name {
   white-space: nowrap;
-  width: 200px;
+  max-width: 200px;
   overflow: hidden;
   text-overflow: ellipsis;
   color: midnightblue;

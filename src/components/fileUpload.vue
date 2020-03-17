@@ -1,92 +1,93 @@
 <template>
   <section class="full-page-container">
-      <div class="content-center">
-        <div class="add-bun">
-        
-        <transition name="fade" mode="out-in">
-          <div v-if="!clickToShowContent" class="content" key="addBuns">
-            <h1 class="section-header">Nam-Nam Add a bun</h1>
-            <div class="btn-add-round"
-            v-on:click="showContent()">+</div>
+    <div class="content-center">
+      <div class="add-bun">
+      
+      <transition name="fade" mode="out-in">
+        <div v-if="!clickToShowContent" class="content" key="addBuns">
+          <h1 class="section-header">Nam-Nam Add a bun</h1>
+          <div class="btn-add-round"
+          v-on:click="showContent()">+</div>
+        </div>
+
+        <div v-else class="container" key="showBuns">
+          <h1 class="section-header">Nam-Nam Add a bun</h1>
+          <div class="upload-area card"
+            v-on:click='addFiles()'>
+            <div class="upload-text">Add a photo</div>
+            <div class="btn-add-round">+</div>
           </div>
 
-          <div v-else class="container" key="showBuns">
-            <h1 class="section-header">Nam-Nam Add a bun</h1>
-            <div class="upload-area card"
-              v-on:click='addFiles()'>
-              <div class="upload-text">Add a photo</div>
-              <div class="btn-add-round">+</div>
+          <div>
+            <input
+              type='file'
+              id='files'
+              ref='fileInput'
+              accept='.jpg, jpeg'
+              v-on:change='handleFilesUpload()'
+              name='files'/>
+          </div>
+          <transition name="fade">
+            <div  class="file-listing" v-if="files">
+              <span class="file-name">
+                {{ files.name }}
+              </span>
+              <span class='remove-file'
+                v-on:click='removeFile()'>
+                Remove
+              </span>
             </div>
+          </transition>
 
-            <div>
-              <input
-                type='file'
-                id='files'
-                ref='fileInput'
-                accept='.jpg, jpeg'
-                v-on:change='handleFilesUpload()'
-                name='files'/>
+          <textInputComponent
+            v-model="cafeName"
+            label="Name of the shop"
+            :required="true"
+            id="cafeName"/>
+
+          <textInputComponent
+            v-model="location"
+            label="Address of the shop"
+            :required="true"
+            id="location"/>
+
+          <rangeSLiderComponent
+            v-model="looks"
+            label='The looks'
+            :required='true'
+            id='looks'/>
+          
+          <rangeSLiderComponent
+            v-model="taste"
+            label='The taste'
+            :required='true'
+            id='taste'/>
+          
+          <rangeSLiderComponent
+            v-model="bun"
+            label='The bun'
+            :required='true'
+            id='bun'/>
+
+          <div class="btn-container">
+            <div class='btn primary-btn'
+              v-on:click='submitFiles()'>
+              Submit
             </div>
-            <transition name="fade">
-              <div  class="file-listing" v-if="files">
-                <span class="file-name">
-                  {{ files.name }}
-                </span>
-                <span class='remove-file'
-                  v-on:click='removeFile()'>
-                  Remove
-                </span>
-              </div>
-            </transition>
-
-            <textInputComponent
-              v-model="cafeName"
-              label="Name of the shop"
-              :required="true"
-              id="cafeName"/>
-
-            <textInputComponent
-              v-model="location"
-              label="Address of the shop"
-              :required="true"
-              id="location"/>
-
-            <rangeSLiderComponent
-              v-model="looks"
-              label='The looks'
-              :required='true'
-              id='looks'/>
-            
-            <rangeSLiderComponent
-              v-model="taste"
-              label='The taste'
-              :required='true'
-              id='taste'/>
-            
-            <rangeSLiderComponent
-              v-model="bun"
-              label='The bun'
-              :required='true'
-              id='bun'/>
-
-            <div class="btn-container">
-              <div class='btn primary-btn'
-                v-on:click='submitFiles()'>
-                Submit
-              </div>
+          </div>
+          <div class="btn-container">
+            <div class='btn secondary-btn'
+              v-on:click='cancelForm()'>
+              Cancel
             </div>
-            <div class="btn-container">
-              <div class='btn secondary-btn'
-                v-on:click='cancelForm()'>
-                Cancel
-              </div>
-            </div>
-          </div> 
-        </transition>
+          </div>
+        </div> 
+      </transition>
 
-        </div>
       </div>
+    </div>
   </section>
+ 
 </template>
 
 <script>
@@ -130,9 +131,14 @@ export default {
   },
 
   methods: {
+    updateDataStore () {
+      this.$store.dispatch('loadCakes')
+    },
+
     addFiles () {
       this.$refs.fileInput.click()
     },
+
     removeFiles () {
       if (document.querySelector('.remove-file')) {
         document.querySelector('.remove-file').click()
@@ -158,11 +164,11 @@ export default {
       formData.append('taste', this.taste)
       formData.append('bun', this.bun)
       await FileUploadService.insertFile(formData)
-      await this.$store.dispatch['loadCakes']
-      /* .then(this.$store.getters['getAllCakes']) */
+      await this.updateDataStore()
       await this.resetFormData()
       await this.showContent()
     },
+
     async cancelForm () {
       await this.resetFormData()
       await this.showContent()
@@ -179,7 +185,7 @@ export default {
       this.files = ''
     },
 
-    scrollToPosition() {
+    scrollToPosition () {
        if (this.clickToShowContent === true) {
         window.scrollTo({ 
           top: this.addBunPosition,
@@ -195,18 +201,9 @@ export default {
         })
         }, 500);
       }
-      /* 
-      const container = document.querySelector(`${selector}`)
-      const scrollPosition = container.offsetTop
-      console.log(container, scrollPosition)
-      console.log('pageYOffset', window.pageYOffset)
-      window.scrollTo({
-        top: scrollPosition,
-        left: 0,
-        behavior: 'smooth'
-      }) */
     },
-    async showContent() {
+
+    async showContent () {
       this.clickToShowContent = !this.clickToShowContent
       await this.scrollToPosition()
     }

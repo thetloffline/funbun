@@ -5,15 +5,15 @@
       <section class="sort-controls">
         <h3>Sort the cakes by</h3>
         <ul>
-          <li class="checked-sort" @click="sortCakes('taste')">The Taste</li>
-          <li class="checked-sort" @click="sortCakes('looks')">The Looks</li>
-          <li class="checked-sort" @click="sortCakes('bun')">The Bun</li>
+          <li class="checked-sort" @click="setSortParam('taste')">The Taste</li>
+          <li class="checked-sort" @click="setSortParam('looks')">The Looks</li>
+          <li class="checked-sort" @click="setSortParam('bun')">The Bun</li>
         </ul>  
       </section>
-      <div>{{sortedCakes}}</div>
+
       <transition-group name='fade'>
         <div class='cake card'
-          v-for='(cake, index) in cakes'
+          v-for='(cake, index) in sortedCakes'
           v-bind:item='cake'
           v-bind:index='index'
           v-bind:key='cake._id'>
@@ -21,11 +21,21 @@
           <button class='btn-small' v-on:click='deleteCake(cake._id)'>Delete</button>
           <div class="cake-photo" :style="{ backgroundImage: `url('${getImagePath(cake.imagePath)}')` }"></div>
           <div class="cake-stats">
-            <p class=''>{{cake.looks}}</p>
-            <p class=''>{{cake.taste}}</p>
-            <p class=''>{{cake.bun}}</p>
-            <p class='date' v-if='cake.modified'>{{cake.modified}}</p>
-            <p class='date' v-else-if='cake.createdAt'>{{cake.createdAt}}</p>
+            <div>
+              TASTE
+              <p class=''>{{cake.taste}}</p>
+            </div>
+            <div>
+              BUN
+              <p class=''>{{cake.bun}}</p>
+            </div>
+            <div>
+              LOOKS
+              <p class=''>{{cake.looks}}</p>
+            </div>
+
+            <!-- <p class='date' v-if='cake.modified'>{{cake.modified}}</p>
+            <p class='date' v-else-if='cake.createdAt'>{{cake.createdAt}}</p> -->
           </div>
           <div class="cake-description">
             <div class='cake-cafe-name'>{{cake.cafeName}}</div>
@@ -39,20 +49,18 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import store from '../store'
 import FileUploadService from '../FileUploadService.js'
 
 export default {
+  store,
   name: 'allCakes',
-  props: {
-  cakes: {
-    type: Array,
-    default: () => []
-  }
-},
+  props: {},
   data () {
     return {
       /* cakes: [], */
-      sortParam: '',
+      sortParam: 'taste' 
     }
   },
 /* 
@@ -63,17 +71,24 @@ export default {
       this.error = err.message
     }
   }, */
+  
+mounted () {
+    /* this.$store.dispatch('loadCakes') */
+  },
+  created () {
+    this.$store.dispatch('loadCakes')
+  },
 
   methods: {
      async deleteCake (id) {
       await FileUploadService.deleteEntry(id)
-      this.cakes = await FileUploadService.getCakes()
+      this.$store.dispatch('loadCakes')
+      //this.cakes = await FileUploadService.getCakes()
     },
     getImagePath (path) {
       return require('./../assets/' + path)
     },
-    sortCakes (sortParam, item) {
-      console.log(sortParam)
+    setSortParam (sortParam, item) {
       this.sortParam = sortParam
       //this.selected(item)
     },
@@ -89,23 +104,26 @@ export default {
     } */
   },
     computed: {
+    ...mapState([
+      'cakes'
+    ]),
     stats: function () {
       const cakesArr = this.cakes
       const taste = cakesArr.reduce((sum, cake) => {return sum + Number(cake.taste)}, 0)
       return taste
     },
     sortedCakes: function () {
-      this.cakes.sort( (a,b) => {
-        if (a[this.sortParam] < b[this.sortParam]) {return 1}
-        if (a[this.sortParam] > b[this.sortParam]) {return -1}
-        else return 0
+      const sortedCakes = this.cakes.sort( (a,b) => {
+        if (parseInt(a[this.sortParam]) < parseInt(b[this.sortParam])) { return 1 }
+        if (parseInt(a[this.sortParam]) > parseInt(b[this.sortParam])) { return -1 }
+        else { return 0 }
       })
+      return sortedCakes
     }
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
 .content-center {

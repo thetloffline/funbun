@@ -1,22 +1,27 @@
 <template>
   <div id='app'>
     <router-view/>
-    {{this.$store.state.test}}
   </div>
 </template>
 
 <script>
-import fileUpload from './components/fileUpload.vue'
+import store from './store'
+
 import landingPage from './components/LandingPage.vue'
+import fileUpload from './components/fileUpload.vue'
 import allCakes from './components/allCakes.vue'
 
 export default {
   name: 'App',
   components: {
-    fileUpload,
+    store,
     landingPage,
+    fileUpload,
     allCakes
-  }
+  },
+  created () {
+    this.$store.dispatch('loadCakes')
+  } 
 }
 </script>
 

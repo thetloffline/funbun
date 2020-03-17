@@ -72,12 +72,8 @@ export default {
     }
   }, */
   
-mounted () {
-    /* this.$store.dispatch('loadCakes') */
-  },
-  created () {
-    this.$store.dispatch('loadCakes')
-  },
+  mounted () {},
+  created () {},
 
   methods: {
      async deleteCake (id) {

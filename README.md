@@ -1,6 +1,19 @@
-> A Node + Vue.js project
+> A Node + Vue.js project using MongoDB.
 
-## Build Setup
+## Node Build Setup
+
+``` bash
+# back-end folder
+cd be/
+
+# install dependencies
+npm install
+
+# serve with hot reload at localhost:3000
+npm run dev
+```
+
+## Vue Build Setup
 
 ``` bash
 # install dependencies

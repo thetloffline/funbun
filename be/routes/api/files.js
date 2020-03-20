@@ -29,19 +29,18 @@ router.post('/', async (req, res) => {
 
   await file.mv(filePath, (err) => {
     if (err) {
-      return res.status(400).send(err)
+      return res.sendStatus(400).send(err)
     }
-    //res.status(201).send()
     console.log('file uploaded')
   })
 
   await db.insertOne(cake, (err, result) => {
     if (err) {
-      re.status(400).send()
+      res.sendStatus(400)
       return console.log(err)
     }
     console.log('saved to database::: ', cake)
-    res.status(201).send()
+    res.sendStatus(201)
   })
 })
 
@@ -51,13 +50,13 @@ router.put('/:id', async (req, res) => {
   await  cakes.updateOne( {_id: new mongodb.ObjectID(req.params.id)}, { $set : query } )
   await  cakes.updateOne( {_id: new mongodb.ObjectID(req.params.id)}, { $set : { "modified" : new Date()} } )
   console.log(query)
-  res.status(200).send()
+  res.sendStatus(200)
 })
 
 router.delete('/:id', async (req, res) => {
   const cakes = await loadCakesCollection()
   await  cakes.deleteOne({_id: new mongodb.ObjectID(req.params.id)})
-  res.status(200).send()
+  res.sendStatus(200)
 })
 
 async function loadCakesCollection() {

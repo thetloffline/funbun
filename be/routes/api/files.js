@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   const db = await loadCakesCollection()
   const file = req.files['files[0]']
-  console.log('uploadedFile:::::', file)
+  //console.log('uploadedFile:::::', file)
   const filePath = __dirname + '/../../../src/assets/' + file.name
   const fileName = file.name;
   console.log(req.body)
@@ -27,17 +27,22 @@ router.post('/', async (req, res) => {
     "bun" : req.body.bun,
     "createdAt" : new Date()
   }
+
   await file.mv(filePath, (err) => {
-    if (err)
+    if (err) {
       return res.status(500).send(err)
-    /* res.status(200).send() */
+    }
+    res.status(201).send()
     console.log('file uploaded')
   })
 
   await db.insertOne(cake, (err, result) => {
-    if (err) return console.log(err)
+    if (err) {
+      re.status(400).send()
+      return console.log(err)
+    }
     console.log('saved to database::: ', cake)
-    res.status(201).send(cake)
+    res.status(201).send()
   })
 })
 

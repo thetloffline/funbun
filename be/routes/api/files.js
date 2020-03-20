@@ -14,14 +14,13 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   const db = await loadCakesCollection()
   const file = req.files['files[0]']
-  //console.log('uploadedFile:::::', file)
   const filePath = __dirname + '/../../../src/assets/' + file.name
   const fileName = file.name;
-  console.log(req.body)
+  //console.log(req.body)
   const cake = {
     "cafeName" : req.body.cafeName,
     "location" : req.body.location,
-    "imagePath" : fileName, 
+    "imageFile" : fileName, 
     "looks" : req.body.looks,
     "taste" : req.body.taste,
     "bun" : req.body.bun,
@@ -30,9 +29,9 @@ router.post('/', async (req, res) => {
 
   await file.mv(filePath, (err) => {
     if (err) {
-      return res.status(500).send(err)
+      return res.status(400).send(err)
     }
-    res.status(201).send()
+    //res.status(201).send()
     console.log('file uploaded')
   })
 

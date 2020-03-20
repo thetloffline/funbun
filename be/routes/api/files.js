@@ -16,7 +16,6 @@ router.post('/', async (req, res) => {
   const file = req.files['files[0]']
   const filePath = __dirname + '/../../../src/assets/' + file.name
   const fileName = file.name;
-  //console.log(req.body)
   const cake = {
     "cafeName" : req.body.cafeName,
     "location" : req.body.location,

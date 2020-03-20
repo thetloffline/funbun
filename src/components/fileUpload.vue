@@ -4,10 +4,13 @@
       <div class="add-bun">
       
       <transition name="fade" mode="out-in">
-        <div v-if="!clickToShowContent" class="content" key="addBuns">
-          <h1 class="section-header">Nam-Nam Add a bun</h1>
-          <div class="btn-add-round"
-          v-on:click="showContent()">+</div>
+        <div v-if="!clickToShowContent" 
+          class="form-bun" 
+          key="addBuns">
+            <h1 class="section-header">Nam-Nam Add a bun</h1>
+            <div class="btn-add-round"
+              v-on:click="showFormContent($event)">+
+            </div>
         </div>
 
         <div v-else class="container" key="showBuns">
@@ -77,7 +80,7 @@
           </div>
           <div class="btn-container">
             <div class='btn secondary-btn'
-              v-on:click='cancelForm()'>
+              v-on:click='cancelForm($event)'>
               Cancel
             </div>
           </div>
@@ -107,10 +110,6 @@ export default {
       taste: 50,
       bun: 50,
       clickToShowContent: false,
-      divPosition: {
-        addBunPosition: '',
-        allCakesPosition: ''
-      },
       formData: '',
       error: ''
     }
@@ -121,18 +120,12 @@ export default {
     'rangeSLiderComponent' : RangeSLiderComponent
   },
 
-  async created () {
-    try {
-      this.addBunPosition = document.querySelector('.add-bun').offsetTop
-      this.allCakesPosition = document.querySelector('.cakes-section-wrapper').offsetTop
-    } catch (err) {
-      this.error = err.message
-    }
-  },
+  async created () {},
 
   methods: {
-    updateDataStore () {
-      this.$store.dispatch('loadCakes')
+     updateDataStore () {
+       this.$store.dispatch('loadCakes')
+      this.scrollingFuncion()
     },
 
     addFiles () {
@@ -155,23 +148,30 @@ export default {
     },
 
     async submitFiles () {
+        console.log('submitFiles')
       const formData = new FormData()
       let uploadedFile = this.files
-      formData.append('files[0]',uploadedFile)
+      formData.append('files[0]', uploadedFile)
       formData.append('cafeName', this.cafeName)
       formData.append('location', this.location)
       formData.append('looks', this.looks)
       formData.append('taste', this.taste)
       formData.append('bun', this.bun)
+      //this.$store.dispatch("uuskook", formData)
       await FileUploadService.insertFile(formData)
       await this.updateDataStore()
-      await this.resetFormData()
-      await this.showContent()
+      this.resetFormData()
     },
+      scrollingFuncion () {
+        console.log('scrollingFuncion')
+        this.scrollToPosition('lastCake')
+        this.toggleShowContent()
+        this.removeLastCakeStyle()
+      },
 
-    async cancelForm () {
+    async cancelForm (e) {
       await this.resetFormData()
-      await this.showContent()
+      await this.hideFormContent(e)
     },
 
     handleFilesUpload () {
@@ -185,28 +185,50 @@ export default {
       this.files = ''
     },
 
-    scrollToPosition () {
-       if (this.clickToShowContent === true) {
-        window.scrollTo({ 
-          top: this.addBunPosition,
-          left: 0,
-          behavior: 'smooth' 
+    scrollToLastCake () {
+      setTimeout(() => {
+        document.querySelector('.lastCake').scrollIntoView({
+          behavior: 'smooth',
         })
-      } if (this.clickToShowContent === false) {
-        setTimeout(() => {
-          window.scrollTo({
-            top: this.allCakesPosition,
-          left: 0,
-          behavior: 'smooth'
-        })
-        }, 500);
-      }
+      }, 600)
     },
 
-    async showContent () {
+    removeLastCakeStyle () {
+      setTimeout(() => {
+        document.querySelector('.lastCake').classList.remove('lastCake')
+      }, 3000);
+    },
+
+    scrollToPosition (selector) {
+        document.querySelector(`.${selector}`).scrollIntoView({
+          behavior: 'smooth'
+        })/* 
+      setTimeout(() => {
+      }, 100); */
+    },
+
+    async showFormContent(e) {
+      this.toggleShowContent()
+      let position = e.target.parentNode.parentNode.className
+      console.log('position', position)
+      await this.scrollToPosition(position)
+    },
+    async hideFormContent(e) {
+      this.toggleShowContent()
+      let position = e.target.parentNode.parentNode.parentNode.className
+      console.log('position', position)
+      await this.scrollToPosition(position)
+    },
+    toggleShowContent () {
       this.clickToShowContent = !this.clickToShowContent
-      await this.scrollToPosition()
     }
+/* 
+    async showFormContent (e) {
+      this.toggleShowContent()
+      const position = e.target.parentNode.parentNode.className
+      console.log('position', position)
+      await this.scrollToPosition(position)
+    } */
   }
 }
 </script>
@@ -218,7 +240,7 @@ export default {
   flex-direction: row;
   justify-content: center;
 }
-.content {
+.form-bun {
   width: 355px;
   height: 35vh;
   margin-top: 33.3vh;

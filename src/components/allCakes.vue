@@ -14,12 +14,16 @@
       <transition-group name='fade'>
         <div class='cake card'
           v-for='(cake, index) in sortedCakes'
+          v-bind:class='{lastCake : cake.isLast === true}'
           v-bind:item='cake'
           v-bind:index='index'
           v-bind:key='cake._id'>
 
-          <button class='btn-small' v-on:click='deleteCake(cake._id)'>Delete</button>
-          <div class="cake-photo" :style="{ backgroundImage: `url('${getImagePath(cake.imagePath)}')` }"></div>
+          
+          <div class="cake-photo" :style="{ backgroundImage: `url('${getImagePath(cake.imageFile)}')` }"></div>
+          
+          <button class='btn btn-small secondary-btn' v-on:click='deleteCake(cake._id)'>Delete</button>
+          
           <div class="cake-stats">
             <div>
               TASTE
@@ -60,61 +64,83 @@ export default {
   data () {
     return {
       /* cakes: [], */
-      sortParam: 'taste' 
+      sortParam: 'taste',
+      isLast: {
+        type: Boolean,
+        value: false
+      }
     }
   },
-/* 
-  async created () {
-    try {
-      this.cakes = await FileUploadService.getCakes()
-    } catch (err) {
-      this.error = err.message
-    }
-  }, */
-  
+
   mounted () {},
   created () {},
 
   methods: {
      async deleteCake (id) {
       await FileUploadService.deleteEntry(id)
-      this.$store.dispatch('loadCakes')
-      //this.cakes = await FileUploadService.getCakes()
+       //this.removeClassLastCake()
+       this.$store.dispatch('loadCakes')
     },
+
+    /* removeClassLastCake () {
+      const lastCakes = document.querySelectorAll('.cake')
+      lastCakes.forEach(element => {
+        console.log(element)
+        element.classList.remove('lastCake')
+      });
+    }, */
+
     getImagePath (path) {
-      return require('./../assets/' + path)
+      try {
+        return require('./../assets/' + path)
+      } catch (error) {
+        console.log('image replaced with placeholder. ', error.message)
+        return require('./../assets/tuuletasku.jpg')
+      }
     },
+
     setSortParam (sortParam, item) {
       this.sortParam = sortParam
       //this.selected(item)
     },
-    selected (item) {
+
+  /*   selected (item) {
       const liItems = document.querySelectorAll('.checked-sort')
       //this.clear()
       item.style.backgroundColor = 'rgba(0, 0, 0, 0.05)'
-    }/* ,
+    }, */
+    
+    /* ,
     clear() {
       liItems.forEach(element => { 
         element.style.backgroundColor = 'rgba(0, 0, 0, 0.2)'
       });
     } */
+    
   },
     computed: {
     ...mapState([
       'cakes'
     ]),
-    stats: function () {
+
+  /*   stats: function () {
       const cakesArr = this.cakes
       const taste = cakesArr.reduce((sum, cake) => {return sum + Number(cake.taste)}, 0)
       return taste
-    },
+    }, */
+
     sortedCakes: function () {
-      const sortedCakes = this.cakes.sort( (a,b) => {
-        if (parseInt(a[this.sortParam]) < parseInt(b[this.sortParam])) { return 1 }
-        if (parseInt(a[this.sortParam]) > parseInt(b[this.sortParam])) { return -1 }
-        else { return 0 }
-      })
-      return sortedCakes
+      if (this.cakes.length !== 0) {
+        const sortedCakes = this.cakes
+        sortedCakes[sortedCakes.length-1].isLast = true
+      
+        sortedCakes.sort( (a,b) => {
+          if (parseInt(a[this.sortParam]) < parseInt(b[this.sortParam])) { return 1 }
+          if (parseInt(a[this.sortParam]) > parseInt(b[this.sortParam])) { return -1 }
+          else { return 0 }
+        })
+        return sortedCakes
+      }
     }
   }
 }
@@ -194,9 +220,9 @@ export default {
 .card {
   display: flex;
   flex-direction: column;
-  
   padding: 30px;
   margin-bottom: 20px;
+  border-radius: 20px;
   box-shadow: 0 2px 7px rgba(0, 0, 0, 0.1);
   /* border-radius: 1rem;*/
   background-color: white;
@@ -220,27 +246,33 @@ export default {
   margin-top: 20vh;
 }
 .cake {
-  padding: 0 0 20px;
-  
+  padding: 0 0 12px; 
 }
-.cake:hover {
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0);
-}
+
 .cake-photo {
   background-size: cover;
   height: 65vh;
+  border-radius: 20px 20px 0 0;
 }
 .cake-stats {
+  height: 60px;
+  margin-top: 12px;
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
   flex-grow: 1;
 }
+.cake-stats>div {
+  padding: 0 30px
+}
+.cake-stats>div>p {
+  padding: 5px;
+}
 .cake-description {
   display: flex;
   flex-direction: column;
   justify-content: left;
-  padding: 10px;
+  padding: 10px 16px;
 }
 .cake-cafe-name {
   display: flex;
@@ -283,6 +315,7 @@ export default {
 }
 /* BUTTON */
 .btn-container {
+  display: flex;
   margin: 10px 0px 10px 0px;
 }
 .btn {
@@ -307,8 +340,11 @@ export default {
   box-shadow: 0 0 0 rgba(0, 0, 0, 0.3);
 }
 .btn-small {
+  position: absolute;
+  margin: 10px;
   padding: 15px;
-  color:rgba(0, 0, 0, 0.6)
+  color:rgba(0, 0, 0, 0.6);
+  font-size: 14px;
 }
 
 .fade-enter-active, .fade-leave-active {

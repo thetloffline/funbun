@@ -37,7 +37,7 @@ export default new Vuex.Store({
             const response =  await axios.post(url, payload,{ headers: {
               'Content-Type': 'multipart/form-data'
             }})
-            resolve(
+              resolve(
               this.dispatch('loadCakes')
               )
               console.log(response.data)
@@ -49,14 +49,26 @@ export default new Vuex.Store({
             })
           },
           
-          getCakes ({ commit }) {
-            this.getAllCakes()
+          async deleteOne ({ commit }, id) {
+            console.log('deleteOne')
+            return new Promise(async (resolve, reject) => { 
+              try {
+                await axios.delete(url+id)
+                resolve(
+                this.dispatch('loadCakes')
+                )
+              } catch (error) {
+                reject(
+                  'deleteOne error', error
+                  )
+              }
+            })
           }
         },
-        
+
         getters: {
           getAllCakes (state) { 
-            console.log(state.cakes)
+            this.dispatch('loadCakes')
             return state.cakes
           }
         }

@@ -19,6 +19,7 @@ router.post('/', async (req, res) => {
   const cake = {
     "cafeName" : req.body.cafeName,
     "location" : req.body.location,
+    "comment" : req.body.comment,
     "imageFile" : fileName, 
     "looks" : req.body.looks,
     "taste" : req.body.taste,

@@ -112,9 +112,8 @@ export default {
   created () {},
 
   methods: {
-     async deleteCake (id) {
-      await FileUploadService.deleteEntry(id)
-       this.$store.dispatch('loadCakes')
+    async deleteCake (id) {
+       await this.$store.dispatch("deleteOne", id)
     },
 
     getImagePath (path) {
@@ -149,6 +148,10 @@ export default {
           block: 'end'
         })
       }, 90)
+    },
+
+    likeCake (id) {
+
     }
   /*   selected (item) {
       const liItems = document.querySelectorAll('.checked-sort')
@@ -296,7 +299,7 @@ export default {
 .cake-description-container {
   display: flex;
   flex-direction: column;
-  margin: 10px 16px;
+  margin: 10px 18px;
 }
 .cake-price {
   display: flex;
@@ -307,7 +310,7 @@ export default {
 .cake-description {
   display: flex;
   flex-direction: row;
-    justify-content: flex-end;
+  justify-content: flex-end;
 }
 .cake-cafe-name {
   display: flex;
@@ -387,9 +390,7 @@ export default {
   /* margin: 12px; */
   font-size: 1rem;
   /* box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.21); */
-}
-.btn-card:hover {
-  box-shadow: 0 0px 8px rgba(0, 0, 0, 0.01);
+  transition: 0.2s all;
 }
 .btn-card-delete {
   position: absolute;
@@ -398,6 +399,9 @@ export default {
 .btn-like {
   color: white;
   background-image: linear-gradient(to right, #39dc7a , #12d67e);
+}
+.btn-like:active {
+  background-image: linear-gradient(to right, #36e97e , #12d67e);
 }
 .btn-dislike {
   color: white;

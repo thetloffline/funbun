@@ -8,7 +8,7 @@
           class="form-bun" 
           key="addBuns">
             <h1 class="section-header">Nam-Nam Add a bun</h1>
-            <div class="btn-add-round"
+            <div class="btn-round "
               v-on:click="showFormContent($event)">+
             </div>
         </div>
@@ -18,9 +18,8 @@
           <div class="upload-area card"
             v-on:click='addFiles()'>
             <div class="upload-text">Add a photo</div>
-            <div class="btn-add-round">+</div>
+            <div class="btn-round">+</div>
           </div>
-
           <div>
             <input
               type='file'
@@ -72,17 +71,23 @@
             :required='true'
             id='bun'/>
 
+            <textAreaInputComponent
+            v-model="comment"
+            label='Comment'
+            id='comment'
+            />
+
           <div class="btn-container">
-            <div class='btn primary-btn'
+            <button class='btn-form btn-primary'
               v-on:click='submitFiles()'>
               Submit
-            </div>
+            </button>
           </div>
           <div class="btn-container">
-            <div class='btn secondary-btn'
+            <button class='btn-form btn-transparent'
               v-on:click='cancelForm($event)'>
               Cancel
-            </div>
+            </button>
           </div>
         </div> 
       </transition>
@@ -97,6 +102,7 @@
 import FileUploadService from '../FileUploadService.js'
 import newImage from './newImage.vue'
 import textInputComponent from './textInputComponent.vue'
+import textAreaInputComponent from './textAreaInputComponent.vue'
 import RangeSLiderComponent from './RangeSLiderComponent.vue'
 
 export default {
@@ -104,8 +110,10 @@ export default {
   data () {
     return {
       files: '',
+      imageFile: '',
       cafeName: '',
       location: '',
+      comment: '',
       looks: 50,
       taste: 50,
       bun: 50,
@@ -117,6 +125,7 @@ export default {
   components: {
     'new-image': newImage,
     'textInputComponent': textInputComponent,
+    'textAreaInputComponent': textAreaInputComponent,
     'rangeSLiderComponent' : RangeSLiderComponent
   },
 
@@ -125,7 +134,6 @@ export default {
   methods: {
      updateDataStore () {
        this.$store.dispatch('loadCakes')
-      this.scrollingFuncion()
     },
 
     addFiles () {
@@ -142,31 +150,31 @@ export default {
       this.removeFiles()
       this.cafeName = ''
       this.location = ''
+      this.imageFile = ''
       this.looks = 50
       this.taste = 50
       this.bun = 50
     },
 
     async submitFiles () {
-        console.log('submitFiles')
       const formData = new FormData()
       let uploadedFile = this.files
       formData.append('files[0]', uploadedFile)
       formData.append('cafeName', this.cafeName)
       formData.append('location', this.location)
+      formData.append('comment', this.comment)
       formData.append('looks', this.looks)
       formData.append('taste', this.taste)
       formData.append('bun', this.bun)
-      //this.$store.dispatch("uuskook", formData)
-      await FileUploadService.insertFile(formData)
-      await this.updateDataStore()
+      await this.$store.dispatch("addNewCake", formData)
       this.resetFormData()
+      this.scrollingFuncion()
+      this.toggleShowContent()
     },
       scrollingFuncion () {
-        console.log('scrollingFuncion')
-        this.scrollToPosition('lastCake')
-        this.toggleShowContent()
-        this.removeLastCakeStyle()
+        setTimeout(() => {
+          this.scrollToPosition('lastCake')
+        }, 600);
       },
 
     async cancelForm (e) {
@@ -185,14 +193,6 @@ export default {
       this.files = ''
     },
 
-    scrollToLastCake () {
-      setTimeout(() => {
-        document.querySelector('.lastCake').scrollIntoView({
-          behavior: 'smooth',
-        })
-      }, 600)
-    },
-
     removeLastCakeStyle () {
       setTimeout(() => {
         document.querySelector('.lastCake').classList.remove('lastCake')
@@ -200,24 +200,20 @@ export default {
     },
 
     scrollToPosition (selector) {
-        document.querySelector(`.${selector}`).scrollIntoView({
-          behavior: 'smooth'
-        })/* 
-      setTimeout(() => {
-      }, 100); */
+      document.querySelector(`.${selector}`).scrollIntoView({
+        behavior: 'smooth'
+      })
     },
 
     async showFormContent(e) {
       this.toggleShowContent()
       let position = e.target.parentNode.parentNode.className
-      console.log('position', position)
-      await this.scrollToPosition(position)
+       this.scrollToPosition(position)
     },
     async hideFormContent(e) {
-      this.toggleShowContent()
       let position = e.target.parentNode.parentNode.parentNode.className
-      console.log('position', position)
-      await this.scrollToPosition(position)
+      this.toggleShowContent()
+      this.scrollToPosition(position)
     },
     toggleShowContent () {
       this.clickToShowContent = !this.clickToShowContent
@@ -246,7 +242,7 @@ export default {
   margin-top: 33.3vh;
   margin-bottom: 33.3vh;
 }
-.btn-add-round {
+.btn-round {
   display:flex;
   justify-content: center;
   flex-direction: column;
@@ -261,15 +257,15 @@ export default {
   font-size: 3rem;
   font-weight: 400;
 }
-.btn-add-round:active {
+
+.btn-round:active {
   background-color: #F2C94C;
 }
 .container {
   display: flex;
   flex-direction: column;
   justify-content:center;
-  margin: 30px 0;
-  padding-top: 10vh;
+  margin: 14vh 0;
   max-width: 700px;
   min-width: 335px;
 }
@@ -288,8 +284,9 @@ export default {
 }
 .section-header {
   width: 260px;
-  margin: auto;
-  padding: 0 0 30px 0;
+    margin: auto;
+    padding: 0 0 30px 0;
+    pointer-events: none;
 }
 h3 {
   margin: 20px 0 0;
@@ -379,37 +376,6 @@ input:focus, .btn:focus {
   padding: 20px 10px;
   margin-top: 20vh;
 }
-.cake {
-  padding: 0 0 20px;
-  margin: 20px 0;
-}
-.cake:hover {
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0);
-}
-.cake-photo {
-  background-size: cover;
-  height: 65vh;
-}
-.cake-stats {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  flex-grow: 1;
-}
-.cake-description {
-  display: flex;
-  flex-direction: column;
-  justify-content: left;
-  padding: 10px;
-}
-.cake-cafe-name {
-  display: flex;
-  font-size: 2em;
-}
-.cake-location {
-  display: flex;
-  font-size: 1.4em;
-}
 .date {
   font-size: 1em;
 }
@@ -433,7 +399,7 @@ input[type='file'] {
   max-width: 200px;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: midnightblue;
+  color: #191970;
 }
 .remove-file {
   padding: 6px 10px;
@@ -442,34 +408,6 @@ input[type='file'] {
   color: white;
   cursor: pointer;
   float: right;
-}
-.btn {
-  /* margin: 0 10px; */
-  padding: 15px;
-  font-size: 21px;
-  color: white;
-  font-weight: 500;
-  border-radius: 3rem;
-  border-style: none;
-  transition: .1s all;
-}
-.primary-btn {
-  background-image: linear-gradient(to right, #39dc7a , #20dc87);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-}
-.primary-btn:hover {
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-}
-.primary-btn:active {
-  background-image: linear-gradient(to right, #42dd80 , #24e68f);
-  box-shadow: 0 0 0 rgba(0, 0, 0, 0.3);
-}
-.secondary-btn {
-  color: midnightblue;
-}
-.btn-small {
-  padding: 15px;
-  color:rgba(0, 0, 0, 0.6)
 }
 .upload-area {
   padding: 40px;

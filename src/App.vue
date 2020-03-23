@@ -69,6 +69,7 @@ button {
   font-weight: 500;
   transition: .1s all;
   cursor: pointer;
+  outline: none;
 }
 .btn-container {
   display: flex;

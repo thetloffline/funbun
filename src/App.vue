@@ -6,7 +6,6 @@
 
 <script>
 import store from './store'
-
 import landingPage from './components/LandingPage.vue'
 import fileUpload from './components/fileUpload.vue'
 import allCakes from './components/allCakes.vue'
@@ -61,6 +60,45 @@ li {
 a {
   color: #42b983;
 }
+button {
+  border-style: none;
+  border-radius: 3rem;
+  padding: 15px;
+  color: white;
+  font-size: 21px;
+  font-weight: 500;
+  transition: .1s all;
+  cursor: pointer;
+}
+.btn-container {
+  display: flex;
+  margin: 10px 0px 10px 0px;
+}
+.btn-form {
+  width: 100%;
+}
+.btn-primary {
+  background-image: linear-gradient(to right, #39dc7a , #20dc87);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+.btn-primary:hover {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+.btn-primary:active {
+  background-image: linear-gradient(to right, #42dd80 , #24e68f);
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0.3);
+}
+.btn-transparent {
+  background-color: rgba(0, 0, 0, 0);
+  color: midnightblue;
+}
+.btn-transparent:active {
+outline: none;
+}
+.btn-transparent:hover {
+  background-color: rgba(0, 0, 0, .01);
+}
+
 .error {
   color: red;
 }

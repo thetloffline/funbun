@@ -15,36 +15,71 @@
         <div class='cake card'
           v-for='(cake, index) in sortedCakes'
           v-bind:class='{lastCake : cake.isLast === true}'
+          v-bind:id='index'
           v-bind:item='cake'
           v-bind:index='index'
-          v-bind:key='cake._id'>
+          v-bind:key='cake._id'
+          v-bind:ref="cake._id">
 
-          
           <div class="cake-photo" :style="{ backgroundImage: `url('${getImagePath(cake.imageFile)}')` }"></div>
           
-          <button class='btn btn-small secondary-btn' v-on:click='deleteCake(cake._id)'>Delete</button>
+          <button class='btn btn-card btn-card-delete' v-on:click='deleteCake(cake._id)'>Delete</button>
           
-          <div class="cake-stats">
-            <div>
+          <ul class="cake-stats">
+            <li>
               TASTE
               <p class=''>{{cake.taste}}</p>
-            </div>
-            <div>
+            </li>
+            <li>
               BUN
               <p class=''>{{cake.bun}}</p>
-            </div>
-            <div>
+            </li>
+            <li>
               LOOKS
               <p class=''>{{cake.looks}}</p>
-            </div>
+            </li>
 
             <!-- <p class='date' v-if='cake.modified'>{{cake.modified}}</p>
             <p class='date' v-else-if='cake.createdAt'>{{cake.createdAt}}</p> -->
+          </ul>
+          
+          <div class="container-rating-btns">
+            <div class="btn-container">
+              <button class='btn btn-card btn-dislike' v-on:click='dislikeCake(cake._id)'>Buns down!</button>
+            </div>
+            <div class='btn-container'>
+              <button class='btn btn-card btn-like' v-on:click='likeCake(cake._id)'>Buns up!</button>
+            </div>
           </div>
-          <div class="cake-description">
-            <div class='cake-cafe-name'>{{cake.cafeName}}</div>
-            <div class='cake-location'>{{cake.location}}</div>
+
+          <div class="cake-description-container">
+            <div class="cake-description">
+            <div class="cake-price">
+              1.75€
+            </div>
+              <div class='cake-cafe-name'>{{cake.cafeName}}</div>
+              <div v-if="cake.comment" 
+              v-on:click.prevent="toggleSelectedId(index)"
+              class="cake-comment-icon">
+              </div>
+            </div>
+            <div class="cake-location"> 
+              <div class='cake-location-icon'></div>
+              <div class='cake-location-address'>{{cake.location}}</div>
+            </div>
+          
           </div>
+          <div v-if="selectedIndex ===index && showComment"
+            class="comment-container" 
+            >
+            <div class="cake-comment">
+              <p>{{cake.createdAt}}</p>
+              <p>
+                {{cake.comment}}
+              </p>
+            </div>
+          </div>
+          
         </div>
       </transition-group>
 
@@ -63,7 +98,8 @@ export default {
   props: {},
   data () {
     return {
-      /* cakes: [], */
+      selectedIndex: '',
+      showComment: '',
       sortParam: 'taste',
       isLast: {
         type: Boolean,
@@ -78,17 +114,8 @@ export default {
   methods: {
      async deleteCake (id) {
       await FileUploadService.deleteEntry(id)
-       //this.removeClassLastCake()
        this.$store.dispatch('loadCakes')
     },
-
-    /* removeClassLastCake () {
-      const lastCakes = document.querySelectorAll('.cake')
-      lastCakes.forEach(element => {
-        console.log(element)
-        element.classList.remove('lastCake')
-      });
-    }, */
 
     getImagePath (path) {
       try {
@@ -101,9 +128,28 @@ export default {
 
     setSortParam (sortParam, item) {
       this.sortParam = sortParam
-      //this.selected(item)
+    },
+    toggleSelectedId (id) {
+      const selector = document.querySelector("#" + CSS.escape(id) )//.childNodes[12].childNodes[0].childNodes[2]
+      if (this.selectedIndex === id) {
+        this.selectedIndex = ''
+        this.showComment = false
+      } 
+      else {
+        this.showComment = true
+        this.selectedIndex = id
+        this.scrollToComment(selector)
+      }
     },
 
+    scrollToComment(selector) {
+      setTimeout(() => {  
+        selector.scrollIntoView({
+          behavior: 'smooth',
+          block: 'end'
+        })
+      }, 90)
+    }
   /*   selected (item) {
       const liItems = document.querySelectorAll('.checked-sort')
       //this.clear()
@@ -133,12 +179,13 @@ export default {
       if (this.cakes.length !== 0) {
         const sortedCakes = this.cakes
         sortedCakes[sortedCakes.length-1].isLast = true
-      
+
         sortedCakes.sort( (a,b) => {
           if (parseInt(a[this.sortParam]) < parseInt(b[this.sortParam])) { return 1 }
           if (parseInt(a[this.sortParam]) > parseInt(b[this.sortParam])) { return -1 }
           else { return 0 }
         })
+        console.log('sortedCakes')
         return sortedCakes
       }
     }
@@ -170,7 +217,6 @@ export default {
   height: 60px;
 }
 
-
 /* REFAKTOREERIDA */
 
 .content-center {
@@ -181,42 +227,21 @@ export default {
 .content {
   display: flex;
   justify-content: center;
-
   width: 355px;
   height: 33.3vh;
   margin-top: 33.3vh;
   margin-bottom: 33.3vh;
 }
-.add-icon-round {
-  display:flex;
-  justify-content: center;
-  flex-direction: column;
-  cursor: pointer;
-  margin: auto;
-  width: 56px;
-  height: 56px;
-  background-color: #F2C94C;
-  border-radius: 30px;
-  color: white;
-  font-size: 3rem;
-  font-weight: 400;
-}
-.add-icon-round:active {
-  background-color: #F9C62D;
-}
-
 .cover-img {
   height: 67vh;
   background: url(./../assets/tuuletasku.jpg) no-repeat center center ;
   background-size: cover;
 }
-
 .section-header {
   width: 260px;
   margin: auto;
   padding: 0 0 30px 0;
 }
-
 .card {
   display: flex;
   flex-direction: column;
@@ -248,15 +273,13 @@ export default {
 .cake {
   padding: 0 0 12px; 
 }
-
 .cake-photo {
   background-size: cover;
-  height: 65vh;
+  height: 50vh;
   border-radius: 20px 20px 0 0;
 }
 .cake-stats {
-  height: 60px;
-  margin-top: 12px;
+  margin: 12px 0 0;
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
@@ -265,25 +288,61 @@ export default {
 .cake-stats>div {
   padding: 0 30px
 }
-.cake-stats>div>p {
-  padding: 5px;
+.cake-stats>li>p {
+  padding: 0px 0px 5px 0px;
+  margin: auto;
+  font-weight: 700;
+}
+.cake-description-container {
+  display: flex;
+  flex-direction: column;
+  margin: 10px 16px;
+}
+.cake-price {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  font-size: 1.4rem;
 }
 .cake-description {
   display: flex;
-  flex-direction: column;
-  justify-content: left;
-  padding: 10px 16px;
+  flex-direction: row;
+    justify-content: flex-end;
 }
 .cake-cafe-name {
   display: flex;
-  font-size: 2em;
+  font-size: 1.5em;
+  font-weight: 700;
 }
 .cake-location {
   display: flex;
-  font-size: 1.4em;
+  justify-content: flex-end;
+}
+.cake-location-address {
+  display: flex;
+  flex-direction: row;
+  margin-left: 12px;
+  font-size: 1.1rem;
+}
+.cake-location-icon {
+  background: url(./../assets/location.svg) no-repeat center;
+  width: 16px;
+  background-size: 16px;
 }
 .date {
   font-size: 1em;
+}
+.cake-comment {
+  max-width: fit-content;
+  padding: 0 18px;
+  text-align: left;
+}
+.cake-comment-icon {
+  background: url(./../assets/comment.svg) no-repeat center;
+  margin-left: 12px;
+  width: 18px;
+  background-size: 18px;
+  cursor: pointer;
 }
 /* SORT */
 .sort-controls>ul, .sort-controls>ul>li  {
@@ -313,40 +372,40 @@ export default {
   background-color: rgba(0, 0, 0, 0.05);
   color: rgba(0, 0, 0, 0.5);
 }
-/* BUTTON */
-.btn-container {
+
+/* CONTAINER */
+.container-rating-btns {
   display: flex;
-  margin: 10px 0px 10px 0px;
-}
-.btn {
-  /* margin: 0 10px; */
-  padding: 15px;
-  font-size: 21px;
-  color: white;
-  font-weight: 500;
-  border-radius: 3rem;
-  border-style: none;
-  transition: .1s all;
-}
-.primary-btn {
-  background-image: linear-gradient(to right, #39dc7a , #20dc87);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-}
-.primary-btn:hover {
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-}
-.primary-btn:active {
-  background-image: linear-gradient(to right, #42dd80 , #24e68f);
-  box-shadow: 0 0 0 rgba(0, 0, 0, 0.3);
-}
-.btn-small {
-  position: absolute;
-  margin: 10px;
-  padding: 15px;
-  color:rgba(0, 0, 0, 0.6);
-  font-size: 14px;
+  flex-direction: row;
+  justify-content: space-evenly;
 }
 
+/* BUTTON */
+.btn-card {
+  padding: 12px 15px;
+  color:rgba(0, 0, 0, 0.6);
+  /* margin: 12px; */
+  font-size: 1rem;
+  /* box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.21); */
+}
+.btn-card:hover {
+  box-shadow: 0 0px 8px rgba(0, 0, 0, 0.01);
+}
+.btn-card-delete {
+  position: absolute;
+  margin: 12px;
+}
+.btn-like {
+  color: white;
+  background-image: linear-gradient(to right, #39dc7a , #12d67e);
+}
+.btn-dislike {
+  color: white;
+  background-image: linear-gradient(to right, #9fa7af, #b9b9c6);
+  /* background-color: darkgrey; */
+}
+
+/* FADE TRANSITION */
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s;
 }

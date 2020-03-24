@@ -34,7 +34,7 @@ export default new Vuex.Store({
       async addNewCake ({ commit }, payload) {
         return new Promise( async (resolve, reject) => {
           try {
-            const response =  await axios.post(url, payload,{ headers: {
+            const response = await axios.post(url, payload,{ headers: {
               'Content-Type': 'multipart/form-data'
             }})
               resolve(
@@ -50,20 +50,56 @@ export default new Vuex.Store({
           },
           
           async deleteOne ({ commit }, id) {
-            console.log('deleteOne')
             return new Promise(async (resolve, reject) => { 
               try {
                 await axios.delete(url+id)
                 resolve(
                 this.dispatch('loadCakes')
                 )
+                console.log(response)
               } catch (error) {
                 reject(
                   'deleteOne error', error
                   )
               }
             })
-          }
+          },
+
+          async rateCake ({ commit }, payload) {
+            return new Promise( async (resolve, reject) => {
+              try {
+                const url_id = url + payload.get('id')
+                const config = {
+                  headers: {
+                      'Content-Type': `text/plain; boundary=${payload._boundary}`
+                  }}
+                const response = await axios.put(url_id, payload, config)
+                resolve(
+                  this.dispatch('loadCakes')
+                )
+              } catch (error) {
+                reject('rateCake', error)
+              }
+            })
+          },
+
+           rateCake2 ({ commit }, payload) {
+            const url_id = url + payload.get('id')
+            const config = { 
+              headers: {
+                  'Content-Type': `text/plain; boundary=${payload._boundary}`
+              }
+            }
+            const response = axios.put(url_id, payload, config)
+              .then(data => {
+                console.log('data', data)
+              })
+              .then(() => this.dispatch('loadCakes'))
+              .catch(error => {
+                console.log(error)
+              }) 
+            }
+          
         },
 
         getters: {

@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import store from './store'
+import store from './store/store'
 import landingPage from './components/LandingPage.vue'
 import fileUpload from './components/fileUpload.vue'
 import allCakes from './components/allCakes.vue'

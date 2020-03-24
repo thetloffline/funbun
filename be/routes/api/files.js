@@ -47,11 +47,7 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     const cakes = await loadCakesCollection()
-   /*  let query = req.body.taste
-    console.log(query) */
-    console.log(req.params.id)
     const result = await cakes.updateOne( {_id: new mongodb.ObjectID(req.params.id)}, { $set : {'taste' : req.body.taste+''}} )
-    console.log(result)
     res.sendStatus(200)
     //await  cakes.updateOne( {_id: req.params.id}, { $set : { "modified" : new Date()} } )
   } catch (error) {
@@ -63,7 +59,6 @@ router.delete('/:id', async (req, res) => {
   try {
     const cakes = await loadCakesCollection()
     await  cakes.deleteOne({_id: new mongodb.ObjectID(req.params.id)})
-    console.log('res')
     res.sendStatus(200)
   } catch (error) {
     console.log(error)

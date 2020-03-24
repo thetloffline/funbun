@@ -45,10 +45,10 @@
           
           <div class="container-rating-btns">
             <div class="btn-container">
-              <button class='btn btn-card btn-dislike' v-on:click='dislikeCake(cake._id)'>Buns down!</button>
+              <button class='btn btn-card btn-dislike' v-on:click.once='rateCake(cake, -5)'>Buns down!</button>
             </div>
             <div class='btn-container'>
-              <button class='btn btn-card btn-like' v-on:click='likeCake(cake._id)'>Buns up!</button>
+              <button class='btn btn-card btn-like' v-on:click.once='rateCake(cake, 5)'>Buns up!</button>
             </div>
           </div>
 
@@ -89,7 +89,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import store from '../store'
+import store from '../store/store'
 import FileUploadService from '../FileUploadService.js'
 
 export default {
@@ -150,8 +150,12 @@ export default {
       }, 90)
     },
 
-    likeCake (id) {
-
+     rateCake (cake, val) {
+      cake.taste = Number.parseInt(cake.taste) + Number.parseInt(val)
+      const formData = new FormData()
+      formData.append('taste', cake.taste)
+      formData.append('id', cake._id)
+      this.$store.dispatch('rateCake', formData)
     }
   /*   selected (item) {
       const liItems = document.querySelectorAll('.checked-sort')
@@ -299,7 +303,7 @@ export default {
 .cake-description-container {
   display: flex;
   flex-direction: column;
-  margin: 10px 18px;
+  margin: 18px;
 }
 .cake-price {
   display: flex;

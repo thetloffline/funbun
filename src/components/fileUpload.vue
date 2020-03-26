@@ -20,6 +20,7 @@
             <div class="upload-text">Add a photo</div>
             <div class="btn-round">+</div>
           </div>
+          
           <div>
             <input
               type='file'
@@ -29,6 +30,7 @@
               v-on:change='handleFilesUpload()'
               name='files'/>
           </div>
+
           <transition name="fade">
             <div  class="file-listing" v-if="files">
               <span class="file-name">
@@ -41,37 +43,41 @@
             </div>
           </transition>
 
-          <textInputComponent
+          <autocomplete 
+            :suggestions="getCafeNames" 
             v-model="cafeName"
             label="Name of the shop"
             :required="true"
-            id="cafeName"/>
+            id="location"
+          />
 
-          <textInputComponent
+          <autocomplete
+            :suggestions="getCafeLocations" 
             v-model="location"
             label="Address of the shop"
             :required="true"
-            id="location"/>
+            id="location"
+          />
 
-          <rangeSLiderComponent
+          <rangeSLider
             v-model="looks"
             label='The looks'
             :required='true'
             id='looks'/>
           
-          <rangeSLiderComponent
+          <rangeSLider
             v-model="taste"
             label='The taste'
             :required='true'
             id='taste'/>
           
-          <rangeSLiderComponent
+          <rangeSLider
             v-model="bun"
             label='The bun'
             :required='true'
             id='bun'/>
 
-            <textAreaInputComponent
+            <textArea
             v-model="comment"
             label='Comment'
             id='comment'
@@ -91,7 +97,7 @@
           </div>
         </div> 
       </transition>
-
+        
       </div>
     </div>
   </section>
@@ -99,19 +105,20 @@
 </template>
 
 <script>
-import FileUploadService from '../FileUploadService.js'
-import newImage from './newImage.vue'
-import textInputComponent from './textInputComponent.vue'
+import { mapGetters } from 'vuex'
+import store from '../store/store'
 import textAreaInputComponent from './textAreaInputComponent.vue'
 import RangeSLiderComponent from './RangeSLiderComponent.vue'
+import AutocompleteComponent from './AutocompleteComponent.vue'
 
 export default {
+  
   name: 'fileUpload',
   data () {
     return {
       files: '',
       imageFile: '',
-      cafeName: '',
+      cafeName:  '',
       location: '',
       comment: '',
       looks: 50,
@@ -119,22 +126,27 @@ export default {
       bun: 50,
       clickToShowContent: false,
       formData: '',
+      value: '',
       error: ''
     }
   },
   components: {
-    'new-image': newImage,
-    'textInputComponent': textInputComponent,
-    'textAreaInputComponent': textAreaInputComponent,
-    'rangeSLiderComponent' : RangeSLiderComponent
+    'autocomplete': AutocompleteComponent,
+    'textArea': textAreaInputComponent,
+    'rangeSLider' : RangeSLiderComponent
   },
 
-  async created () {},
+  mounted () {},
+  created () {},
+
+  computed: {
+    ...mapGetters([
+      'getCafeNames',
+      'getCafeLocations'
+    ]),
+  },
 
   methods: {
-     updateDataStore () {
-       this.$store.dispatch('loadCakes')
-    },
 
     addFiles () {
       this.$refs.fileInput.click()
@@ -171,11 +183,12 @@ export default {
       this.scrollingFuncion()
       this.toggleShowContent()
     },
-      scrollingFuncion () {
-        setTimeout(() => {
-          this.scrollToPosition('lastCake')
-        }, 600);
-      },
+
+    scrollingFuncion () {
+      setTimeout(() => {
+        this.scrollToPosition('lastCake')
+      }, 600);
+    },
 
     async cancelForm (e) {
       await this.resetFormData()

@@ -3,9 +3,8 @@
     <div class='content-center'>
       <div class='content'>
         <div class='poster'>
-            <h1>{{msg}}</h1>
+          <h1>{{msg}}</h1>
         </div>
-        <div class='arrow'></div>
       </div>
         <fileUpload/>
         <allCakes/>
@@ -31,7 +30,6 @@ export default {
 }
 </script>
 
-<!-- Add 'scoped' attribute to limit CSS to this component only -->
 <style scoped>
 
 .content-center {

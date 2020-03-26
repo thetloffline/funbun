@@ -4,7 +4,9 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from './store/store'
-
+import landingPage from './components/LandingPage.vue'
+import fileUpload from './components/fileUpload.vue'
+import allCakes from './components/allCakes.vue'
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
@@ -12,6 +14,15 @@ new Vue({
   el: '#app',
   router,
   store,
-  components: { App },
-  template: '<App/>'
+  components: { 
+    App,
+    landingPage,
+    fileUpload,
+    allCakes 
+  },
+  template: '<App/>',
+
+  created () {
+    this.$store.dispatch('loadCakes')
+  } 
 })

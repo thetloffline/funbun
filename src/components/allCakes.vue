@@ -203,8 +203,6 @@ export default {
             else { return 0 }
           }
         })
-        console.log('sortedCakes',this.sortParam)
-        console.log('compareSort',this.compareSort)
         return sortedCakes
       }
     }

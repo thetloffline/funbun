@@ -126,8 +126,14 @@ export default {
 }
 li {
   cursor: pointer;
+  margin: 0;
+
 }
 li:hover, li:focus, li:active {
+  background-color: midnightblue;
+  color: white;
+}
+.active {
   background-color: midnightblue;
   color: white;
 }

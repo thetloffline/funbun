@@ -103,9 +103,12 @@ export default new Vuex.Store({
         },
 
         getters: {
-          getAllCakes (state) { 
-            this.dispatch('loadCakes')
-            return state.cakes
-          }
+          getCafeNames ( state) { 
+            return state.cakes.map(cake => cake.cafeName)
+          },
+
+          getCafeLocations ( state) { 
+            return state.cakes.map(cake => cake.location)
+          } 
         }
       })

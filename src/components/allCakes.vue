@@ -8,6 +8,7 @@
           <li class="checked-sort" @click="setSortParam('taste')">The Taste</li>
           <li class="checked-sort" @click="setSortParam('looks')">The Looks</li>
           <li class="checked-sort" @click="setSortParam('bun')">The Bun</li>
+          <li class="checked-sort" @click="setSortParam('price')">€</li>
         </ul>  
       </section>
 
@@ -54,8 +55,8 @@
 
           <div class="cake-description-container">
             <div class="cake-description">
-            <div class="cake-price">
-              1.75€
+            <div v-if="cake.price" class="cake-price">
+              {{cake.price}} €
             </div>
               <div class='cake-cafe-name'>{{cake.cafeName}}</div>
               <div v-if="cake.comment" 
@@ -101,6 +102,7 @@ export default {
       selectedIndex: '',
       showComment: '',
       sortParam: 'taste',
+      compareSort: 0,
       isLast: {
         type: Boolean,
         value: false
@@ -127,7 +129,9 @@ export default {
 
     setSortParam (sortParam, item) {
       this.sortParam = sortParam
+      this.compareSort ++
     },
+
     toggleSelectedId (id) {
       const selector = document.querySelector("#" + CSS.escape(id) )//.childNodes[12].childNodes[0].childNodes[2]
       if (this.selectedIndex === id) {
@@ -186,13 +190,21 @@ export default {
       if (this.cakes.length !== 0) {
         const sortedCakes = this.cakes
         sortedCakes[sortedCakes.length-1].isLast = true
-
+        
         sortedCakes.sort( (a,b) => {
-          if (parseInt(a[this.sortParam]) < parseInt(b[this.sortParam])) { return 1 }
-          if (parseInt(a[this.sortParam]) > parseInt(b[this.sortParam])) { return -1 }
-          else { return 0 }
+          if (this.compareSort % 2 ) {
+            if (parseInt(a[this.sortParam]) < parseInt(b[this.sortParam])) { return -1 }
+            if (parseInt(a[this.sortParam]) > parseInt(b[this.sortParam])) { return 1 }
+            else { return 0 }
+          }
+          else {
+            if (parseInt(a[this.sortParam]) < parseInt(b[this.sortParam])) { return 1 }
+            if (parseInt(a[this.sortParam]) > parseInt(b[this.sortParam])) { return -1 }
+            else { return 0 }
+          }
         })
-        console.log('sortedCakes')
+        console.log('sortedCakes',this.sortParam)
+        console.log('compareSort',this.compareSort)
         return sortedCakes
       }
     }

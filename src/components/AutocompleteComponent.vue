@@ -55,7 +55,9 @@ export default {
       required: true
     },
 
-    value: ""
+    value: {
+      type: String
+    }
   },
 
   computed: {

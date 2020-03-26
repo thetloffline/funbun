@@ -20,7 +20,7 @@
             <div class="upload-text">Add a photo</div>
             <div class="btn-round">+</div>
           </div>
-          
+
           <div>
             <input
               type='file'
@@ -48,7 +48,7 @@
             v-model="cafeName"
             label="Name of the shop"
             :required="true"
-            id="location"
+            id="cafeName"
           />
 
           <autocomplete
@@ -57,6 +57,14 @@
             label="Address of the shop"
             :required="true"
             id="location"
+          />
+
+          <autocomplete
+            :suggestions="getCakeprices" 
+            v-model="price"
+            label="Price"
+            :required="true"
+            id="price"
           />
 
           <rangeSLider
@@ -120,6 +128,7 @@ export default {
       imageFile: '',
       cafeName:  '',
       location: '',
+      price: '',
       comment: '',
       looks: 50,
       taste: 50,
@@ -142,7 +151,8 @@ export default {
   computed: {
     ...mapGetters([
       'getCafeNames',
-      'getCafeLocations'
+      'getCafeLocations',
+      'getCakeprices'
     ]),
   },
 
@@ -162,6 +172,7 @@ export default {
       this.removeFiles()
       this.cafeName = ''
       this.location = ''
+      this.price = ''
       this.imageFile = ''
       this.looks = 50
       this.taste = 50
@@ -174,6 +185,7 @@ export default {
       formData.append('files[0]', uploadedFile)
       formData.append('cafeName', this.cafeName)
       formData.append('location', this.location)
+      formData.append('price', this.price)
       formData.append('comment', this.comment)
       formData.append('looks', this.looks)
       formData.append('taste', this.taste)

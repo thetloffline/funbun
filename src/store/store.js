@@ -104,15 +104,15 @@ export default new Vuex.Store({
 
         getters: {
           getCafeNames ( state) { 
-            return state.cakes.map(cake => cake.cafeName)
+            return [...new Set(state.cakes.map(cake => cake.cafeName))] 
           },
 
           getCafeLocations ( state) { 
-            return state.cakes.map(cake => cake.location)
+            return [...new Set(state.cakes.map(cake => cake.location))]
           },
 
           getCakeprices ( state) { 
-            return state.cakes.map(cake => cake.price)
+            return [...new Set(state.cakes.map(cake => cake.price))]
           } 
         }
       })

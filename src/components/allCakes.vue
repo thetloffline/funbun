@@ -3,12 +3,21 @@
     <div class='cakes-container'>
         <h1>Bun stats</h1>
       <section class="sort-controls">
-        <h3>Sort the cakes by</h3>
-        <ul>
-          <li class="checked-sort" @click="setSortParam('taste')">The Taste</li>
-          <li class="checked-sort" @click="setSortParam('looks')">The Looks</li>
-          <li class="checked-sort" @click="setSortParam('bun')">The Bun</li>
-          <li class="checked-sort" @click="setSortParam('price')">€</li>
+        <!-- <h3>Sort the cakes by</h3> -->
+        <ul class="sort-bts">
+          <li class="btn-container" >
+            <button class="btn btn-card btn-transparent btn-sort btn-selected" id="data-sort-taste" @click="setSortParam('taste', $event), setActiveClass($event.target)">Taste</button>
+            </li>
+          <li class="btn-container">
+            <button class="btn btn-card btn-transparent btn-sort" id="data-sort-looks" @click="setSortParam('looks', $event), setActiveClass($event.target)">Looks</button>
+            </li>
+          <li class="btn-container">
+            <button class="btn btn-card btn-transparent btn-sort" id="data-sort-bun" @click="setSortParam('bun', $event), setActiveClass($event.target)">Bun</button>
+            </li>
+          <li class="btn-container">
+            <button class="btn btn-card btn-transparent btn-sort" id="data-sort-price" @click="setSortParam('price', $event), setActiveClass($event.target)">€</button>
+            </li>
+        
         </ul>  
       </section>
 
@@ -60,7 +69,7 @@
             </div>
               <div class='cake-cafe-name'>{{cake.cafeName}}</div>
               <div v-if="cake.comment" 
-              v-on:click.prevent="toggleSelectedId(index)"
+              v-on:click.prevent="toggleSelectedCommentId(index)"
               class="cake-comment-icon">
               </div>
             </div>
@@ -70,7 +79,7 @@
             </div>
           
           </div>
-          <div v-if="selectedIndex ===index && showComment"
+          <div v-if="selectedCommentIndex ===index && showComment"
             class="comment-container" 
             >
             <div class="cake-comment">
@@ -99,10 +108,14 @@ export default {
   props: {},
   data () {
     return {
-      selectedIndex: '',
+      selectedCommentIndex: '',
       showComment: '',
+      sortAsc: {
+        type: Boolean,
+        value: true
+        },
+      selectedBtn: null,
       sortParam: 'taste',
-      compareSort: 0,
       isLast: {
         type: Boolean,
         value: false
@@ -111,7 +124,9 @@ export default {
   },
 
   mounted () {},
-  created () {},
+  created () {
+    const sortButtons = document.querySelectorAll('.btn-sort')
+  },
 
   methods: {
     async deleteCake (id) {
@@ -127,20 +142,31 @@ export default {
       }
     },
 
-    setSortParam (sortParam, item) {
-      this.sortParam = sortParam
-      this.compareSort ++
+    setActiveClass (e) {
+      const activeBtns = document.querySelectorAll('.btn-selected')
+      activeBtns[0].className = activeBtns[0].className.replace('btn-selected', '')
+      e.classList.add('btn-selected')
     },
 
-    toggleSelectedId (id) {
+    setSortParam (sortParam, e) {
+      this.sortParam = sortParam
+    
+      //check if same sort button is pressed
+      if (this.selectedBtn === e.target.id) {
+        this.sortAsc.value = !this.sortAsc.value
+      } 
+      this.selectedBtn = e.target.id
+    },
+
+    toggleSelectedCommentId (id) {
       const selector = document.querySelector("#" + CSS.escape(id) )//.childNodes[12].childNodes[0].childNodes[2]
-      if (this.selectedIndex === id) {
-        this.selectedIndex = ''
+      if (this.selectedCommentIndex === id) {
+        this.selectedCommentIndex = ''
         this.showComment = false
       } 
       else {
         this.showComment = true
-        this.selectedIndex = id
+        this.selectedCommentIndex = id
         this.scrollToComment(selector)
       }
     },
@@ -154,56 +180,29 @@ export default {
       }, 90)
     },
 
-     rateCake (cake, val) {
+    rateCake (cake, val) {
       cake.taste = Number.parseInt(cake.taste) + Number.parseInt(val)
       const formData = new FormData()
       formData.append('taste', cake.taste)
       formData.append('id', cake._id)
       this.$store.dispatch('rateCake', formData)
     }
-  /*   selected (item) {
-      const liItems = document.querySelectorAll('.checked-sort')
-      //this.clear()
-      item.style.backgroundColor = 'rgba(0, 0, 0, 0.05)'
-    }, */
-    
-    /* ,
-    clear() {
-      liItems.forEach(element => { 
-        element.style.backgroundColor = 'rgba(0, 0, 0, 0.2)'
-      });
-    } */
-    
   },
     computed: {
     ...mapState([
       'cakes'
     ]),
 
-  /*   stats: function () {
-      const cakesArr = this.cakes
-      const taste = cakesArr.reduce((sum, cake) => {return sum + Number(cake.taste)}, 0)
-      return taste
-    }, */
-
     sortedCakes: function () {
       if (this.cakes.length !== 0) {
         const sortedCakes = this.cakes
+
+        //identify latest created cake
         sortedCakes[sortedCakes.length-1].isLast = true
         
-        sortedCakes.sort( (a,b) => {
-          if (this.compareSort % 2 ) {
-            if (parseInt(a[this.sortParam]) < parseInt(b[this.sortParam])) { return -1 }
-            if (parseInt(a[this.sortParam]) > parseInt(b[this.sortParam])) { return 1 }
-            else { return 0 }
-          }
-          else {
-            if (parseInt(a[this.sortParam]) < parseInt(b[this.sortParam])) { return 1 }
-            if (parseInt(a[this.sortParam]) > parseInt(b[this.sortParam])) { return -1 }
-            else { return 0 }
-          }
-        })
-        return sortedCakes
+        //toggle sort DESC ASC 
+        let ascDesc = this.sortAsc.value ? -1 : 1;
+          return sortedCakes.sort((a, b) => ascDesc * parseInt(a[this.sortParam].localeCompare(b[this.sortParam])));
       }
     }
   }
@@ -221,17 +220,6 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-.poster {
-  width: 260px;
-  margin-top: 11.5vh;
-  margin-bottom: 10.5vh;
-  text-align: left;
-}
-.arrow {
-  background: url(./../assets/arrow.svg) no-repeat center center ;
-  background-size: 30px;
-  height: 60px;
 }
 
 /* REFAKTOREERIDA */
@@ -286,6 +274,7 @@ export default {
   flex-direction: column;
   padding: 20px 10px;
   margin-top: 20vh;
+  min-width: 350px;
 }
 .cake {
   padding: 0 0 12px; 
@@ -299,7 +288,7 @@ export default {
   margin: 12px 0 0;
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: space-around;
   flex-grow: 1;
 }
 .cake-stats>div {
@@ -313,7 +302,7 @@ export default {
 .cake-description-container {
   display: flex;
   flex-direction: column;
-  margin: 18px;
+  margin: 24px;
 }
 .cake-price {
   display: flex;
@@ -367,27 +356,16 @@ export default {
   flex-direction: row;
 }
 .sort-controls>ul {
-  justify-content: space-evenly;
+  justify-content: space-around;
   margin-top: 5vh;
 }
-.sort-controls>ul>li {
+.btn-sort {
   flex-grow: 1;
   justify-content: center;
-  background-color: rgba(0, 0, 0, 0.05);
-  padding: 20px;
-  font-size: 18px;
-  font-weight: 700;
-  color: rgba(0, 0, 0, 0.6);
+  color: midnightblue;
   transition: 0.2s all;
   margin: 0;
-}
-.sort-controls>ul>li:hover {
-  cursor: pointer;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-}
-.sort-controls>ul>li:active {
-  background-color: rgba(0, 0, 0, 0.05);
-  color: rgba(0, 0, 0, 0.5);
+  font-size: 1.2rem !important;
 }
 
 /* CONTAINER */
@@ -399,8 +377,8 @@ export default {
 
 /* BUTTON */
 .btn-card {
-  padding: 12px 15px;
-  color:rgba(0, 0, 0, 0.6);
+  padding: 12px 18px;
+  color: midnightblue;
   /* margin: 12px; */
   font-size: 1rem;
   /* box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.21); */
@@ -409,6 +387,7 @@ export default {
 .btn-card-delete {
   position: absolute;
   margin: 12px;
+  color: rgba(0, 0, 0, 0.6);
 }
 .btn-like {
   color: white;
@@ -421,6 +400,10 @@ export default {
   color: white;
   background-image: linear-gradient(to right, #9fa7af, #b9b9c6);
   /* background-color: darkgrey; */
+}
+.btn-selected {
+  color: white;
+  background-color: midnightblue;
 }
 
 /* FADE TRANSITION */

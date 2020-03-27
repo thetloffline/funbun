@@ -6,16 +6,16 @@
         <!-- <h3>Sort the cakes by</h3> -->
         <ul class="sort-bts">
           <li class="btn-container" >
-            <button class="btn btn-card btn-transparent btn-sort btn-selected" id="data-sort-taste" @click="setSortParam('taste', $event), setActiveClass($event.target)">Taste</button>
+            <button class="btn-card btn-transparent btn-sort btn-selected" id="data-sort-taste" @click="setSortParam('taste', $event), setActiveClass($event.target)">Taste</button>
             </li>
           <li class="btn-container">
-            <button class="btn btn-card btn-transparent btn-sort" id="data-sort-looks" @click="setSortParam('looks', $event), setActiveClass($event.target)">Looks</button>
+            <button class="btn-card btn-transparent btn-sort" id="data-sort-looks" @click="setSortParam('looks', $event), setActiveClass($event.target)">Looks</button>
             </li>
           <li class="btn-container">
-            <button class="btn btn-card btn-transparent btn-sort" id="data-sort-bun" @click="setSortParam('bun', $event), setActiveClass($event.target)">Bun</button>
+            <button class="btn-card btn-transparent btn-sort" id="data-sort-bun" @click="setSortParam('bun', $event), setActiveClass($event.target)">Bun</button>
             </li>
           <li class="btn-container">
-            <button class="btn btn-card btn-transparent btn-sort" id="data-sort-price" @click="setSortParam('price', $event), setActiveClass($event.target)">€</button>
+            <button class="btn-card btn-transparent btn-sort" id="data-sort-price" @click="setSortParam('price', $event), setActiveClass($event.target)">€</button>
             </li>
         
         </ul>  
@@ -33,7 +33,7 @@
 
           <div class="cake-photo" :style="{ backgroundImage: `url('${getImagePath(cake.imageFile)}')` }"></div>
           
-          <button class='btn btn-card btn-card-delete' v-on:click='deleteCake(cake._id)'>Delete</button>
+          <button class='btn-card btn-card-delete' v-on:click='deleteCake(cake._id)'>Delete</button>
           
           <ul class="cake-stats">
             <li>
@@ -55,10 +55,10 @@
           
           <div class="container-rating-btns">
             <div class="btn-container">
-              <button class='btn btn-card btn-dislike' v-on:click.once='rateCake(cake, -5)'>Buns down!</button>
+              <button class='btn-card btn-dislike' v-on:click.once='rateCake(cake, -5)'>Buns down!</button>
             </div>
             <div class='btn-container'>
-              <button class='btn btn-card btn-like' v-on:click.once='rateCake(cake, 5)'>Buns up!</button>
+              <button class='btn-card btn-like' v-on:click.once='rateCake(cake, 5)'>Buns up!</button>
             </div>
           </div>
 
@@ -242,19 +242,12 @@ export default {
   background: url(./../assets/tuuletasku.jpg) no-repeat center center ;
   background-size: cover;
 }
-.section-header {
-  width: 260px;
-  margin: auto;
-  padding: 0 0 30px 0;
-}
 .card {
   display: flex;
   flex-direction: column;
-  padding: 30px;
-  margin-bottom: 20px;
+  margin: 20px 0;
   border-radius: 20px;
   box-shadow: 0 2px 7px rgba(0, 0, 0, 0.1);
-  /* border-radius: 1rem;*/
   background-color: white;
   transition: 0.5s all;
 }
@@ -268,16 +261,13 @@ export default {
   margin-bottom: 20px;
   transition: 0.2s all;
 }
+
 /* CAKE */
 .cakes-container {
   display: flex;
   flex-direction: column;
-  padding: 20px 10px;
   margin-top: 20vh;
   min-width: 350px;
-}
-.cake {
-  padding: 0 0 12px; 
 }
 .cake-photo {
   background-size: cover;
@@ -355,18 +345,11 @@ export default {
   display: flex;
   flex-direction: row;
 }
-.sort-controls>ul {
-  justify-content: space-around;
-  margin-top: 5vh;
+.sort-bts {
+justify-content: space-around;
+margin: auto;
 }
-.btn-sort {
-  flex-grow: 1;
-  justify-content: center;
-  color: midnightblue;
-  transition: 0.2s all;
-  margin: 0;
-  font-size: 1.2rem !important;
-}
+
 
 /* CONTAINER */
 .container-rating-btns {
@@ -376,14 +359,14 @@ export default {
 }
 
 /* BUTTON */
+
 .btn-card {
   padding: 12px 18px;
   color: midnightblue;
-  /* margin: 12px; */
   font-size: 1rem;
-  /* box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.21); */
   transition: 0.2s all;
 }
+
 .btn-card-delete {
   position: absolute;
   margin: 12px;
@@ -400,6 +383,15 @@ export default {
   color: white;
   background-image: linear-gradient(to right, #9fa7af, #b9b9c6);
   /* background-color: darkgrey; */
+}
+.btn-sort {
+  flex-grow: 1;
+  justify-content: center;
+  margin: 0;
+  font-size: 1.2rem !important;
+  color: midnightblue;
+  transition: 0.2s all;
+  outline: 0;
 }
 .btn-selected {
   color: white;

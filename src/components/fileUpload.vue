@@ -309,10 +309,10 @@ export default {
 }
 .section-header {
   width: 260px;
-    margin: auto;
-    padding: 0 0 30px 0;
-    pointer-events: none;
+  margin: auto;
+  padding: 0 0 30px 0;
 }
+
 h3 {
   margin: 20px 0 0;
   color: rgba(0, 0, 0, 0.6)
@@ -441,7 +441,7 @@ input[type='file'] {
   font-weight: 700;
   color: rgba(0, 0, 0, 0.5);
 }
-.upload-area > *, .btn {
+.upload-area > * {
   cursor: pointer;
 }
 .ulpoad-icon {

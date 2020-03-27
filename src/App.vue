@@ -13,6 +13,7 @@ export default {
 <style>
 html {
   background-color: rgba(0, 0, 0, 0.02);
+  margin: auto;
 }
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -55,7 +56,7 @@ button {
   font-weight: 500;
   transition: .1s all;
   cursor: pointer;
-  outline: none;
+  outline: 0;
 }
 .btn-container {
   display: flex;
@@ -67,6 +68,7 @@ button {
 .btn-primary {
   background-image: linear-gradient(to right, #39dc7a , #20dc87);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  outline: 0;
 }
 .btn-primary:hover {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
@@ -79,13 +81,12 @@ button {
   background-color: rgba(0, 0, 0, 0);
   color: midnightblue;
 }
-.btn-transparent:active {
-outline: none;
+.btn-transparent:active, .btn-sort:active, .btn-card:active{
+  outline: 0;
 }
 .btn-transparent:hover {
-  background-color: rgba(0, 0, 0, .01);
+  background-color: white;
 }
-
 .error {
   color: red;
 }
@@ -93,7 +94,5 @@ outline: none;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  /* height: 100vh; */
-  /* background-color: rgba(0, 0, 0, 0.15) */
 }
 </style>

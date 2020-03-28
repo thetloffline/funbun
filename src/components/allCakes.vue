@@ -282,11 +282,10 @@ export default {
   flex-grow: 1;
 }
 .cake-stats>div {
-  padding: 0 30px
+  margin: 0 30px
 }
 .cake-stats>li>p {
-  padding: 0px 0px 5px 0px;
-  margin: auto;
+  margin: 0 auto 5px;
   font-weight: 700;
 }
 .cake-description-container {
@@ -344,12 +343,13 @@ export default {
 .sort-controls>ul, .sort-controls>ul>li  {
   display: flex;
   flex-direction: row;
+  justify-content: space-evenly;
+  margin-top: 5vh;
 }
 .sort-bts {
 justify-content: space-around;
 margin: auto;
 }
-
 
 /* CONTAINER */
 .container-rating-btns {
@@ -388,7 +388,7 @@ margin: auto;
   flex-grow: 1;
   justify-content: center;
   margin: 0;
-  font-size: 1.2rem !important;
+  font-size: 1.1rem !important;
   color: midnightblue;
   transition: 0.2s all;
   outline: 0;

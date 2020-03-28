@@ -305,12 +305,11 @@ export default {
   background-size: cover;
 }
 .btn-container {
-  margin: 10px 0px 10px 0px;
+  margin: 10px 0 10px 0;
 }
 .section-header {
   width: 260px;
-  margin: auto;
-  padding: 0 0 30px 0;
+  margin: 0 auto 30px;
 }
 
 h3 {
@@ -350,33 +349,6 @@ a {
   margin-bottom: 20px;
   transition: 0.2s all;
 }
-.sort-controls>ul, .sort-controls>ul>li  {
-  display: flex;
-  flex-direction: row;
-}
-.sort-controls>ul {
-  justify-content: space-evenly;
-  margin-top: 5vh;
-}
-.sort-controls>ul>li {
-  flex-grow: 1;
-  justify-content: center;
-  background-color: rgba(0, 0, 0, 0.05);
-  padding: 20px;
-  font-size: 18px;
-  font-weight: 700;
-  color: rgba(0, 0, 0, 0.6);
-  transition: 0.2s all;
-  margin: 0;
-}
-.sort-controls>ul>li:hover {
-  cursor: pointer;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-}
-.sort-controls>ul>li:active {
-  background-color: rgba(0, 0, 0, 0.05);
-  color: rgba(0, 0, 0, 0.5);
-}
 label {
   display: flex;
 }
@@ -415,11 +387,8 @@ input[type='file'] {
   font-size: 1rem;
   font-weight: 600;
 }
-.file-listing > * {
-  justify-content: space-between;
-  padding: 6px;
-}
 .file-name {
+  margin: 6px;
   white-space: nowrap;
   max-width: 200px;
   overflow: hidden;
@@ -440,8 +409,6 @@ input[type='file'] {
   font-size: 18px;
   font-weight: 700;
   color: rgba(0, 0, 0, 0.5);
-}
-.upload-area > * {
   cursor: pointer;
 }
 .ulpoad-icon {

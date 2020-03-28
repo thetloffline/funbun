@@ -125,8 +125,6 @@ export default {
 .hide {
   display: none;
 }
-.dropdown-menu {
-}
 li {
   cursor: pointer;
   margin: 0;

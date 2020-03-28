@@ -73,8 +73,7 @@ input[type='text']{
   cursor: text;
   width: 100%;
   height: 40px;
-  margin-bottom: 10px;
-  margin-top: 4px;
+  margin: 4px auto 10px;
   padding: 4px;
   border: 0;
   border-bottom: 2px solid midnightblue;

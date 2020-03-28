@@ -55,10 +55,10 @@
           
           <div class="container-rating-btns">
             <div class="btn-container">
-              <button class='btn-card btn-dislike' v-on:click.once='rateCake(cake, -5)'>Buns down!</button>
+              <button class='btn-card btn-dislike' v-on:click.once='rateCake(cake, -1)'>Buns down!</button>
             </div>
             <div class='btn-container'>
-              <button class='btn-card btn-like' v-on:click.once='rateCake(cake, 5)'>Buns up!</button>
+              <button class='btn-card btn-like' v-on:click.once='rateCake(cake, 1)'>Buns up!</button>
             </div>
           </div>
 
@@ -67,7 +67,7 @@
             <div v-if="cake.price" class="cake-price">
               {{cake.price}} €
             </div>
-              <div class='cake-cafe-name'>{{cake.cafeName}}</div>
+              <div class='cake-cafe-name'>{{cake.cafeName | capitalize}}</div>
               <div v-if="cake.comment" 
               v-on:click.prevent="toggleSelectedCommentId(index)"
               class="cake-comment-icon">
@@ -75,7 +75,7 @@
             </div>
             <div class="cake-location"> 
               <div class='cake-location-icon'></div>
-              <div class='cake-location-address'>{{cake.location}}</div>
+              <div class='cake-location-address'>{{cake.location | capitalize}}</div>
             </div>
           
           </div>

@@ -52,7 +52,7 @@ button {
   border-radius: 3rem;
   padding: 15px;
   color: white;
-  font-size: 21px;
+  font-size: 1.4rem;
   font-weight: 500;
   transition: .1s all;
   cursor: pointer;

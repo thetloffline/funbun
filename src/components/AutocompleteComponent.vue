@@ -69,9 +69,10 @@ export default {
         this.$emit("input", value);
       }
     },
+    
     matches() {
       return this.suggestions.filter(str => {
-        return str.indexOf(this.selection) >= 0;
+        return str.toLowerCase().indexOf(this.selection.toLowerCase()) >= 0;
       });
     },
 

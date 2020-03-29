@@ -84,9 +84,7 @@
             >
             <div class="cake-comment">
               <p>{{cake.createdAt}}</p>
-              <p>
-                {{cake.comment}}
-              </p>
+              <p class="comment">{{cake.comment}}</p>
             </div>
           </div>
           
@@ -167,7 +165,8 @@ export default {
       else {
         this.showComment = true
         this.selectedCommentIndex = id
-        this.scrollToComment(selector)
+
+        this.SmoothVerticalScrolling(selector, 275, "center")
       }
     },
 
@@ -181,7 +180,7 @@ export default {
     },
 
     rateCake (cake, val) {
-      cake.taste = Number.parseInt(cake.taste) + Number.parseInt(val)
+      cake.taste = Number(cake.taste) + Number(val)
       const formData = new FormData()
       formData.append('taste', cake.taste)
       formData.append('id', cake._id)
@@ -202,7 +201,7 @@ export default {
         
         //toggle sort DESC ASC 
         let ascDesc = this.sortAsc.value ? -1 : 1;
-          return sortedCakes.sort((a, b) => ascDesc * parseInt(a[this.sortParam].localeCompare(b[this.sortParam])));
+          return sortedCakes.sort((a, b) => ascDesc * parseInt( a[this.sortParam].localeCompare(b[this.sortParam]) ));
       }
     }
   }
@@ -327,10 +326,15 @@ export default {
 .date {
   font-size: 1em;
 }
+.comment-container{
+  display: flex;
+  margin: 0 24px;
+}
 .cake-comment {
-  max-width: fit-content;
-  padding: 0 18px;
+  display: flex;
+  flex-direction: column;
   text-align: left;
+  width: 300px;
 }
 .cake-comment-icon {
   background: url(./../assets/comment.svg) no-repeat center;

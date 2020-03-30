@@ -82,7 +82,7 @@ button {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 .btn-primary:active {
-  background-image: linear-gradient(to right, #42dd80 , #24e68f);
+  background-color: #42428A;
   box-shadow: 0 0 0 rgba(0, 0, 0, 0.3);
 }
 .btn-transparent {
@@ -105,14 +105,13 @@ button {
   height: 72px;
   border-radius: 36px;
   background-color: midnightblue;
-
   color: white;
   font-size: 3rem;
   font-weight: 400;
 }
 
 .btn-round:active {
-  background-color: #F2C94C;
+  background-color: #42428A;
 }
 .error {
   color: red;

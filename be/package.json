@@ -1,5 +1,5 @@
 {
-  "name": "vidly",
+  "name": "funbun",
   "version": "1.0.0",
   "main": "./routes/index.js",
   "scripts": {
@@ -7,7 +7,7 @@
     "dev": "nodemon routes/index.js"
   },
   "author": "toomas thetloff",
-  "license": "ISC",
+  "license": "MIT",
   "keywords": [],
   "description": "",
   "dependencies": {

@@ -187,19 +187,22 @@ export default {
       formData.append('location', this.location)
       formData.append('price', this.price)
       formData.append('comment', this.comment)
-      formData.append('looks', this.looks)
-      formData.append('taste', this.taste)
-      formData.append('bun', this.bun)
+      formData.append('looks', Number(this.looks))
+      formData.append('taste', Number(this.taste))
+      formData.append('bun', Number(this.bun))
       await this.$store.dispatch("addNewCake", formData)
       this.resetFormData()
       this.scrollingFuncion()
       this.toggleShowContent()
     },
-
+  
     scrollingFuncion () {
-      setTimeout(() => {
+      const lastCake = document.querySelector('.lastCake')
+        this.SmoothVerticalScrolling(lastCake, 275, "")
+      
+     /*  setTimeout(() => {
         this.scrollToPosition('lastCake')
-      }, 600);
+      }, 600); */
     },
 
     async cancelForm (e) {
@@ -233,12 +236,16 @@ export default {
     async showFormContent(e) {
       this.toggleShowContent()
       let position = e.target.parentNode.parentNode.className
-       this.scrollToPosition(position)
+        this.SmoothVerticalScrolling(position, 275, "")
+       
+       //this.scrollToPosition(position)
     },
     async hideFormContent(e) {
       let position = e.target.parentNode.parentNode.parentNode.className
       this.toggleShowContent()
-      this.scrollToPosition(position)
+        this.SmoothVerticalScrolling(position, 275, "")
+
+      //this.scrollToPosition(position)
     },
     toggleShowContent () {
       this.clickToShowContent = !this.clickToShowContent
@@ -267,30 +274,12 @@ export default {
   margin-top: 33.3vh;
   margin-bottom: 33.3vh;
 }
-.btn-round {
-  display:flex;
-  justify-content: center;
-  flex-direction: column;
-  cursor: pointer;
-  margin: auto;
-  width: 56px;
-  height: 56px;
-  border-radius: 30px;
-  background-color: #F9C62D;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
-  color: white;
-  font-size: 3rem;
-  font-weight: 400;
-}
 
-.btn-round:active {
-  background-color: #F2C94C;
-}
 .container {
   display: flex;
   flex-direction: column;
   justify-content:center;
-  margin: 14vh 0;
+  margin: 0;
   max-width: 700px;
   min-width: 335px;
 }
@@ -309,7 +298,7 @@ export default {
 }
 .section-header {
   width: 260px;
-  margin: 0 auto 30px;
+  margin: 20vh auto 5vh;
 }
 
 h3 {
@@ -404,25 +393,11 @@ input[type='file'] {
   float: right;
 }
 .upload-area {
-  padding: 40px;
+
   cursor: pointer;
-  font-size: 18px;
-  font-weight: 700;
+  font-size: 1.2rem;
   color: rgba(0, 0, 0, 0.5);
   cursor: pointer;
-}
-.ulpoad-icon {
-  display:flex;
-  justify-content: center;
-  flex-direction: column;
-  margin: auto;
-  width: 40px;
-  height: 40px;
-  border-radius: 3rem;
-  border-style: solid ;
-  border-width: 2px;
-  border-color: rgba(0, 0, 0, 0.26);
-  color: rgba(0, 0, 0, 0.26);
 }
 .upload-text {
   padding-bottom: 5px;
@@ -430,10 +405,6 @@ input[type='file'] {
   justify-content: center;
   flex-direction: column;
   margin: auto;
-  color: midnightblue;
-}
-.ulpoad-icon:active {
-  border-color: rgba(0, 0, 0, 0.6);
   color: midnightblue;
 }
 .fade-enter-active {

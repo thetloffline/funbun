@@ -244,11 +244,6 @@ export default {
 .btn-container {
   margin: 10px 0 10px 0;
 }
-.section-header {
-  width: 260px;
-  margin: 0 auto 30px;
-}
-
 h3 {
   margin: 20px 0 0;
   color: rgba(0, 0, 0, 0.6);

@@ -13,7 +13,9 @@ app.use(cors({
     '0.0.0.0:3000',
     '0.0.0.0:8080',
     'arvuti.local:8080',
-    'arvuti.local:3000'
+    'arvuti.local:3000',
+    '10.29.64.55:8080',
+    '10.29.64.55:3000'
   ]
 }))
 app.use(fileUpload(

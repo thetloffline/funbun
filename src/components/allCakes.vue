@@ -201,7 +201,9 @@ export default {
         
         //toggle sort DESC ASC 
         let ascDesc = this.sortAsc.value ? -1 : 1;
-          return sortedCakes.sort((a, b) => ascDesc * parseInt( a[this.sortParam].localeCompare(b[this.sortParam]) ));
+        
+        return sortedCakes.sort((a, b) => ascDesc * (Number(a[this.sortParam]) > Number(b[this.sortParam]) ? 1 : -1)) 
+            //return ascDesc * Number(a[this.sortParam].localeCompare(b[this.sortParam]))}
       }
     }
   }

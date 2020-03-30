@@ -38,8 +38,7 @@ export default {
   justify-content: center;
 }
 .content {
-  margin: 28.3vh auto 38.3vh;
-  height: 35vh;
+  margin: 8.3vh auto 18.3vh;
 }
 .poster {
   width: 300px;

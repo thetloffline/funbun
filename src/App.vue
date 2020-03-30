@@ -11,24 +11,27 @@ export default {
 </script>
 
 <style>
+@import url('https://fonts.googleapis.com/css?family=Poppins:800&display=swap');
+</style>
+
+<style>
 html {
-  background-color: rgba(0, 0, 0, 0.02);
+  background-color: #A6B1E1;
   margin: auto;
 }
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-weight: 500;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
 }
 h1,h2 {
-  font-weight: 900;
-  font-style: italic;
-  font-size: 2.6rem;
-  letter-spacing: -2;
+  font-family: 'Poppins';
+  font-size: 2.8rem;
   line-height: 3rem;
-  color: midnightblue;
+  color: white;
 }
 h2 {
   font-size: 2.4rem;
@@ -45,12 +48,15 @@ li {
   margin: 0 10px;
 }
 a {
-  color: #42b983;
+  color: #FF715B;
+}
+p {
+
 }
 button {
   border-style: none;
   border-radius: 3rem;
-  padding: 15px;
+  padding: 18px;
   color: white;
   font-size: 1.4rem;
   font-weight: 500;
@@ -60,13 +66,15 @@ button {
 }
 .btn-container {
   display: flex;
-  margin: 10px 0px 10px 0px;
+  margin: 10px 0   10px 0;
 }
 .btn-form {
+  margin:  0;
   width: 100%;
 }
 .btn-primary {
-  background-image: linear-gradient(to right, #39dc7a , #20dc87);
+  /* background-image: linear-gradient(to right, #39dc7a , #20dc87); */
+  background-color: midnightblue;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
   outline: 0;
 }
@@ -86,6 +94,25 @@ button {
 }
 .btn-transparent:hover {
   background-color: white;
+}
+.btn-round {
+  display:flex;
+  justify-content: center;
+  flex-direction: column;
+  cursor: pointer;
+  margin: auto;
+  width: 72px;
+  height: 72px;
+  border-radius: 36px;
+  background-color: midnightblue;
+
+  color: white;
+  font-size: 3rem;
+  font-weight: 400;
+}
+
+.btn-round:active {
+  background-color: #F2C94C;
 }
 .error {
   color: red;

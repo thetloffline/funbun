@@ -185,7 +185,7 @@ export default {
       } else {
         this.showComment = true;
         this.selectedCommentIndex = id;
-        this.scrollToComment(selector);
+        //this.scrollToComment(selector); does not work on Safari
         //this.SmoothVerticalScrolling(selector, 275, "center")
       }
     },
@@ -348,8 +348,8 @@ export default {
 }
 .cake-location-icon {
   background: url(./../assets/location.svg) no-repeat center;
-  width: 16px;
-  background-size: 16px;
+  width: 18px;
+  background-size: 18px;
 }
 .date {
   font-size: 1em;

@@ -2,260 +2,216 @@
   <section class="full-page-container">
     <div class="content-center">
       <div class="add-bun">
-      
-      <transition name="fade" mode="out-in">
-        <div v-if="!clickToShowContent" 
-          class="form-bun" 
-          key="addBuns">
+        <transition name="fade" mode="out-in">
+          <div v-if="!clickToShowContent" class="form-bun" key="addBuns">
             <h1 class="section-header">Nam-Nam Add a bun</h1>
-            <div class="btn-round "
-              v-on:click="showFormContent($event)">+
-            </div>
-        </div>
-
-        <div v-else class="container" key="showBuns">
-          <h1 class="section-header">Nam-Nam Add a bun</h1>
-          <div class="upload-area card"
-            v-on:click='addFiles()'>
-            <div class="upload-text">Add a photo</div>
-            <div class="btn-round">+</div>
+            <div class="btn-round" v-on:click="showFormContent($event)">+</div>
           </div>
 
-          <div>
-            <input
-              type='file'
-              id='files'
-              ref='fileInput'
-              accept='.jpg, jpeg'
-              v-on:change='handleFilesUpload()'
-              name='files'/>
-          </div>
-
-          <transition name="fade">
-            <div  class="file-listing" v-if="files">
-              <span class="file-name">
-                {{ files.name }}
-              </span>
-              <span class='remove-file'
-                v-on:click='removeFile()'>
-                Remove
-              </span>
+          <div v-else class="container" key="showBuns">
+            <h1 class="section-header">Nam-Nam Add a bun</h1>
+            <div class="upload-area card" v-on:click="addFiles()">
+              <div class="upload-text">Add a photo</div>
+              <div class="btn-round">+</div>
             </div>
-          </transition>
 
-          <autocomplete 
-            :suggestions="getCafeNames" 
-            v-model="cafeName"
-            label="Name of the shop"
-            :required="true"
-            id="cafeName"
-          />
+            <div>
+              <input
+                type="file"
+                id="files"
+                ref="fileInput"
+                accept=".jpg, jpeg"
+                v-on:change="handleFilesUpload()"
+                name="files"
+              />
+            </div>
 
-          <autocomplete
-            :suggestions="getCafeLocations" 
-            v-model="location"
-            label="Address of the shop"
-            :required="true"
-            id="location"
-          />
+            <transition name="fade">
+              <div class="file-listing" v-if="files">
+                <span class="file-name">{{ files.name }}</span>
+                <span class="remove-file" v-on:click="removeFile()">Remove</span>
+              </div>
+            </transition>
 
-          <autocomplete
-            :suggestions="getCakeprices" 
-            v-model="price"
-            label="Price"
-            :required="true"
-            id="price"
-          />
-
-          <rangeSLider
-            v-model="looks"
-            label='The looks'
-            :required='true'
-            id='looks'/>
-          
-          <rangeSLider
-            v-model="taste"
-            label='The taste'
-            :required='true'
-            id='taste'/>
-          
-          <rangeSLider
-            v-model="bun"
-            label='The bun'
-            :required='true'
-            id='bun'/>
-
-            <textArea
-            v-model="comment"
-            label='Comment'
-            id='comment'
+            <autocomplete
+              :suggestions="getCafeNames"
+              v-model="cafeName"
+              label="Name of the shop"
+              :required="true"
+              id="cafeName"
             />
 
-          <div class="btn-container">
-            <button class='btn-form btn-primary'
-              v-on:click='submitFiles()'>
-              Submit
-            </button>
+            <autocomplete
+              :suggestions="getCafeLocations"
+              v-model="location"
+              label="Address of the shop"
+              :required="true"
+              id="location"
+            />
+
+            <autocomplete
+              :suggestions="getCakeprices"
+              v-model="price"
+              label="Price"
+              :required="true"
+              id="price"
+            />
+
+            <rangeSLider v-model="looks" label="The looks" :required="true" id="looks" />
+
+            <rangeSLider v-model="taste" label="The taste" :required="true" id="taste" />
+
+            <rangeSLider v-model="bun" label="The bun" :required="true" id="bun" />
+
+            <textArea v-model="comment" label="Comment" id="comment" />
+
+            <div class="btn-container">
+              <button class="btn-form btn-primary" v-on:click="submitFiles()">Submit</button>
+            </div>
+            <div class="btn-container">
+              <button class="btn-form btn-transparent" v-on:click="cancelForm($event)">Cancel</button>
+            </div>
           </div>
-          <div class="btn-container">
-            <button class='btn-form btn-transparent'
-              v-on:click='cancelForm($event)'>
-              Cancel
-            </button>
-          </div>
-        </div> 
-      </transition>
-        
+        </transition>
       </div>
     </div>
   </section>
- 
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import store from '../store/store'
-import textAreaInputComponent from './textAreaInputComponent.vue'
-import RangeSLiderComponent from './RangeSLiderComponent.vue'
-import AutocompleteComponent from './AutocompleteComponent.vue'
+import { mapGetters } from "vuex";
+import store from "../store/store";
+import textAreaInputComponent from "./textAreaInputComponent.vue";
+import RangeSLiderComponent from "./RangeSLiderComponent.vue";
+import AutocompleteComponent from "./AutocompleteComponent.vue";
 
 export default {
-  
-  name: 'fileUpload',
-  data () {
+  name: "fileUpload",
+  data() {
     return {
-      files: '',
-      imageFile: '',
-      cafeName:  '',
-      location: '',
-      price: '',
-      comment: '',
+      files: "",
+      imageFile: "",
+      cafeName: "",
+      location: "",
+      price: "",
+      comment: "",
       looks: 50,
       taste: 50,
       bun: 50,
       clickToShowContent: false,
-      formData: '',
-      value: '',
-      error: ''
-    }
+      formData: "",
+      value: "",
+      error: ""
+    };
   },
   components: {
-    'autocomplete': AutocompleteComponent,
-    'textArea': textAreaInputComponent,
-    'rangeSLider' : RangeSLiderComponent
+    autocomplete: AutocompleteComponent,
+    textArea: textAreaInputComponent,
+    rangeSLider: RangeSLiderComponent
   },
 
-  mounted () {},
-  created () {},
+  mounted() {},
+  created() {},
 
   computed: {
-    ...mapGetters([
-      'getCafeNames',
-      'getCafeLocations',
-      'getCakeprices'
-    ]),
+    ...mapGetters(["getCafeNames", "getCafeLocations", "getCakeprices"])
   },
 
   methods: {
-
-    addFiles () {
-      this.$refs.fileInput.click()
+    addFiles() {
+      this.$refs.fileInput.click();
     },
 
-    removeFiles () {
-      if (document.querySelector('.remove-file')) {
-        document.querySelector('.remove-file').click()
-        } else {return}
+    removeFiles() {
+      if (document.querySelector(".remove-file")) {
+        document.querySelector(".remove-file").click();
+      } else {
+        return;
+      }
     },
 
-    resetFormData () {
-      this.removeFiles()
-      this.cafeName = ''
-      this.location = ''
-      this.price = ''
-      this.imageFile = ''
-      this.looks = 50
-      this.taste = 50
-      this.bun = 50
+    resetFormData() {
+      this.removeFiles();
+      this.cafeName = "";
+      this.location = "";
+      this.price = "";
+      this.imageFile = "";
+      this.looks = 50;
+      this.taste = 50;
+      this.bun = 50;
     },
 
-    async submitFiles () {
-      const formData = new FormData()
-      let uploadedFile = this.files
-      formData.append('files[0]', uploadedFile)
-      formData.append('cafeName', this.cafeName)
-      formData.append('location', this.location)
-      formData.append('price', this.price)
-      formData.append('comment', this.comment)
-      formData.append('looks', this.looks)
-      formData.append('taste', this.taste)
-      formData.append('bun', this.bun)
-      await this.$store.dispatch("addNewCake", formData)
-      this.resetFormData()
-      this.scrollingFuncion()
-      this.toggleShowContent()
+    async submitFiles() {
+      const formData = new FormData();
+      let uploadedFile = this.files;
+      formData.append("files[0]", uploadedFile);
+      formData.append("cafeName", this.cafeName);
+      formData.append("location", this.location);
+      formData.append("price", this.price);
+      formData.append("comment", this.comment);
+      formData.append("looks", Number(this.looks));
+      formData.append("taste", Number(this.taste));
+      formData.append("bun", Number(this.bun));
+      await this.$store.dispatch("addNewCake", formData);
+      this.resetFormData();
+      this.scrollToLastCake();
+      this.toggleShowContent();
     },
 
-    scrollingFuncion () {
+    scrollToLastCake() {
       setTimeout(() => {
-        this.scrollToPosition('lastCake')
+        this.scrollToPosition("lastCake");
       }, 600);
     },
 
-    async cancelForm (e) {
-      await this.resetFormData()
-      await this.hideFormContent(e)
+    cancelForm(e) {
+      this.resetFormData();
+      this.hideFormContent(e);
     },
 
-    handleFilesUpload () {
-      let uploadedFiles = this.$refs.fileInput.files
-        for (var i = 0; i < uploadedFiles.length; i++) {
-          this.files = uploadedFiles[i]
-        }
+    handleFilesUpload() {
+      let uploadedFiles = this.$refs.fileInput.files;
+      for (var i = 0; i < uploadedFiles.length; i++) {
+        this.files = uploadedFiles[i];
+      }
     },
 
-    removeFile () {
-      this.files = ''
+    removeFile() {
+      this.files = "";
     },
 
-    removeLastCakeStyle () {
+    removeLastCakeStyle() {
       setTimeout(() => {
-        document.querySelector('.lastCake').classList.remove('lastCake')
+        document.querySelector(".lastCake").classList.remove("lastCake");
       }, 3000);
     },
 
-    scrollToPosition (selector) {
+    scrollToPosition(selector) {
       document.querySelector(`.${selector}`).scrollIntoView({
-        behavior: 'smooth'
-      })
+        behavior: "smooth"
+      });
     },
 
-    async showFormContent(e) {
-      this.toggleShowContent()
-      let position = e.target.parentNode.parentNode.className
-       this.scrollToPosition(position)
+    showFormContent(e) {
+      this.toggleShowContent();
+      let position = e.target.parentNode.parentNode.className;
+      this.scrollToPosition(position);
     },
-    async hideFormContent(e) {
-      let position = e.target.parentNode.parentNode.parentNode.className
-      this.toggleShowContent()
-      this.scrollToPosition(position)
+
+    hideFormContent(e) {
+      let position = e.target.parentNode.parentNode.parentNode.className;
+      this.toggleShowContent();
+      this.scrollToPosition(position);
     },
-    toggleShowContent () {
-      this.clickToShowContent = !this.clickToShowContent
+
+    toggleShowContent() {
+      this.clickToShowContent = !this.clickToShowContent;
     }
-/* 
-    async showFormContent (e) {
-      this.toggleShowContent()
-      const position = e.target.parentNode.parentNode.className
-      console.log('position', position)
-      await this.scrollToPosition(position)
-    } */
   }
-}
+};
 </script>
 
 <style scoped>
-
 .content-center {
   display: flex;
   flex-direction: row;
@@ -268,7 +224,7 @@ export default {
   margin-bottom: 33.3vh;
 }
 .btn-round {
-  display:flex;
+  display: flex;
   justify-content: center;
   flex-direction: column;
   cursor: pointer;
@@ -276,7 +232,7 @@ export default {
   width: 56px;
   height: 56px;
   border-radius: 30px;
-  background-color: #F9C62D;
+  background-color: #f9c62d;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
   color: white;
   font-size: 3rem;
@@ -284,12 +240,12 @@ export default {
 }
 
 .btn-round:active {
-  background-color: #F2C94C;
+  background-color: #f2c94c;
 }
 .container {
   display: flex;
   flex-direction: column;
-  justify-content:center;
+  justify-content: center;
   margin: 14vh 0;
   max-width: 700px;
   min-width: 335px;
@@ -301,7 +257,7 @@ export default {
 }
 .cover-img {
   height: 67vh;
-  background: url(./../assets/tuuletasku.jpg) no-repeat center center ;
+  background: url(./../assets/tuuletasku.jpg) no-repeat center center;
   background-size: cover;
 }
 .btn-container {
@@ -314,7 +270,7 @@ export default {
 
 h3 {
   margin: 20px 0 0;
-  color: rgba(0, 0, 0, 0.6)
+  color: rgba(0, 0, 0, 0.6);
 }
 ul {
   list-style-type: none;
@@ -352,7 +308,7 @@ a {
 label {
   display: flex;
 }
-input[type='text']{
+input[type="text"] {
   width: 100%;
   margin-bottom: 10px;
   margin-top: 4px;
@@ -363,11 +319,12 @@ input[type='text']{
   outline: none;
   font-size: 18px;
 }
-input:focus, .btn:focus {
-   outline: none;
+input:focus,
+.btn:focus {
+  outline: none;
 }
 .area:active {
-  background-color: white
+  background-color: white;
 }
 .cakes-container {
   padding: 20px 10px;
@@ -376,7 +333,7 @@ input:focus, .btn:focus {
 .date {
   font-size: 1em;
 }
-input[type='file'] {
+input[type="file"] {
   position: absolute;
   top: -500px;
 }
@@ -398,7 +355,7 @@ input[type='file'] {
 .remove-file {
   padding: 6px 10px;
   border-radius: 10px;
-  background-color: rgba(0, 0, 0, .6);
+  background-color: rgba(0, 0, 0, 0.6);
   color: white;
   cursor: pointer;
   float: right;
@@ -412,21 +369,21 @@ input[type='file'] {
   cursor: pointer;
 }
 .ulpoad-icon {
-  display:flex;
+  display: flex;
   justify-content: center;
   flex-direction: column;
   margin: auto;
   width: 40px;
   height: 40px;
   border-radius: 3rem;
-  border-style: solid ;
+  border-style: solid;
   border-width: 2px;
   border-color: rgba(0, 0, 0, 0.26);
   color: rgba(0, 0, 0, 0.26);
 }
 .upload-text {
   padding-bottom: 5px;
-  display:flex;
+  display: flex;
   justify-content: center;
   flex-direction: column;
   margin: auto;
@@ -438,16 +395,15 @@ input[type='file'] {
 }
 .fade-enter-active {
   transition: opacity 1.5s;
-   /* transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0); */
+  /* transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0); */
 }
 .fade-leave-active {
-  transition: opacity .5s;
-   /* transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0); */
+  transition: opacity 0.5s;
+  /* transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0); */
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
 }
 
 /* RANGE SLIDER */
-
 </style>

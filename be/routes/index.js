@@ -9,7 +9,11 @@ app.use(bodyParser.urlencoded({extended: true}))
 app.use(cors({
   allowedOrigins: [
     'localhost:3000',
-    'localhost:8080'
+    'localhost:8080',
+    '0.0.0.0:3000',
+    '0.0.0.0:8080',
+    'arvuti.local:8080',
+    'arvuti.local:3000'
   ]
 }))
 app.use(fileUpload(

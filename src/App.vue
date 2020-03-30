@@ -37,8 +37,16 @@ h2 {
   font-size: 2.4rem;
 }
 h3 {
-  margin: 20px 0 0;
-  color: rgba(0, 0, 0, 0.6)
+  display: flex;
+  font-size: 1.5em;
+  font-weight: 700;
+  color: midnightblue;
+  margin: 0;
+}
+h5 {
+  font-size: 1rem;
+  font-weight: 400;
+  margin: 0;
 }
 ul {
   list-style-type: none;
@@ -52,6 +60,10 @@ a {
 }
 p {
 
+}
+.section-header {
+  width: 260px;
+  margin: 0 auto 30px;
 }
 button {
   border-style: none;

@@ -1,9 +1,12 @@
 <template>
   <section class="cakes-section-wrapper">
     <div class="cakes-container">
-      <h1>Bun stats</h1>
+      <h1 class="section-header">Bun stats</h1>
+      <div class="mobile-sort">
+        <div class="btn-round"></div>
+      </div>
       <section class="sort-controls">
-        <ul class="sort-bts">
+        <ul class="sort-btns">
           <li class="btn-container">
             <button
               class="btn-card btn-transparent btn-sort btn-selected"
@@ -55,15 +58,15 @@
 
           <ul class="cake-stats">
             <li>
-              TASTE
+              <h5>TASTE</h5> 
               <p class>{{cake.taste}}</p>
             </li>
             <li>
-              BUN
+              <h5>BUN</h5> 
               <p class>{{cake.bun}}</p>
             </li>
             <li>
-              LOOKS
+              <h5>LOOKS</h5> 
               <p class>{{cake.looks}}</p>
             </li>
 
@@ -83,7 +86,7 @@
           <div class="cake-description-container">
             <div class="cake-description">
               <div v-if="cake.price" class="cake-price">{{cake.price}} €</div>
-              <div class="cake-cafe-name">{{cake.cafeName | capitalize}}</div>
+              <h3>{{cake.cafeName | capitalize}}</h3>
               <div
                 v-if="cake.comment"
                 v-on:click.prevent="toggleSelectedCommentId(index)"
@@ -91,8 +94,12 @@
               ></div>
             </div>
             <div class="cake-location">
-              <div class="cake-location-icon"></div>
-              <div class="cake-location-address">{{cake.location | capitalize}}</div>
+              <a :href="'https://www.google.com/maps/place/' 
+                + cake.location | address" 
+                target="_blank" >
+                  <div class="cake-location-icon"></div>
+                  <div class="cake-location-address">{{cake.location | capitalize}}</div>
+              </a>
             </div>
           </div>
           <div v-if="selectedCommentIndex ===index && showComment" class="comment-container">
@@ -299,7 +306,8 @@ export default {
 }
 .cake-stats > li > p {
   margin: 0 auto 5px;
-  font-weight: 700;
+  font-weight: 500;
+  font-size: 1.4rem;
 }
 .cake-description-container {
   display: flex;
@@ -316,6 +324,7 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
+  margin: 0 0 8px;
 }
 .cake-cafe-name {
   display: flex;
@@ -325,6 +334,11 @@ export default {
 .cake-location {
   display: flex;
   justify-content: flex-end;
+}
+.cake-location>a {
+  display: flex;
+  color:  midnightblue;
+  text-decoration: none;
 }
 .cake-location-address {
   display: flex;
@@ -353,19 +367,19 @@ export default {
 .cake-comment-icon {
   background: url(./../assets/comment.svg) no-repeat center;
   margin-left: 12px;
-  width: 18px;
-  background-size: 18px;
+  width: 24px;
+  background-size: 24px;
   cursor: pointer;
 }
+
 /* SORT */
-.sort-controls > ul,
-.sort-controls > ul > li {
+.mobile-sort {
+  display: none;
+}
+.sort-btns {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
-  margin-top: 5vh;
-}
-.sort-bts {
   justify-content: space-around;
   margin: auto;
 }
@@ -385,18 +399,21 @@ export default {
   font-size: 1rem;
   transition: 0.2s all;
 }
-
+.btn-selected {
+  background-color: white;
+}
 .btn-card-delete {
   position: absolute;
   margin: 12px;
-  color: rgba(0, 0, 0, 0.6);
+  color: #00000099;
+  background-color: rgba(255, 255, 255, 0.7)
 }
 .btn-like {
   color: white;
-  background-image: linear-gradient(to right, #39dc7a, #12d67e);
+  background-color: midnightblue;
 }
 .btn-like:active {
-  background-image: linear-gradient(to right, #36e97e, #12d67e);
+  background-color: midnightblue;
 }
 .btn-dislike {
   color: white;
@@ -411,10 +428,6 @@ export default {
   color: midnightblue;
   transition: 0.2s all;
   outline: 0;
-}
-.btn-selected {
-  color: white;
-  background-color: midnightblue;
 }
 
 /* FADE TRANSITION */

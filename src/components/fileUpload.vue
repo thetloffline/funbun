@@ -223,25 +223,6 @@ export default {
   margin-top: 33.3vh;
   margin-bottom: 33.3vh;
 }
-.btn-round {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  cursor: pointer;
-  margin: auto;
-  width: 56px;
-  height: 56px;
-  border-radius: 30px;
-  background-color: #f9c62d;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
-  color: white;
-  font-size: 3rem;
-  font-weight: 400;
-}
-
-.btn-round:active {
-  background-color: #f2c94c;
-}
 .container {
   display: flex;
   flex-direction: column;

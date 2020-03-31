@@ -52,6 +52,6 @@ export default {
   height: 80vh;
 }
 .slogan {
-  width: 300px;
+  width: 250px;
 }
 </style>

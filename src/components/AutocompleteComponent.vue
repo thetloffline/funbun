@@ -23,6 +23,7 @@
         @keydown.down="down"
         @keydown.up="up"
         @input="change"
+        @blur="blur"
       />
       <label :for="label">{{ label }}</label>
     </div>
@@ -84,6 +85,10 @@ export default {
   },
 
   methods: {
+    blur() {
+      this.open = false;
+    },
+
     enter() {
       this.selection = this.matches[this.current];
       this.open = false;

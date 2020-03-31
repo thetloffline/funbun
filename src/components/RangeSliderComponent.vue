@@ -11,10 +11,8 @@
       min="0"
       max="100"
       step="1"
-      v-on:mousemove="getValue($event)"
       v-on:input="getValue($event)"
-      v-on:mousedown="mousePressed()"
-      v-on:mouseup="mouseUp()"
+      v-on:change="change($event)"
     />
   </div>
 </template>
@@ -36,10 +34,6 @@ export default {
   },
   data() {
     return {
-      clicked: {
-        type: Boolean,
-        default: false
-      },
       rangeValue: {
         type: Number
       },
@@ -48,18 +42,18 @@ export default {
   },
 
   methods: {
-    mousePressed() {
-      this.clicked = true;
+    
+    getValue(event) {
+      let value = Number(event.target.value);
+      this.$emit("input", value);
+      this.rangeValue = value;
     },
-    mouseUp() {
-      this.clicked = false;
-    },
-    async getValue(event) {
-      if ((await this.clicked) === true) {
-        let value = Number(event.target.value);
-        this.$emit("input", value);
-        this.rangeValue = value;
-      }
+    
+    change(event) {
+      let value = Number(event.target.value);
+      this.$emit("change", value);
+      this.rangeValue = value;
+
     }
   }
 };

@@ -19,9 +19,10 @@
         :id="label"
         :placeholder="label"
         v-model="selection"
-        @keydown.enter="enter"
+        @keydown.enter="enter($event)"
         @keydown.down="down"
         @keydown.up="up"
+        @keydown.esc="blur"
         @input="change"
         @blur="blur"
       />
@@ -87,11 +88,36 @@ export default {
   methods: {
     blur() {
       this.open = false;
+      console.log(this.selection);
+      // expected behaviour ESC —> this.matches = false
     },
 
-    enter() {
-      this.selection = this.matches[this.current];
-      this.open = false;
+    enter(e) {
+      if (this.matches.length === 0) {
+        let nodes =
+          e.target.parentNode.parentNode.nextElementSibling.childNodes[0]
+            .childNodes;
+        if (nodes.length >= 2) {
+          nodes[2].focus();
+        } else {
+          e.target.blur();
+          return;
+        }
+        return;
+      }
+      if (this.matches.length >= 1) {
+        this.selection = this.matches[this.current];
+        this.open = false;
+        let nodes =
+          e.target.parentNode.parentNode.nextElementSibling.childNodes[0]
+            .childNodes;
+        if (nodes.length >= 2) {
+          nodes[2].focus();
+        } else {
+          e.target.blur();
+          return;
+        }
+      }
     },
 
     up() {

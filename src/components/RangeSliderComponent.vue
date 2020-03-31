@@ -19,7 +19,7 @@
 
 <script>
 export default {
-  name: "rangeSlider",
+  name: "rangeSliderComponent",
   props: {
     id: {
       type: String

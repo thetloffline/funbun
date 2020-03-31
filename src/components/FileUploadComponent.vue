@@ -1,11 +1,18 @@
 <template>
-  <section class="full-page-container">
+  <section id="form">
     <div class="content-center">
       <div class="add-bun">
         <transition name="fade" mode="out-in">
-          <div v-if="!clickToShowContent" class="form-bun" key="addBuns">
-            <h1 class="section-header">Nam-Nam Add a bun</h1>
-            <div class="btn-round" v-on:click="showFormContent($event)">+</div>
+          <div v-if="!clickToShowContent" 
+            class="form-bun" 
+            key="addBuns">
+              <h1 class="section-header">
+                Nam-Nam Add a bun
+              </h1>
+              <div class="btn-round" 
+                v-on:click="showFormContent($event)">
+                +
+              </div>
           </div>
 
           <div v-else class="container" key="showBuns">
@@ -81,12 +88,12 @@
 <script>
 import { mapGetters } from "vuex";
 import store from "../store/store";
-import textAreaInputComponent from "./textAreaInputComponent.vue";
-import RangeSLiderComponent from "./RangeSLiderComponent.vue";
-import AutocompleteComponent from "./AutocompleteComponent.vue";
+import textArea from "./TextareaComponent.vue";
+import rangeSLider from "./RangeSLiderComponent.vue";
+import autocomplete from "./AutocompleteComponent.vue";
 
 export default {
-  name: "fileUpload",
+  name: "fileUploadComponent",
   data() {
     return {
       files: "",
@@ -105,9 +112,9 @@ export default {
     };
   },
   components: {
-    autocomplete: AutocompleteComponent,
-    textArea: textAreaInputComponent,
-    rangeSLider: RangeSLiderComponent
+    autocomplete: autocomplete,
+    textArea: textArea,
+    rangeSLider: rangeSLider
   },
 
   mounted() {},
@@ -215,13 +222,16 @@ export default {
 .content-center {
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-around;
+}
+.add-bun {
+  display: flex; 
+  flex-direction: column;
+  justify-content: space-around;
 }
 .form-bun {
+  margin: 25vh auto;
   width: 355px;
-  height: 35vh;
-  margin-top: 33.3vh;
-  margin-bottom: 33.3vh;
 }
 .container {
   display: flex;
@@ -230,16 +240,6 @@ export default {
   margin: 14vh 0;
   max-width: 700px;
   min-width: 335px;
-}
-.form-wrapper {
-  display: flex;
-  flex-direction: column;
-  min-width: 90%;
-}
-.cover-img {
-  height: 67vh;
-  background: url(./../assets/tuuletasku.jpg) no-repeat center center;
-  background-size: cover;
 }
 .btn-container {
   margin: 10px 0 10px 0;
@@ -301,10 +301,6 @@ input:focus,
 }
 .area:active {
   background-color: white;
-}
-.cakes-container {
-  padding: 20px 10px;
-  margin-top: 20vh;
 }
 .date {
   font-size: 1em;

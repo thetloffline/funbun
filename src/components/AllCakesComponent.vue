@@ -117,11 +117,10 @@
 <script>
 import { mapState } from "vuex";
 import store from "../store/store";
-import FileUploadService from "../FileUploadService.js";
 
 export default {
   store,
-  name: "allCakes",
+  name: "allCakesComponent",
   props: {},
   data() {
     return {
@@ -231,32 +230,16 @@ export default {
 </script>
 
 <style scoped>
-.content-center {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-}
+
 .cakes-section-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin: 25vh auto;
 }
 
 /* REFAKTOREERIDA */
 
-.content-center {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-}
-.content {
-  display: flex;
-  justify-content: center;
-  width: 355px;
-  height: 33.3vh;
-  margin-top: 33.3vh;
-  margin-bottom: 33.3vh;
-}
 .cover-img {
   height: 67vh;
   background: url(./../assets/tuuletasku.jpg) no-repeat center center;
@@ -286,7 +269,6 @@ export default {
 .cakes-container {
   display: flex;
   flex-direction: column;
-  margin-top: 20vh;
   min-width: 350px;
 }
 .cake-photo {
@@ -401,6 +383,10 @@ export default {
 }
 .btn-selected {
   background-color: white;
+  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.075);
+}
+.btn-selected:active  {
+  box-shadow: -3px 4px 0 #6C6CA4;
 }
 .btn-card-delete {
   position: absolute;
@@ -413,7 +399,7 @@ export default {
   background-color: midnightblue;
 }
 .btn-like:active {
-  background-color: midnightblue;
+  background-color: #6C6CA4;
 }
 .btn-dislike {
   color: white;

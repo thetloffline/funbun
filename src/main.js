@@ -4,9 +4,11 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from './store/store'
-import landingPage from './components/LandingPage.vue'
-import fileUpload from './components/fileUpload.vue'
-import allCakes from './components/allCakes.vue'
+import fixedCover from './components/FixedCoverComponent.vue'
+import landingPage from './components/LandingPageComponent.vue'
+import fileUpload from './components/FileUploadComponent.vue'
+import allCakes from './components/AllCakesComponent.vue'
+
 Vue.config.productionTip = false
 
 Vue.filter('capitalize', function (value) {
@@ -28,6 +30,7 @@ new Vue({
   store,
   components: { 
     App,
+    fixedCover,
     landingPage,
     fileUpload,
     allCakes 

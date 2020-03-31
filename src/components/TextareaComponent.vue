@@ -20,7 +20,7 @@
 
 <script>
 export default {
-  name: 'texttextareaComponent',
+  name: 'textareaComponent',
   props: {
     id: {
       type: String

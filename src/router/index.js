@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import LandingPage from '@/components/LandingPage'
-import fileUpload from '@/components/fileUpload'
+import landingPage from '@/components/LandingPageComponent'
+import fileUpload from '@/components/FileUploadComponent'
 
 Vue.use(Router)
 
@@ -9,8 +9,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'LandingPage',
-      component: LandingPage
+      name: 'landingPage',
+      component: landingPage
     },
     {
       path: '/tere',

@@ -11,12 +11,13 @@ export default {
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css?family=Poppins:800&display=swap');
+  @import url('https://fonts.googleapis.com/css?family=Poppins:800&display=swap');
 </style>
 
 <style>
 html {
-  background-color: #A6B1E1;
+  /* background-color: #A6B1E1; */
+  background: #f6f9fc;
   margin: auto;
 }
 #app {
@@ -25,13 +26,12 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: midnightblue;
 }
 h1,h2 {
   font-family: 'Poppins';
   font-size: 2.8rem;
   line-height: 3rem;
-  color: white;
 }
 h2 {
   font-size: 2.4rem;
@@ -128,9 +128,5 @@ button {
 .error {
   color: red;
 }
-.full-page-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
+
 </style>

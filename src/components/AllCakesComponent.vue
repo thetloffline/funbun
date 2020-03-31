@@ -58,15 +58,15 @@
 
           <ul class="cake-stats">
             <li>
-              <h5>TASTE</h5> 
+              <h5>TASTE</h5>
               <p class>{{cake.taste}}</p>
             </li>
             <li>
-              <h5>BUN</h5> 
+              <h5>BUN</h5>
               <p class>{{cake.bun}}</p>
             </li>
             <li>
-              <h5>LOOKS</h5> 
+              <h5>LOOKS</h5>
               <p class>{{cake.looks}}</p>
             </li>
 
@@ -94,11 +94,13 @@
               ></div>
             </div>
             <div class="cake-location">
-              <a :href="'https://www.google.com/maps/place/' 
-                + cake.location | address" 
-                target="_blank" >
-                  <div class="cake-location-icon"></div>
-                  <div class="cake-location-address">{{cake.location | capitalize}}</div>
+              <a
+                :href="'https://www.google.com/maps/place/' 
+                + cake.location | address"
+                target="_blank"
+              >
+                <div class="cake-location-icon"></div>
+                <div class="cake-location-address">{{cake.location | capitalize}}</div>
               </a>
             </div>
           </div>
@@ -230,7 +232,6 @@ export default {
 </script>
 
 <style scoped>
-
 .cakes-section-wrapper {
   display: flex;
   flex-direction: column;
@@ -317,9 +318,9 @@ export default {
   display: flex;
   justify-content: flex-end;
 }
-.cake-location>a {
+.cake-location > a {
   display: flex;
-  color:  midnightblue;
+  color: midnightblue;
   text-decoration: none;
 }
 .cake-location-address {
@@ -385,21 +386,21 @@ export default {
   background-color: white;
   box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.075);
 }
-.btn-selected:active  {
-  box-shadow: -3px 4px 0 #6C6CA4;
+.btn-selected:active {
+  box-shadow: -3px 4px 0 #6c6ca4;
 }
 .btn-card-delete {
   position: absolute;
   margin: 12px;
   color: #00000099;
-  background-color: rgba(255, 255, 255, 0.7)
+  background-color: rgba(255, 255, 255, 0.7);
 }
 .btn-like {
   color: white;
   background-color: midnightblue;
 }
 .btn-like:active {
-  background-color: #6C6CA4;
+  background-color: #6c6ca4;
 }
 .btn-dislike {
   color: white;

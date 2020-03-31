@@ -28,16 +28,16 @@ new Vue({
   el: '#app',
   router,
   store,
-  components: { 
+  components: {
     App,
     fixedCover,
     landingPage,
     fileUpload,
-    allCakes 
+    allCakes
   },
   template: '<App/>',
 
   created () {
     this.$store.dispatch('loadCakes')
-  } 
+  }
 })

@@ -1,17 +1,17 @@
 <template>
-  <div id='app'>
-    <router-view/>
+  <div id="app">
+    <router-view />
   </div>
 </template>
 
 <script>
 export default {
-  name: 'App',
-}
+  name: "App"
+};
 </script>
 
 <style>
-  @import url('https://fonts.googleapis.com/css?family=Poppins:800&display=swap');
+@import url("https://fonts.googleapis.com/css?family=Poppins:800&display=swap");
 </style>
 
 <style>
@@ -21,15 +21,16 @@ html {
   margin: auto;
 }
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   font-weight: 500;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: midnightblue;
 }
-h1,h2 {
-  font-family: 'Poppins';
+h1,
+h2 {
+  font-family: "Poppins";
   font-size: 2.8rem;
   line-height: 3rem;
 }
@@ -56,10 +57,9 @@ li {
   margin: 0 10px;
 }
 a {
-  color: #FF715B;
+  color: #ff715b;
 }
 p {
-
 }
 .section-header {
   width: 260px;
@@ -72,16 +72,16 @@ button {
   color: white;
   font-size: 1.4rem;
   font-weight: 500;
-  transition: .1s all;
+  transition: 0.1s all;
   cursor: pointer;
   outline: 0;
 }
 .btn-container {
   display: flex;
-  margin: 10px 0   10px 0;
+  margin: 10px 0 10px 0;
 }
 .btn-form {
-  margin:  0;
+  margin: 0;
   width: 100%;
 }
 .btn-primary {
@@ -94,21 +94,23 @@ button {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 .btn-primary:active {
-  background-color: #42428A;
+  background-color: #42428a;
   box-shadow: 0 0 0 rgba(0, 0, 0, 0.3);
 }
 .btn-transparent {
   background-color: rgba(0, 0, 0, 0);
   color: midnightblue;
 }
-.btn-transparent:active, .btn-sort:active, .btn-card:active{
+.btn-transparent:active,
+.btn-sort:active,
+.btn-card:active {
   outline: 0;
 }
 .btn-transparent:hover {
   background-color: white;
 }
 .btn-round {
-  display:flex;
+  display: flex;
   justify-content: center;
   flex-direction: column;
   cursor: pointer;
@@ -123,10 +125,9 @@ button {
 }
 
 .btn-round:active {
-  background-color: #42428A;
+  background-color: #42428a;
 }
 .error {
   color: red;
 }
-
 </style>

@@ -3,16 +3,9 @@
     <div class="content-center">
       <div class="add-bun">
         <transition name="fade" mode="out-in">
-          <div v-if="!clickToShowContent" 
-            class="form-bun" 
-            key="addBuns">
-              <h1 class="section-header">
-                Nam-Nam Add a bun
-              </h1>
-              <div class="btn-round" 
-                v-on:click="showFormContent($event)">
-                +
-              </div>
+          <div v-if="!clickToShowContent" class="form-bun" key="addBuns">
+            <h1 class="section-header">Nam-Nam Add a bun</h1>
+            <div class="btn-round" v-on:click="showFormContent($event)">+</div>
           </div>
 
           <div v-else class="container" key="showBuns">
@@ -225,7 +218,7 @@ export default {
   justify-content: space-around;
 }
 .add-bun {
-  display: flex; 
+  display: flex;
   flex-direction: column;
   justify-content: space-around;
 }

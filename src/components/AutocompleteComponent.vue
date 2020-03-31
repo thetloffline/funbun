@@ -69,7 +69,7 @@ export default {
         this.$emit("input", value);
       }
     },
-    
+
     matches() {
       return this.suggestions.filter(str => {
         return str.toLowerCase().indexOf(this.selection.toLowerCase()) >= 0;
@@ -84,7 +84,6 @@ export default {
   },
 
   methods: {
-  
     enter() {
       this.selection = this.matches[this.current];
       this.open = false;
@@ -128,9 +127,10 @@ export default {
 li {
   cursor: pointer;
   margin: 0;
-
 }
-li:hover, li:focus, li:active {
+li:hover,
+li:focus,
+li:active {
   background-color: midnightblue;
   color: white;
 }

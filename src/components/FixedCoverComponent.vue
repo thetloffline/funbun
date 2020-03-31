@@ -1,31 +1,30 @@
 <template>
-<div>
-  <div class="sticky sticky-cover"></div>
-  <div class="sticky overlay">
-    <div class="flex">
-      <div class='sticky-slogan'>
-        <h1>{{msg}}</h1>
+  <div>
+    <div class="sticky sticky-cover"></div>
+    <div class="sticky overlay">
+      <div class="flex">
+        <div class="sticky-slogan">
+          <h1>{{msg}}</h1>
+        </div>
       </div>
     </div>
   </div>
-</div>
 </template>
 
 <script>
 export default {
   name: "fixedCoverComponent",
-  data () {
+  data() {
     return {
       msg: "All work and no fun makes Jack want to have some bun!"
-    }
+    };
   }
-
-}
+};
 </script>
 
 <style scoped>
 @media only screen and (min-width: 860px) {
-  .flex {  
+  .flex {
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -33,7 +32,8 @@ export default {
     justify-content: center;
   }
   .sticky {
-    position: fixed;left: 0;
+    position: fixed;
+    left: 0;
     top: 0;
     bottom: 0;
     width: 60vw;
@@ -56,7 +56,7 @@ export default {
   .sticky-slogan {
     display: flex !important;
   }
-  .sticky-slogan>h1 {
+  .sticky-slogan > h1 {
     font-size: 5rem;
     line-height: 4.6rem;
     margin: auto 5vw;

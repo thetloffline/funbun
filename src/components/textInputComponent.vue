@@ -3,24 +3,22 @@
     <div class="field">
       <input
         class="input"
-        type='text'
+        type="text"
         required
         :name="label"
         :id="label"
         :placeholder="label"
-        :value='value'
+        :value="value"
         v-on:input="updateValue($event.target.value)"
       />
-      <label :for="label">
-          {{ label }}
-      </label>
+      <label :for="label">{{ label }}</label>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'textInputComponent',
+  name: "textInputComponent",
   props: {
     id: {
       type: String
@@ -34,11 +32,11 @@ export default {
     }
   },
   methods: {
-    updateValue: function (value) {
-      this.$emit('input', value)
+    updateValue: function(value) {
+      this.$emit("input", value);
     }
   }
-}
+};
 </script>
 
 <style scoped>
@@ -52,7 +50,7 @@ label {
   transition: all 0.2s;
   touch-action: manipulation;
 }
-input:placeholder-shown+label {
+input:placeholder-shown + label {
   cursor: text;
   max-width: 66.66%;
   white-space: nowrap;
@@ -67,9 +65,9 @@ input::placeholder {
 }
 input:focus::-webkit-input-placeholder {
   opacity: 0;
-  color: rgba(0, 0, 0, 0)
+  color: rgba(0, 0, 0, 0);
 }
-input[type='text']{
+input[type="text"] {
   cursor: text;
   width: 100%;
   height: 40px;
@@ -82,7 +80,8 @@ input[type='text']{
   color: midnightblue;
   transition: all 0.2s;
 }
-input:not(:placeholder-shown) + label, input:focus + label {
+input:not(:placeholder-shown) + label,
+input:focus + label {
   transform: translate(0, 0) scale(1);
   font-size: 14px;
   cursor: pointer;

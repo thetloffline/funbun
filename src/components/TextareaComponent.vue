@@ -4,23 +4,21 @@
       <textarea
         rows="4"
         class="textarea"
-        type='text'
+        type="text"
         :name="label"
         :id="label"
         :placeholder="label"
-        :value='value'
+        :value="value"
         v-on:input="updateValue($event.target.value)"
       />
-      <label :for="label">
-          {{ label }}
-      </label>
+      <label :for="label">{{ label }}</label>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'textareaComponent',
+  name: "textareaComponent",
   props: {
     id: {
       type: String
@@ -34,11 +32,11 @@ export default {
     }
   },
   methods: {
-    updateValue: function (value) {
-      this.$emit('input', value)
+    updateValue: function(value) {
+      this.$emit("input", value);
     }
   }
-}
+};
 </script>
 
 <style scoped>
@@ -52,7 +50,7 @@ label {
   transition: all 0.2s;
   touch-action: manipulation;
 }
-textarea:placeholder-shown+label {
+textarea:placeholder-shown + label {
   cursor: text;
   max-width: 66.66%;
   white-space: nowrap;
@@ -67,7 +65,7 @@ textarea::placeholder {
 }
 textarea:focus::-webkit-textarea-placeholder {
   opacity: 0;
-  color: rgba(0, 0, 0, 0)
+  color: rgba(0, 0, 0, 0);
 }
 textarea {
   cursor: text;
@@ -84,7 +82,8 @@ textarea {
   color: midnightblue;
   transition: all 0.2s;
 }
-textarea:not(:placeholder-shown) + label, textarea:focus + label {
+textarea:not(:placeholder-shown) + label,
+textarea:focus + label {
   transform: translate(0, 0) scale(1);
   font-size: 14px;
   cursor: pointer;

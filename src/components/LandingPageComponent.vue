@@ -3,7 +3,7 @@
     <fixedCover/>
     <div class='content-center'>
       <div class='sm-content'>
-        <div class='poster'>
+        <div class='slogan'>
           <h1>{{msg}}</h1>
         </div>
       </div>
@@ -49,9 +49,9 @@ export default {
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
-  height: 100vh;
+  height: 80vh;
 }
-.poster {
+.slogan {
   width: 300px;
 }
 </style>

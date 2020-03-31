@@ -3,7 +3,7 @@
   <div class="sticky sticky-cover"></div>
   <div class="sticky overlay">
     <div class="flex">
-      <div class='sticky-poster'>
+      <div class='sticky-slogan'>
         <h1>{{msg}}</h1>
       </div>
     </div>
@@ -53,10 +53,10 @@ export default {
     background: url(./../assets/tuuletasku.jpg) no-repeat center center;
     background-size: cover;
   }
-  .sticky-poster {
+  .sticky-slogan {
     display: flex !important;
   }
-  .sticky-poster>h1 {
+  .sticky-slogan>h1 {
     font-size: 5rem;
     line-height: 4.6rem;
     margin: auto 5vw;
@@ -64,7 +64,7 @@ export default {
 }
 
 /* END MEDIA QUERY */
-.sticky-poster {
+.sticky-slogan {
   display: none;
 }
 </style>

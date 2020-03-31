@@ -241,11 +241,6 @@ export default {
 
 /* REFAKTOREERIDA */
 
-.cover-img {
-  height: 67vh;
-  background: url(./../assets/tuuletasku.jpg) no-repeat center center;
-  background-size: cover;
-}
 .card {
   display: flex;
   flex-direction: column;
@@ -257,13 +252,6 @@ export default {
 }
 .card:hover {
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-}
-.area {
-  display: flex;
-  flex-direction: column;
-  padding: 30px;
-  margin-bottom: 20px;
-  transition: 0.2s all;
 }
 
 /* CAKE */
@@ -283,9 +271,6 @@ export default {
   flex-direction: row;
   justify-content: space-around;
   flex-grow: 1;
-}
-.cake-stats > div {
-  margin: 0 30px;
 }
 .cake-stats > li > p {
   margin: 0 auto 5px;
@@ -311,8 +296,6 @@ export default {
 }
 .cake-cafe-name {
   display: flex;
-  font-size: 1.5em;
-  font-weight: 700;
 }
 .cake-location {
   display: flex;

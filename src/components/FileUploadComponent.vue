@@ -237,23 +237,7 @@ export default {
 .btn-container {
   margin: 10px 0 10px 0;
 }
-h3 {
-  margin: 20px 0 0;
-  color: rgba(0, 0, 0, 0.6);
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-.error {
-  color: red;
-}
+
 .card {
   display: flex;
   flex-direction: column;
@@ -266,37 +250,6 @@ a {
 }
 .card:hover {
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-}
-.area {
-  display: flex;
-  flex-direction: column;
-  padding: 30px;
-  margin-bottom: 20px;
-  transition: 0.2s all;
-}
-label {
-  display: flex;
-}
-input[type="text"] {
-  width: 100%;
-  margin-bottom: 10px;
-  margin-top: 4px;
-  padding: 4px;
-  border: 0;
-  border-bottom: 2px solid rgba(0, 0, 0, 0.15);
-  height: 40px;
-  outline: none;
-  font-size: 18px;
-}
-input:focus,
-.btn:focus {
-  outline: none;
-}
-.area:active {
-  background-color: white;
-}
-.date {
-  font-size: 1em;
 }
 input[type="file"] {
   position: absolute;
@@ -333,29 +286,12 @@ input[type="file"] {
   color: rgba(0, 0, 0, 0.5);
   cursor: pointer;
 }
-.ulpoad-icon {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  margin: auto;
-  width: 40px;
-  height: 40px;
-  border-radius: 3rem;
-  border-style: solid;
-  border-width: 2px;
-  border-color: rgba(0, 0, 0, 0.26);
-  color: rgba(0, 0, 0, 0.26);
-}
 .upload-text {
   padding-bottom: 5px;
   display: flex;
   justify-content: center;
   flex-direction: column;
   margin: auto;
-  color: midnightblue;
-}
-.ulpoad-icon:active {
-  border-color: rgba(0, 0, 0, 0.6);
   color: midnightblue;
 }
 .fade-enter-active {

@@ -38,7 +38,8 @@ export default {
   data() {
     return {
       open: false,
-      current: 0
+      startSelecting: false,
+      current: -1
     };
   },
 
@@ -74,7 +75,12 @@ export default {
 
     matches() {
       return this.suggestions.filter(str => {
-        return str.toLowerCase().indexOf(this.selection.toLowerCase()) >= 0;
+        if (this.selection === "" || this.selection === undefined) {
+          return;
+        }
+        if (this.selection.length >= 3) {
+          return str.toLowerCase().indexOf(this.selection.toLowerCase()) >= 0;
+        }
       });
     },
 
@@ -88,35 +94,33 @@ export default {
   methods: {
     blur() {
       this.open = false;
-      console.log(this.selection);
-      // expected behaviour ESC —> this.matches = false
+      this.startSelecting = false;
+    },
+
+    focusInput(e) {
+      const inputs = document.querySelectorAll(".input");
+      for (let i = 0; i < inputs.length; i++) {
+        if (inputs[i].value.length === 0) {
+          inputs[i].focus();
+          this.startSelecting = false;
+          return;
+        }
+      }
     },
 
     enter(e) {
       if (this.matches.length === 0) {
-        let nodes =
-          e.target.parentNode.parentNode.nextElementSibling.childNodes[0]
-            .childNodes;
-        if (nodes.length >= 2) {
-          nodes[2].focus();
-        } else {
-          e.target.blur();
-          return;
-        }
+        this.focusInput(e);
         return;
       }
-      if (this.matches.length >= 1) {
+      if (this.matches.length >= 1 && this.startSelecting) {
         this.selection = this.matches[this.current];
         this.open = false;
-        let nodes =
-          e.target.parentNode.parentNode.nextElementSibling.childNodes[0]
-            .childNodes;
-        if (nodes.length >= 2) {
-          nodes[2].focus();
-        } else {
-          e.target.blur();
-          return;
-        }
+        this.focusInput(e);
+      }
+      if (this.matches.length >= 1 && !this.startSelecting) {
+        this.open = false;
+        this.focusInput(e);
       }
     },
 
@@ -125,17 +129,24 @@ export default {
     },
 
     down() {
-      if (this.current < this.matches.length - 1) this.current++;
+      if (this.open == true) {
+        this.startSelecting = true;
+      }
+      if (this.current < this.matches.length - 1) {
+        this.current++;
+      }
     },
 
     isActive(index) {
-      return index === this.current;
+      if (this.startSelecting === true) {
+        return index === this.current;
+      }
     },
 
     change() {
       if (this.open == false) {
         this.open = true;
-        this.current = 0;
+        this.current = -1;
       }
     },
 

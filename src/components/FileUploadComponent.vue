@@ -34,6 +34,7 @@
             </transition>
 
             <autocomplete
+              type="text"
               :suggestions="getCafeNames"
               v-model="cafeName"
               label="Name of the shop"
@@ -42,6 +43,7 @@
             />
 
             <autocomplete
+              type="text"
               :suggestions="getCafeLocations"
               v-model="location"
               label="Address of the shop"
@@ -50,6 +52,7 @@
             />
 
             <autocomplete
+              type="number"
               :suggestions="getCakeprices"
               v-model="price"
               label="Price"
@@ -95,9 +98,9 @@ export default {
       location: "",
       price: "",
       comment: "",
-      looks: 50,
-      taste: 50,
-      bun: 50,
+      looks: 0,
+      taste: 0,
+      bun: 0,
       clickToShowContent: false,
       formData: "",
       value: "",
@@ -137,9 +140,9 @@ export default {
       this.price = "";
       this.imageFile = "";
       this.comment = "";
-      this.looks = 50;
-      this.taste = 50;
-      this.bun = 50;
+      this.looks = 0;
+      this.taste = 0;
+      this.bun = 0;
     },
 
     async submitFiles() {

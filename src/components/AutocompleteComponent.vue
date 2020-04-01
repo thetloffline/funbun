@@ -14,7 +14,7 @@
       </ul>
       <input
         class="input"
-        type="text"
+        :type="type"
         required
         :name="label"
         :id="label"
@@ -46,6 +46,10 @@ export default {
 
   props: {
     id: {
+      type: String
+    },
+
+    type: {
       type: String
     },
 
@@ -219,7 +223,7 @@ input:focus::-webkit-input-placeholder {
   opacity: 0;
   color: rgba(0, 0, 0, 0);
 }
-input[type="text"] {
+input[type="text"], input[type="number"] {
   cursor: text;
   width: 100%;
   height: 40px;

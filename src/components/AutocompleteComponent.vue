@@ -7,6 +7,7 @@
           :key="index"
           v-bind:class="{'active': isActive(index)}"
           @click="suggestionClick(index)"
+          @mousedown.prevent 
         >
           <span class="suggestion">{{ suggestion }}</span>
         </li>

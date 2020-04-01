@@ -136,6 +136,7 @@ export default {
       this.location = "";
       this.price = "";
       this.imageFile = "";
+      this.comment = "";
       this.looks = 50;
       this.taste = 50;
       this.bun = 50;

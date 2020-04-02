@@ -37,7 +37,7 @@
               type="text"
               :suggestions="getCafeNames"
               v-model="cafeName"
-              label="Name of the shop"
+              label="Name"
               :required="true"
               id="cafeName"
             />
@@ -46,13 +46,14 @@
               type="text"
               :suggestions="getCafeLocations"
               v-model="location"
-              label="Address of the shop"
+              label="Address"
               :required="true"
               id="location"
             />
 
             <autocomplete
               type="number"
+              step="0.01"
               :suggestions="getCakeprices"
               v-model="price"
               label="Price"
@@ -60,11 +61,11 @@
               id="price"
             />
 
-            <rangeSLider v-model="looks" label="The looks" :required="true" id="looks" />
+            <rangeSLider v-model="looks" label="Looks" :required="true" id="looks" />
 
-            <rangeSLider v-model="taste" label="The taste" :required="true" id="taste" />
+            <rangeSLider v-model="taste" label="Taste" :required="true" id="taste" />
 
-            <rangeSLider v-model="bun" label="The bun" :required="true" id="bun" />
+            <rangeSLider v-model="bun" label="Bun" :required="true" id="bun" />
 
             <textArea v-model="comment" label="Comment" id="comment" />
 
@@ -145,18 +146,18 @@ export default {
       this.bun = 0;
     },
 
-    async submitFiles() {
+    submitFiles() {
       const formData = new FormData();
       let uploadedFile = this.files;
       formData.append("files[0]", uploadedFile);
       formData.append("cafeName", this.cafeName);
       formData.append("location", this.location);
-      formData.append("price", this.price);
+      formData.append("price", Number(this.price));
       formData.append("comment", this.comment);
       formData.append("looks", Number(this.looks));
       formData.append("taste", Number(this.taste));
       formData.append("bun", Number(this.bun));
-      await this.$store.dispatch("addNewCake", formData);
+      this.$store.dispatch("addNewCake", formData);
       this.resetFormData();
       this.scrollToLastCake();
       this.toggleShowContent();
@@ -203,8 +204,8 @@ export default {
     },
 
     hideFormContent(e) {
-      let position = e.target.parentNode.parentNode.parentNode.className;
       this.toggleShowContent();
+      let position = e.target.parentNode.parentNode.parentNode.className;
       this.scrollToPosition(position);
     },
 
@@ -283,7 +284,6 @@ input[type="file"] {
   float: right;
 }
 .upload-area {
-  padding: 40px;
   cursor: pointer;
   font-size: 18px;
   font-weight: 700;

@@ -5,7 +5,7 @@
   "author": "thetloffline <thetloffline@users.noreply.github.com>",
   "private": true,
   "scripts": {
-    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
+    "dev": "webpack-dev-server --inline --progress --disableHostCheck --host 0.0.0.0 --config build/webpack.dev.conf.js",
     "start": "npm run dev",
     "unit": "jest --config test/unit/jest.conf.js --coverage",
     "test": "npm run unit",
@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "axios": "^0.19.2",
+    "standard": "^14.3.3",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
     "vuex": "^3.1.3"

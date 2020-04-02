@@ -12,6 +12,10 @@
           <span class="suggestion">{{ suggestion }}</span>
         </li>
       </ul>
+      <div id="error"
+        v-bind:class="isValid ? '' : 'error'">
+        {{error}}
+      </div>
       <input
         class="input"
         :type="type"
@@ -25,7 +29,8 @@
         @keydown.up="up"
         @keydown.esc="blur"
         @input="change"
-        @blur="blur"
+        @blur="blur(), validateField($event)"
+        @focus="hideError($event)"
       />
       <label :for="label">{{ label }}</label>
     </div>
@@ -39,8 +44,10 @@ export default {
   data() {
     return {
       open: false,
-      startSelecting: false,
-      current: -1
+      startedSelecting: false,
+      current: -1,
+      isValid: true,
+      error: ''
     };
   },
 
@@ -97,9 +104,24 @@ export default {
   },
 
   methods: {
+
+    validateField(e) {
+      if (this.selection === '' ) {
+        this.isValid = false;
+        this.error = `Please enter ${this.label}`
+      } else {
+       this.error = ''
+        this.isValid = true;
+      }
+    },
+
+    hideError(e) {
+      this.error = ''
+    },
+
     blur() {
       this.open = false;
-      this.startSelecting = false;
+      this.startedSelecting = false;
     },
 
     focusInput(e) {
@@ -107,7 +129,7 @@ export default {
       for (let i = 0; i < inputs.length; i++) {
         if (inputs[i].value.length === 0) {
           inputs[i].focus();
-          this.startSelecting = false;
+          this.startedSelecting = false;
           return;
         }
       }
@@ -118,15 +140,12 @@ export default {
         this.focusInput(e);
         return;
       }
-      if (this.matches.length >= 1 && this.startSelecting) {
+
+      if (this.startedSelecting) {
         this.selection = this.matches[this.current];
-        this.open = false;
-        this.focusInput(e);
       }
-      if (this.matches.length >= 1 && !this.startSelecting) {
-        this.open = false;
-        this.focusInput(e);
-      }
+      this.focusInput(e);
+      this.open = false;
     },
 
     up() {
@@ -135,7 +154,7 @@ export default {
 
     down() {
       if (this.open == true) {
-        this.startSelecting = true;
+        this.startedSelecting = true;
       }
       if (this.current < this.matches.length - 1) {
         this.current++;
@@ -143,7 +162,7 @@ export default {
     },
 
     isActive(index) {
-      if (this.startSelecting === true) {
+      if (this.startedSelecting === true) {
         return index === this.current;
       }
     },
@@ -173,7 +192,10 @@ export default {
 }
 li {
   cursor: pointer;
-  margin: 0;
+  margin: 3px 0;
+}
+li:nth-child(even) {
+  background-color: #F7F7FA;
 }
 li:hover,
 li:focus,
@@ -223,19 +245,23 @@ input:focus::-webkit-input-placeholder {
   opacity: 0;
   color: rgba(0, 0, 0, 0);
 }
-input[type="text"], input[type="number"] {
+input[type="text"]:focus,
+input[type="number"]:focus {
+  background-color: #F7F7FA;
+}
+input[type="text"],
+input[type="number"] {
   cursor: text;
-  width: 100%;
+  width: 96%;
   height: 40px;
   margin-bottom: 10px;
   margin-top: 4px;
-  padding: 4px;
+  padding: 4px 0 4px 4%;
   border: 0;
-  border-bottom: 2px solid midnightblue;
+  border-bottom: 2px solid #ABABCB;
   outline: none;
   font-size: 18px;
   color: midnightblue;
-  transition: all 0.2s;
 }
 input:not(:placeholder-shown) + label,
 input:focus + label {
@@ -243,4 +269,16 @@ input:focus + label {
   font-size: 14px;
   cursor: pointer;
 }
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
 </style>

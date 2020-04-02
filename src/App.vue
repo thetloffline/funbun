@@ -126,7 +126,14 @@ button {
 .btn-round:active {
   background-color: #42428a;
 }
+
 .error {
-  color: red;
+  display: block;
+  transition: all 0.5s;
+}
+ #error { 
+   background-color: #FFE47B;
+   color: #746216;
+   margin-top: -4px;
 }
 </style>

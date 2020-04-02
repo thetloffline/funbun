@@ -63,6 +63,9 @@ textarea::placeholder {
   opacity: 0;
   transition: inherit;
 }
+textarea:focus {
+  background-color: #F7F7FA;
+}
 textarea:focus::-webkit-textarea-placeholder {
   opacity: 0;
   color: rgba(0, 0, 0, 0);
@@ -75,12 +78,11 @@ textarea {
   margin-top: 4px;
   padding: 4px;
   border: 0;
-  border-bottom: 2px solid midnightblue;
+  border-bottom: 2px solid #ABABCB;
   outline: none;
   resize: vertical;
   font-size: 18px;
   color: midnightblue;
-  transition: all 0.2s;
 }
 textarea:not(:placeholder-shown) + label,
 textarea:focus + label {

@@ -16,7 +16,6 @@ export default {
 
 <style>
 html {
-  /* background-color: #A6B1E1; */
   background: #f6f9fc;
   margin: auto;
 }
@@ -82,10 +81,10 @@ button {
 }
 .btn-form {
   margin: 0;
+  height: 60px;
   width: 100%;
 }
 .btn-primary {
-  /* background-image: linear-gradient(to right, #39dc7a , #20dc87); */
   background-color: midnightblue;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
   outline: 0;
@@ -115,9 +114,9 @@ button {
   flex-direction: column;
   cursor: pointer;
   margin: auto;
-  width: 72px;
-  height: 72px;
-  border-radius: 36px;
+  width: 60px;
+  height: 60px;
+  border-radius: 30px;
   background-color: midnightblue;
   color: white;
   font-size: 3rem;

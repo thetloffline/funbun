@@ -4,9 +4,9 @@ import axios from 'axios'
 
 Vue.use(Vuex, axios)
 
-const url = 'http://10.29.64.55:3000/api/files/'
+const url = 'http://arvuti.local:3000/api/files/'
 export default new Vuex.Store({
-  state: { 
+  state: {
     cakes: []
   },
 
@@ -19,100 +19,66 @@ export default new Vuex.Store({
   actions: {
     async loadCakes ({ commit }) {
       try {
-        return new Promise( async (resolve, reject) => {
-          const res = await axios.get(url)
-          let cakesData = res.data
-          resolve(
-            commit('SET_CAKES', cakesData)
-            )
-          })
-        } catch (err) {
-          console.log(err)
+        const response = await axios.get(url)
+        const cakesData = response.data
+        commit('SET_CAKES', cakesData)
+      } catch (err) {
+        console.log(err)
+      }
+    },
+
+    async addNewCake ({ commit }, payload) {
+      try {
+        const response = await axios.post(url, payload, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+        this.dispatch('loadCakes')
+        console.log(response.data)
+      } catch (error) {
+        console.log('addNewCake error', error)
+      }
+    },
+
+    async deleteOne ({ commit }, id) {
+      try {
+        const response = await axios.delete(url + id)
+        this.dispatch('loadCakes')
+        // console.log(response)
+      } catch (err) {
+        console.log('deleteOne error', err)
+      }
+    },
+
+    async rateCake ({ commit }, payload) {
+      try {
+        const urlId = url + payload.get('id')
+        const config = {
+          headers: {
+            'Content-Type': `text/plain; boundary=${payload._boundary}`
+          }
         }
-      },
-      
-      async addNewCake ({ commit }, payload) {
-        return new Promise( async (resolve, reject) => {
-          try {
-            const response = await axios.post(url, payload,{ headers: {
-              'Content-Type': 'multipart/form-data'
-            }})
-              resolve(
-              this.dispatch('loadCakes')
-              )
-              console.log(response.data)
-            } catch (error) {
-              reject(
-                'addNewCake error', error
-                )
-              }
-            })
-          },
-          
-          async deleteOne ({ commit }, id) {
-            return new Promise(async (resolve, reject) => { 
-              try {
-                await axios.delete(url+id)
-                resolve(
-                this.dispatch('loadCakes')
-                )
-                console.log(response)
-              } catch (error) {
-                reject(
-                  'deleteOne error', error
-                  )
-              }
-            })
-          },
+        const response = await axios.put(urlId, payload, config)
+        this.dispatch('loadCakes')
+        // console.log(response)
+      } catch (err) {
+        console.log('rateCake', err)
+      }
+    }
+  },
 
-          async rateCake ({ commit }, payload) {
-            return new Promise( async (resolve, reject) => {
-              try {
-                const url_id = url + payload.get('id')
-                const config = {
-                  headers: {
-                      'Content-Type': `text/plain; boundary=${payload._boundary}`
-                  }}
-                const response = await axios.put(url_id, payload, config)
-                resolve(
-                  this.dispatch('loadCakes')
-                )
-              } catch (error) {
-                reject('rateCake', error)
-              }
-            })
-          },
+  getters: {
+    getCafeNames (state) {
+      return [...new Set(state.cakes.map(cake => cake.cafeName))]
+    },
 
-           rateCake2 ({ commit }, payload) {
-            const url_id = url + payload.get('id')
-            const config = { 
-              headers: {
-                  'Content-Type': `text/plain; boundary=${payload._boundary}`
-              }
-            }
-            const response = axios.put(url_id, payload, config)
-              .then(data => {
-                console.log('data', data)
-              })
-              .then(() => this.dispatch('loadCakes'))
-              .catch(error => {
-                console.log(error)
-              }) 
-            }
-          
-        },
+    getCafeLocations (state) {
+      return [...new Set(state.cakes.map(cake => cake.location))]
+    },
 
-        getters: {
-          getCafeNames ( state) { 
-            return [...new Set(state.cakes.map(cake => cake.cafeName))] 
-          },
-
-          getCafeLocations ( state) { 
-            return [...new Set(state.cakes.map(cake => cake.location))]
-          },
-
-          getCakeprices ( state) { 
-            return [...new Set(state.cakes.map(cake => cake.price))]
-          } 
-        }
-      })
+    getCakeprices (state) {
+      return [...new Set(state.cakes.map(cake => cake.price))]
+    }
+  }
+})

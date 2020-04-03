@@ -179,7 +179,7 @@ export default {
       for (var i = 0; i < uploadedFiles.length; i++) {
         this.files = uploadedFiles[i];
       }
-      // hack for ios devices
+      // scrolling hack for ios devices
       if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
         window.scrollBy({
           behavior: 'smooth', 
@@ -215,7 +215,16 @@ export default {
     hideFormContent(e) {
       this.toggleShowContent();
       let position = e.target.parentNode.parentNode.parentNode.className;
-      this.scrollToPosition(position);
+      
+      // scrolling hack for ios devices
+      if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
+         setTimeout(() => {
+           this.scrollToPosition(position)
+         }, 500);
+       } else {
+         this.scrollToPosition(position)
+       }
+
     },
 
     toggleShowContent() {

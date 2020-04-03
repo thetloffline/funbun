@@ -179,6 +179,15 @@ export default {
       for (var i = 0; i < uploadedFiles.length; i++) {
         this.files = uploadedFiles[i];
       }
+      // hack for ios devices
+      if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
+        window.scrollBy({
+          behavior: 'smooth', 
+          top: 150
+        })
+      } else {
+        this.focusInput()
+      }
     },
 
     removeFile() {

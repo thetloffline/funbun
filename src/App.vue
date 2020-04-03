@@ -122,18 +122,26 @@ button {
   font-size: 3rem;
   font-weight: 400;
 }
-
 .btn-round:active {
   background-color: #42428a;
 }
-
 .error {
-  display: block;
-  transition: all 0.5s;
+  color: #746216;
+  /* margin-top: -4px; */
+  background-color: #FFE47B;
+  animation: slide-right 0.2s ease;
+  transition: all 0.2s;
 }
- #error { 
-   background-color: #FFE47B;
-   color: #746216;
-   margin-top: -4px;
+
+@keyframes slide-right {
+  0% {
+    opacity: 0;
+    transform: translateX(-90px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
+
 </style>

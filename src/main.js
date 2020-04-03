@@ -10,6 +10,22 @@ import fileUpload from './components/FileUploadComponent.vue'
 import allCakes from './components/AllCakesComponent.vue'
 
 Vue.config.productionTip = false
+Vue.mixin({
+  methods: {
+    focusInput () {
+      const inputs = document.querySelectorAll('.input')
+      setTimeout(() => {
+        for (let i = 0; i < inputs.length; i++) {
+          if (inputs[i].value.length === 0) {
+            inputs[i].focus()
+            this.startedSelecting = false
+            return
+          }
+        }
+      }, 100)
+    }
+  }
+})
 
 Vue.filter('capitalize', function (value) {
   if (!value) return ''

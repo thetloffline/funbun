@@ -12,10 +12,12 @@
           <span class="suggestion">{{ suggestion }}</span>
         </li>
       </ul>
+
       <div id="error"
         v-bind:class="isValid ? '' : 'error'">
         {{error}}
       </div>
+
       <input
         class="input"
         :type="type"
@@ -24,13 +26,14 @@
         :id="label"
         :placeholder="label"
         v-model="selection"
-        @keydown.enter="enter($event)"
+        @keydown.enter="enter()"
         @keydown.down="down"
         @keydown.up="up"
         @keydown.esc="blur"
         @input="change"
-        @blur="blur(), validateField($event)"
-        @focus="hideError($event)"
+        @blur="blur()"
+        @focus="disableError()"
+
       />
       <label :for="label">{{ label }}</label>
     </div>
@@ -74,12 +77,13 @@ export default {
       type: String
     }
   },
-
+  
   computed: {
     selection: {
       get() {
         return this.value;
       },
+
       set(value) {
         this.$emit("input", value);
       }
@@ -90,6 +94,7 @@ export default {
         if (this.selection === "" || this.selection === undefined) {
           return;
         }
+
         if (this.selection.length >= 3) {
           return str.toLowerCase().indexOf(this.selection.toLowerCase()) >= 0;
         }
@@ -105,46 +110,39 @@ export default {
 
   methods: {
 
-    validateField(e) {
-      if (this.selection === '' ) {
-        this.isValid = false;
-        this.error = `Please enter ${this.label}`
-      } else {
-       this.error = ''
-        this.isValid = true;
-      }
+    validateField() {
+      setTimeout(() => {
+        if (this.selection === '' ) {
+          this.isValid = false;
+          this.error = `Please enter ${this.label}`
+        } else {
+          this.isValid = true;
+        }
+      }, 50);
     },
 
-    hideError(e) {
+    disableError() {
       this.error = ''
+      this.isValid = true;
     },
 
     blur() {
       this.open = false;
       this.startedSelecting = false;
+      this.validateField()
     },
 
-    focusInput(e) {
-      const inputs = document.querySelectorAll(".input");
-      for (let i = 0; i < inputs.length; i++) {
-        if (inputs[i].value.length === 0) {
-          inputs[i].focus();
-          this.startedSelecting = false;
-          return;
-        }
-      }
-    },
-
-    enter(e) {
+    enter() {
       if (this.matches.length === 0) {
-        this.focusInput(e);
+        this.focusInput();
         return;
       }
 
       if (this.startedSelecting) {
         this.selection = this.matches[this.current];
       }
-      this.focusInput(e);
+      
+      this.focusInput();
       this.open = false;
     },
 
@@ -156,6 +154,7 @@ export default {
       if (this.open == true) {
         this.startedSelecting = true;
       }
+
       if (this.current < this.matches.length - 1) {
         this.current++;
       }
@@ -177,6 +176,7 @@ export default {
     suggestionClick(index) {
       this.selection = this.matches[index];
       this.open = false;
+      this.focusInput()
     }
   }
 };
@@ -262,6 +262,7 @@ input[type="number"] {
   outline: none;
   font-size: 18px;
   color: midnightblue;
+  transition: all 0.2s;
 }
 input:not(:placeholder-shown) + label,
 input:focus + label {
@@ -275,10 +276,8 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-
 /* Firefox */
 input[type=number] {
   -moz-appearance: textfield;
 }
-
 </style>

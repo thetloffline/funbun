@@ -86,7 +86,7 @@
 import { mapGetters } from "vuex";
 import store from "../store/store";
 import textArea from "./TextareaComponent.vue";
-import rangeSLider from "./RangeSLiderComponent.vue";
+import rangeSLider from "./RangeSliderComponent.vue";
 import autocomplete from "./AutocompleteComponent.vue";
 
 export default {

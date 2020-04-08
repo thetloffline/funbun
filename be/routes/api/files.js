@@ -1,3 +1,4 @@
+const path = require('path')
 const express = require('express')
 const mongodb = require('mongodb')
 const router = express.Router()
@@ -17,7 +18,7 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   const db = await loadCakesCollection()
   const file = req.files['files[0]']
-  const filePath = __dirname + '/../../../src/assets/' + file.name
+  const filePath = path.join(__dirname, '/../../../src/assets/', file.name)
   const fileName = file.name
   const cake = {
     cafeName: req.body.cafeName,

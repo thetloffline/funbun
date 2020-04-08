@@ -4,7 +4,7 @@ import axios from 'axios'
 
 Vue.use(Vuex, axios)
 
-const url = 'http://arvuti.local:3000/api/files/'
+const url = 'http://localhost:3000/cakes/'
 export default new Vuex.Store({
   state: {
     cakes: []

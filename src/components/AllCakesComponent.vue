@@ -95,7 +95,7 @@
             </div>
             <div class="cake-location">
               <a
-                :href="'https://www.google.com/maps/place/' 
+                :href="'https://www.google.com/maps/place/'
                 + cake.location | address"
                 target="_blank"
               >
@@ -117,118 +117,118 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import store from "../store/store";
+import { mapState } from 'vuex'
+import store from '../store/store'
 
 export default {
   store,
-  name: "allCakesComponent",
+  name: 'allCakesComponent',
   props: {},
-  data() {
+  data () {
     return {
-      selectedCommentIndex: "",
-      showComment: "",
+      selectedCommentIndex: '',
+      showComment: '',
       sortAsc: {
         type: Boolean,
         value: true
       },
       selectedBtn: null,
-      sortParam: "taste",
+      sortParam: 'taste',
       isLast: {
         type: Boolean,
         value: false
       }
-    };
+    }
   },
 
-  mounted() {},
-  created() {
-    const sortButtons = document.querySelectorAll(".btn-sort");
+  mounted () {},
+  created () {
+    const sortButtons = document.querySelectorAll('.btn-sort')
   },
 
   methods: {
-    async deleteCake(id) {
-      await this.$store.dispatch("deleteOne", id);
+    async deleteCake (id) {
+      await this.$store.dispatch('deleteOne', id)
     },
 
-    getImagePath(path) {
+    getImagePath (path) {
       try {
-        return require("./../assets/" + path);
+        return require('./../assets/' + path)
       } catch (error) {
-        console.log("image replaced with placeholder. ", error.message);
-        return require("./../assets/tuuletasku.jpg");
+        console.log('image replaced with placeholder. ', error.message)
+        return require('./../assets/tuuletasku.jpg')
       }
     },
 
-    setActiveClass(e) {
-      const activeBtns = document.querySelectorAll(".btn-selected");
+    setActiveClass (e) {
+      const activeBtns = document.querySelectorAll('.btn-selected')
       activeBtns[0].className = activeBtns[0].className.replace(
-        "btn-selected",
-        ""
-      );
-      e.classList.add("btn-selected");
+        'btn-selected',
+        ''
+      )
+      e.classList.add('btn-selected')
     },
 
-    setSortParam(sortParam, e) {
-      this.sortParam = sortParam;
-      //check if the same sort button is pressed
+    setSortParam (sortParam, e) {
+      this.sortParam = sortParam
+      // check if the same sort button is pressed
       if (this.selectedBtn === e.target.id) {
-        this.sortAsc.value = !this.sortAsc.value;
+        this.sortAsc.value = !this.sortAsc.value
       }
-      this.selectedBtn = e.target.id;
+      this.selectedBtn = e.target.id
     },
 
-    toggleSelectedCommentId(id) {
-      const selector = document.querySelector("#" + CSS.escape(id));
+    toggleSelectedCommentId (id) {
+      const selector = document.querySelector('#' + CSS.escape(id))
       if (this.selectedCommentIndex === id) {
-        this.selectedCommentIndex = "";
-        this.showComment = false;
+        this.selectedCommentIndex = ''
+        this.showComment = false
       } else {
-        this.showComment = true;
-        this.selectedCommentIndex = id;
-        //this.scrollToComment(selector); does not work on Safari
-        //this.SmoothVerticalScrolling(selector, 275, "center")
+        this.showComment = true
+        this.selectedCommentIndex = id
+        // this.scrollToComment(selector); does not work on Safari
+        // this.SmoothVerticalScrolling(selector, 275, "center")
       }
     },
 
-    scrollToComment(selector) {
+    scrollToComment (selector) {
       setTimeout(() => {
         selector.scrollIntoView({
-          behavior: "smooth",
-          block: "end"
-        });
-      }, 90);
+          behavior: 'smooth',
+          block: 'end'
+        })
+      }, 90)
     },
 
-    rateCake(cake, val) {
-      cake.taste = Number(cake.taste) + Number(val);
-      const formData = new FormData();
-      formData.append("taste", cake.taste);
-      formData.append("id", cake._id);
-      this.$store.dispatch("rateCake", formData);
+    rateCake (cake, val) {
+      cake.taste = Number(cake.taste) + Number(val)
+      const formData = new FormData()
+      formData.append('taste', cake.taste)
+      formData.append('id', cake._id)
+      this.$store.dispatch('rateCake', formData)
     }
   },
   computed: {
-    ...mapState(["cakes"]),
+    ...mapState(['cakes']),
 
-    sortedCakes: function() {
+    sortedCakes: function () {
       if (this.cakes.length !== 0) {
-        const sortedCakes = this.cakes;
+        const sortedCakes = this.cakes
 
-        //identify latest created cake
-        sortedCakes[sortedCakes.length - 1].isLast = true;
+        // identify latest created cake
+        sortedCakes[sortedCakes.length - 1].isLast = true
 
-        //toggle sort DESC ASC
-        let ascDesc = this.sortAsc.value ? -1 : 1;
+        // toggle sort DESC ASC
+        let ascDesc = this.sortAsc.value ? -1 : 1
         return sortedCakes.sort(
           (a, b) =>
             ascDesc *
             (Number(a[this.sortParam]) > Number(b[this.sortParam]) ? 1 : -1)
-        );
+        )
       }
     }
   }
-};
+}
 </script>
 
 <style scoped>

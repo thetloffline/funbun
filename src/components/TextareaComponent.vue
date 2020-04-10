@@ -18,7 +18,7 @@
 
 <script>
 export default {
-  name: "textareaComponent",
+  name: 'textareaComponent',
   props: {
     id: {
       type: String
@@ -32,11 +32,11 @@ export default {
     }
   },
   methods: {
-    updateValue: function(value) {
-      this.$emit("input", value);
+    updateValue: function (value) {
+      this.$emit('input', value)
     }
   }
-};
+}
 </script>
 
 <style scoped>

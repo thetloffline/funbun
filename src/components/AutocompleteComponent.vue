@@ -7,7 +7,7 @@
           :key="index"
           v-bind:class="{'active': isActive(index)}"
           @click="suggestionClick(index)"
-          @mousedown.prevent 
+          @mousedown.prevent
         >
           <span class="suggestion">{{ suggestion }}</span>
         </li>
@@ -41,17 +41,17 @@
 </template>
 
 <script>
-import Vue from "vue";
+import Vue from 'vue'
 
 export default {
-  data() {
+  data () {
     return {
       open: false,
       startedSelecting: false,
       current: -1,
       isValid: true,
       error: ''
-    };
+    }
   },
 
   props: {
@@ -77,109 +77,109 @@ export default {
       type: String
     }
   },
-  
+
   computed: {
     selection: {
-      get() {
-        return this.value;
+      get () {
+        return this.value
       },
 
-      set(value) {
-        this.$emit("input", value);
+      set (value) {
+        this.$emit('input', value)
       }
     },
 
-    matches() {
+    matches () {
       return this.suggestions.filter(str => {
-        if (this.selection === "" || this.selection === undefined) {
-          return;
+        if (this.selection === '' || this.selection === undefined) {
+          return
         }
 
         if (this.selection.length >= 3) {
-          return str.toLowerCase().indexOf(this.selection.toLowerCase()) >= 0;
+          return str.toLowerCase().indexOf(this.selection.toLowerCase()) >= 0
         }
-      });
+      })
     },
 
-    openSuggestion() {
+    openSuggestion () {
       return (
-        this.selection !== "" && this.matches.length != 0 && this.open === true
-      );
+        this.selection !== '' && this.matches.length != 0 && this.open === true
+      )
     }
   },
 
   methods: {
 
-    validateField() {
+    validateField () {
       setTimeout(() => {
-        if (this.selection === '' ) {
-          this.isValid = false;
+        if (this.selection === '') {
+          this.isValid = false
           this.error = `Please enter ${this.label}`
         } else {
-          this.isValid = true;
+          this.isValid = true
         }
-      }, 50);
+      }, 50)
     },
 
-    disableError() {
+    disableError () {
       this.error = ''
-      this.isValid = true;
+      this.isValid = true
     },
 
-    blur() {
-      this.open = false;
-      this.startedSelecting = false;
+    blur () {
+      this.open = false
+      this.startedSelecting = false
       this.validateField()
     },
 
-    enter() {
+    enter () {
       if (this.matches.length === 0) {
-        this.focusInput();
-        return;
+        this.focusInput()
+        return
       }
 
       if (this.startedSelecting) {
-        this.selection = this.matches[this.current];
+        this.selection = this.matches[this.current]
       }
-      
-      this.focusInput();
-      this.open = false;
+
+      this.focusInput()
+      this.open = false
     },
 
-    up() {
-      if (this.current > 0) this.current--;
+    up () {
+      if (this.current > 0) this.current--
     },
 
-    down() {
+    down () {
       if (this.open == true) {
-        this.startedSelecting = true;
+        this.startedSelecting = true
       }
 
       if (this.current < this.matches.length - 1) {
-        this.current++;
+        this.current++
       }
     },
 
-    isActive(index) {
+    isActive (index) {
       if (this.startedSelecting === true) {
-        return index === this.current;
+        return index === this.current
       }
     },
 
-    change() {
+    change () {
       if (this.open == false) {
-        this.open = true;
-        this.current = -1;
+        this.open = true
+        this.current = -1
       }
     },
 
-    suggestionClick(index) {
-      this.selection = this.matches[index];
-      this.open = false;
+    suggestionClick (index) {
+      this.selection = this.matches[index]
+      this.open = false
       this.focusInput()
     }
   }
-};
+}
 </script>
 
 <style scoped>

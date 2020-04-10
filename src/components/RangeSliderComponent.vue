@@ -19,7 +19,7 @@
 
 <script>
 export default {
-  name: "rangeSliderComponent",
+  name: 'rangeSliderComponent',
   props: {
     id: {
       type: String
@@ -32,31 +32,30 @@ export default {
       required: true
     }
   },
-  data() {
+  data () {
     return {
       rangeValue: {
         type: Number
       },
-      error: ""
-    };
+      error: ''
+    }
   },
 
   methods: {
-    
-    getValue(event) {
-      let value = Number(event.target.value);
-      this.$emit("input", value);
-      this.rangeValue = value;
-    },
-    
-    change(event) {
-      let value = Number(event.target.value);
-      this.$emit("change", value);
-      this.rangeValue = value;
 
+    getValue (event) {
+      let value = Number(event.target.value)
+      this.$emit('input', value)
+      this.rangeValue = value
+    },
+
+    change (event) {
+      let value = Number(event.target.value)
+      this.$emit('change', value)
+      this.rangeValue = value
     }
   }
-};
+}
 </script>
 
 <style scoped>

@@ -13,13 +13,13 @@
 
 <script>
 export default {
-  name: "fixedCoverComponent",
-  data() {
+  name: 'fixedCoverComponent',
+  data () {
     return {
-      msg: "All work and no fun makes Jack want to have some bun!"
-    };
+      msg: 'All work and no fun makes Jack want to have some bun!'
+    }
   }
-};
+}
 </script>
 
 <style scoped>

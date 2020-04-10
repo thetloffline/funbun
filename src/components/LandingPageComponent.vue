@@ -14,23 +14,23 @@
 </template>
 
 <script>
-import allCakes from "./AllCakesComponent.vue";
-import fileUpload from "./FileUploadComponent.vue";
-import fixedCover from "./FixedCoverComponent.vue";
+import allCakes from './AllCakesComponent.vue'
+import fileUpload from './FileUploadComponent.vue'
+import fixedCover from './FixedCoverComponent.vue'
 
 export default {
-  name: "LandingPageComponent",
-  data() {
+  name: 'LandingPageComponent',
+  data () {
     return {
-      msg: "All work and no fun makes Jack want to have some bun!"
-    };
+      msg: 'All work and no fun makes Jack want to have some bun!'
+    }
   },
   components: {
     fixedCover: fixedCover,
     allCakes: allCakes,
     fileUpload: fileUpload
   }
-};
+}
 </script>
 
 <style scoped>

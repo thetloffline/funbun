@@ -83,30 +83,30 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import store from "../store/store";
-import textArea from "./TextareaComponent.vue";
-import rangeSLider from "./RangeSliderComponent.vue";
-import autocomplete from "./AutocompleteComponent.vue";
+import { mapGetters } from 'vuex'
+import store from '../store/store'
+import textArea from './TextareaComponent.vue'
+import rangeSLider from './RangeSliderComponent.vue'
+import autocomplete from './AutocompleteComponent.vue'
 
 export default {
-  name: "fileUploadComponent",
-  data() {
+  name: 'fileUploadComponent',
+  data () {
     return {
-      files: "",
-      imageFile: "",
-      cafeName: "",
-      location: "",
-      price: "",
-      comment: "",
+      files: '',
+      imageFile: '',
+      cafeName: '',
+      location: '',
+      price: '',
+      comment: '',
       looks: 0,
       taste: 0,
       bun: 0,
       clickToShowContent: false,
-      formData: "",
-      value: "",
-      error: ""
-    };
+      formData: '',
+      value: '',
+      error: ''
+    }
   },
   components: {
     autocomplete: autocomplete,
@@ -114,75 +114,75 @@ export default {
     rangeSLider: rangeSLider
   },
 
-  mounted() {},
-  created() {},
+  mounted () {},
+  created () {},
 
   computed: {
-    ...mapGetters(["getCafeNames", "getCafeLocations", "getCakeprices"])
+    ...mapGetters(['getCafeNames', 'getCafeLocations', 'getCakeprices'])
   },
 
   methods: {
-    addFiles() {
-      this.$refs.fileInput.click();
+    addFiles () {
+      this.$refs.fileInput.click()
     },
 
-    removeFiles() {
-      if (document.querySelector(".remove-file")) {
-        document.querySelector(".remove-file").click();
+    removeFiles () {
+      if (document.querySelector('.remove-file')) {
+        document.querySelector('.remove-file').click()
       } else {
-        return;
+
       }
     },
 
-    resetFormData() {
-      this.removeFiles();
-      this.cafeName = "";
-      this.location = "";
-      this.price = "";
-      this.imageFile = "";
-      this.comment = "";
-      this.looks = 0;
-      this.taste = 0;
-      this.bun = 0;
+    resetFormData () {
+      this.removeFiles()
+      this.cafeName = ''
+      this.location = ''
+      this.price = ''
+      this.imageFile = ''
+      this.comment = ''
+      this.looks = 0
+      this.taste = 0
+      this.bun = 0
     },
 
-    submitFiles() {
-      const formData = new FormData();
-      let uploadedFile = this.files;
-      formData.append("files[0]", uploadedFile);
-      formData.append("cafeName", this.cafeName);
-      formData.append("location", this.location);
-      formData.append("price", Number(this.price));
-      formData.append("comment", this.comment);
-      formData.append("looks", Number(this.looks));
-      formData.append("taste", Number(this.taste));
-      formData.append("bun", Number(this.bun));
-      this.$store.dispatch("addNewCake", formData);
-      this.resetFormData();
-      this.scrollToLastCake();
-      this.toggleShowContent();
+    submitFiles () {
+      const formData = new FormData()
+      let uploadedFile = this.files
+      formData.append('files[0]', uploadedFile)
+      formData.append('cafeName', this.cafeName)
+      formData.append('location', this.location)
+      formData.append('price', Number(this.price))
+      formData.append('comment', this.comment)
+      formData.append('looks', Number(this.looks))
+      formData.append('taste', Number(this.taste))
+      formData.append('bun', Number(this.bun))
+      this.$store.dispatch('addNewCake', formData)
+      this.resetFormData()
+      this.scrollToLastCake()
+      this.toggleShowContent()
     },
 
-    scrollToLastCake() {
+    scrollToLastCake () {
       setTimeout(() => {
-        this.scrollToPosition("lastCake");
-      }, 600);
+        this.scrollToPosition('lastCake')
+      }, 600)
     },
 
-    cancelForm(e) {
-      this.resetFormData();
-      this.hideFormContent(e);
+    cancelForm (e) {
+      this.resetFormData()
+      this.hideFormContent(e)
     },
 
-    handleFilesUpload() {
-      let uploadedFiles = this.$refs.fileInput.files;
+    handleFilesUpload () {
+      let uploadedFiles = this.$refs.fileInput.files
       for (var i = 0; i < uploadedFiles.length; i++) {
-        this.files = uploadedFiles[i];
+        this.files = uploadedFiles[i]
       }
       // scrolling hack for ios devices
       if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
         window.scrollBy({
-          behavior: 'smooth', 
+          behavior: 'smooth',
           top: 150
         })
       } else {
@@ -190,48 +190,47 @@ export default {
       }
     },
 
-    removeFile() {
-      this.files = "";
+    removeFile () {
+      this.files = ''
     },
 
-    removeLastCakeStyle() {
+    removeLastCakeStyle () {
       setTimeout(() => {
-        document.querySelector(".lastCake").classList.remove("lastCake");
-      }, 3000);
+        document.querySelector('.lastCake').classList.remove('lastCake')
+      }, 3000)
     },
 
-    scrollToPosition(selector) {
+    scrollToPosition (selector) {
       document.querySelector(`.${selector}`).scrollIntoView({
-        behavior: "smooth"
-      });
+        behavior: 'smooth'
+      })
     },
 
-    showFormContent(e) {
-      this.toggleShowContent();
-      let position = e.target.parentNode.parentNode.className;
-      this.scrollToPosition(position);
+    showFormContent (e) {
+      this.toggleShowContent()
+      let position = e.target.parentNode.parentNode.className
+      this.scrollToPosition(position)
     },
 
-    hideFormContent(e) {
-      this.toggleShowContent();
-      let position = e.target.parentNode.parentNode.parentNode.className;
-      
+    hideFormContent (e) {
+      this.toggleShowContent()
+      let position = e.target.parentNode.parentNode.parentNode.className
+
       // scrolling hack for ios devices
       if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
-         setTimeout(() => {
-           this.scrollToPosition(position)
-         }, 500);
-       } else {
-         this.scrollToPosition(position)
-       }
-
+        setTimeout(() => {
+          this.scrollToPosition(position)
+        }, 500)
+      } else {
+        this.scrollToPosition(position)
+      }
     },
 
-    toggleShowContent() {
-      this.clickToShowContent = !this.clickToShowContent;
+    toggleShowContent () {
+      this.clickToShowContent = !this.clickToShowContent
     }
   }
-};
+}
 </script>
 
 <style scoped>

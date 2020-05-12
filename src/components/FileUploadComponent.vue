@@ -36,7 +36,7 @@
             <autocomplete
               type="text"
               :suggestions="getCafeNames"
-              v-model="cafeName"
+              v-model="shop.name"
               label="Name"
               :required="true"
               id="cafeName"
@@ -45,29 +45,27 @@
             <autocomplete
               type="text"
               :suggestions="getCafeLocations"
-              v-model="location"
+              v-model="shop.address"
               label="Address"
               :required="true"
-              id="location"
+              id="address"
             />
 
             <autocomplete
               type="number"
               step="0.01"
               :suggestions="getCakeprices"
-              v-model="price"
+              v-model="product.price"
               label="Price"
               :required="true"
               id="price"
             />
 
-            <rangeSLider v-model="looks" label="Looks" :required="true" id="looks" />
+            <rangeSLider v-model="feedback.looks" label="Looks" :required="true" id="looks" />
 
-            <rangeSLider v-model="taste" label="Taste" :required="true" id="taste" />
+            <rangeSLider v-model="feedback.taste" label="Taste" :required="true" id="taste" />
 
-            <rangeSLider v-model="bun" label="Bun" :required="true" id="bun" />
-
-            <textArea v-model="comment" label="Comment" id="comment" />
+            <textArea v-model="feedback.comment" label="Comment" id="comment" />
 
             <div class="btn-container">
               <button class="btn-form btn-primary" v-on:click="submitFiles()">Submit</button>
@@ -95,13 +93,20 @@ export default {
     return {
       files: '',
       imageFile: '',
-      cafeName: '',
-      location: '',
-      price: '',
-      comment: '',
-      looks: 0,
-      taste: 0,
-      bun: 0,
+      shop: {
+        name: '',
+        address: '',
+      },
+      product: {
+        category: '',
+        name: '',
+        price: ''
+      },
+      feedback: {
+        looks: 0,
+        taste: 0,
+        comment: '',
+      },
       clickToShowContent: false,
       formData: '',
       value: '',
@@ -136,28 +141,39 @@ export default {
 
     resetFormData () {
       this.removeFiles()
-      this.cafeName = ''
-      this.location = ''
-      this.price = ''
-      this.imageFile = ''
-      this.comment = ''
-      this.looks = 0
-      this.taste = 0
-      this.bun = 0
+      this.shop.name = ''
+      this.shop.address = ''
+      this.product.category = ''
+      this.product.name = ''
+      this.product.price = ''
+      this.feedback.files[0] = ''
+      this.feedback.looks = 0
+      this.feedback.taste = 0
+      this.feedback.comment = ''
     },
 
-    submitFiles () {
-      const formData = new FormData()
+    async submitFiles () {
       let uploadedFile = this.files
-      formData.append('files[0]', uploadedFile)
-      formData.append('cafeName', this.cafeName)
-      formData.append('location', this.location)
-      formData.append('price', Number(this.price))
-      formData.append('comment', this.comment)
-      formData.append('looks', Number(this.looks))
-      formData.append('taste', Number(this.taste))
-      formData.append('bun', Number(this.bun))
-      this.$store.dispatch('addNewCake', formData)
+      
+      const shop = new FormData()
+      shop.append('name', this.shop.name)
+      shop.append('address', this.shop.address)
+      
+      const product = new FormData()
+      product.append('category', this.product.category)
+      product.append('name', this.product.name)
+      product.append('price', Number(this.product.price))
+      
+      const feedback = new FormData()
+      feedback.append('files[0]', uploadedFile)
+      feedback.append('looks', Number(this.feedback.looks))
+      feedback.append('taste', Number(this.feedback.taste))
+      feedback.append('comment', this.feedback.comment)
+
+      await this.$store.dispatch('addProduct', product)
+      /* await this.$store.dispatch('addShop', shop)
+      await this.$store.dispatch('addFeedback', feedback) */
+
       this.resetFormData()
       this.scrollToLastCake()
       this.toggleShowContent()

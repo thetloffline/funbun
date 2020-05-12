@@ -4,47 +4,67 @@ import axios from 'axios'
 
 Vue.use(Vuex, axios)
 
-const url = 'http://localhost:3000/cakes/'
+const url = 'http://localhost:3000/api'
 export default new Vuex.Store({
   state: {
-    cakes: []
+    products: [],
+    shops: []
   },
 
   mutations: {
-    SET_CAKES (state, cakesData) {
-      state.cakes = cakesData
+    SET_PRODUCTS (state, productData) {
+      state.products = productData
+      console.log(productData)
+    },
+
+    SET_SHOPS (state, shopData) {
+      state.shops = shopData
+      console.log(shopData)
     }
   },
 
   actions: {
-    async loadCakes ({ commit }) {
+    async loadProducts ({ commit }) {
       try {
-        const response = await axios.get(url)
-        const cakesData = response.data
-        commit('SET_CAKES', cakesData)
+        const response = await axios.get(url + '/products')
+        const productData = response.data
+        commit('SET_PRODUCTS', productData)
       } catch (err) {
         console.log(err)
       }
     },
 
-    async addNewCake ({ commit }, payload) {
+    async loadShops ({ commit }) {
       try {
-        const response = await axios.post(url, payload, {
+        const response = await axios.get(url + '/shops')
+        const shopData = response.data
+        commit('SET_SHOPS', shopData)
+      } catch (err) {
+        console.log(err)
+      }
+    },
+
+    async addProduct ({ commit }, payload) {
+      for (var pair of payload.entries()) {
+        console.log(pair[0] + ', ' + pair[1])
+      }
+      try {
+        const response = await axios.post(url + '/products', payload, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
         })
-        this.dispatch('loadCakes')
+        this.dispatch('loadProducts')
         console.log(response.data)
       } catch (error) {
-        console.log('addNewCake error', error)
+        console.log('addProduct error', error)
       }
     },
 
     async deleteOne ({ commit }, id) {
       try {
         const response = await axios.delete(url + id)
-        this.dispatch('loadCakes')
+        this.dispatch('loadProducts')
         // console.log(response)
       } catch (err) {
         console.log('deleteOne error', err)
@@ -60,7 +80,7 @@ export default new Vuex.Store({
           }
         }
         const response = await axios.put(urlId, payload, config)
-        this.dispatch('loadCakes')
+        this.dispatch('loadProducts')
         // console.log(response)
       } catch (err) {
         console.log('rateCake', err)
@@ -70,15 +90,15 @@ export default new Vuex.Store({
 
   getters: {
     getCafeNames (state) {
-      return [...new Set(state.cakes.map(cake => cake.cafeName))]
+      return [...new Set(state.products.map(cake => cake.cafeName))]
     },
 
     getCafeLocations (state) {
-      return [...new Set(state.cakes.map(cake => cake.location))]
+      return [...new Set(state.products.map(cake => cake.location))]
     },
 
     getCakeprices (state) {
-      return [...new Set(state.cakes.map(cake => cake.price))]
+      return [...new Set(state.products.map(cake => cake.price))]
     }
   }
 })

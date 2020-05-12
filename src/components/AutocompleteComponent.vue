@@ -32,7 +32,7 @@
         @keydown.esc="blur"
         @input="change"
         @blur="blur()"
-        @focus="disableError()"
+        @focus="disableValidationError()"
 
       />
       <label :for="label">{{ label }}</label>
@@ -121,7 +121,7 @@ export default {
       }, 50)
     },
 
-    disableError () {
+    disableValidationError () {
       this.error = ''
       this.isValid = true
     },

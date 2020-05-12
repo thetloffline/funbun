@@ -1,10 +1,12 @@
 <template>
-  <section class="cakes-section-wrapper">
-    <div class="cakes-container">
+  <section class="products-section-wrapper">
+    <div class="products-container">
       <h1 class="section-header">Bun stats</h1>
+
       <div class="mobile-sort">
         <div class="btn-round"></div>
       </div>
+
       <section class="sort-controls">
         <ul class="sort-btns">
           <li class="btn-container">
@@ -40,74 +42,75 @@
 
       <transition-group name="fade">
         <div
-          class="cake card"
-          v-for="(cake, index) in sortedCakes"
-          v-bind:class="{lastCake : cake.isLast === true}"
+          class="product card"
+          v-for="(product, index) in sortedProducts"
+          v-bind:class="{lastCake : product.isLast === true}"
           v-bind:id="index"
-          v-bind:item="cake"
+          v-bind:item="product"
           v-bind:index="index"
-          v-bind:key="cake._id"
-          v-bind:ref="cake._id"
+          v-bind:key="product._id"
+          v-bind:ref="product._id"
         >
           <div
-            class="cake-photo"
-            :style="{ backgroundImage: `url('${getImagePath(cake.imageFile)}')` }"
+            class="product-photo"
+            :style="{ backgroundImage: `url('${getImagePath(product.imageFile)}')` }"
           ></div>
 
-          <button class="btn-card btn-card-delete" v-on:click="deleteCake(cake._id)">Delete</button>
+          <button class="btn-card btn-card-delete" v-on:click="deleteCake(product._id)">Delete</button>
 
-          <ul class="cake-stats">
+          <ul class="product-stats">
             <li>
               <h5>TASTE</h5>
-              <p class>{{cake.taste}}</p>
+              <p class>{{product.taste}}</p>
             </li>
             <li>
               <h5>BUN</h5>
-              <p class>{{cake.bun}}</p>
+              <p class>{{product.bun}}</p>
             </li>
             <li>
               <h5>LOOKS</h5>
-              <p class>{{cake.looks}}</p>
+              <p class>{{product.looks}}</p>
             </li>
 
-            <!-- <p class='date' v-if='cake.modified'>{{cake.modified}}</p>
-            <p class='date' v-else-if='cake.createdAt'>{{cake.createdAt}}</p>-->
+            <!-- <p class='date' v-if='product.modified'>{{product.modified}}</p>
+            <p class='date' v-else-if='product.createdAt'>{{product.createdAt}}</p>-->
           </ul>
 
           <div class="container-rating-btns">
             <div class="btn-container">
-              <button class="btn-card btn-dislike" v-on:click.once="rateCake(cake, -1)">Buns down!</button>
+              <button class="btn-card btn-dislike" v-on:click.once="rateCake(product, -1)">Buns down!</button>
             </div>
             <div class="btn-container">
-              <button class="btn-card btn-like" v-on:click.once="rateCake(cake, 1)">Buns up!</button>
+              <button class="btn-card btn-like" v-on:click.once="rateCake(product, 1)">Buns up!</button>
             </div>
           </div>
 
-          <div class="cake-description-container">
-            <div class="cake-description">
-              <div v-if="cake.price" class="cake-price">{{cake.price}} €</div>
-              <h3>{{cake.cafeName | capitalize}}</h3>
+          <div class="product-description-container">
+            <div class="product-description">
+              <div v-if="product.price" class="product-price">{{product.price}} €</div>
+              <h3 v-if="searchCafe(shop.shop_id)">{{shop.name | capitalize}}</h3>
+              <!-- <h3 v-if="product.shop_id === searchCafe[0]._id">{{searchCafe[0].name}}</h3> -->
               <div
-                v-if="cake.comment"
+                v-if="product.comment"
                 v-on:click.prevent="toggleSelectedCommentId(index)"
-                class="cake-comment-icon"
+                class="product-comment-icon"
               ></div>
             </div>
-            <div class="cake-location">
-              <a
+            <div class="product-location">
+              <!-- <a
                 :href="'https://www.google.com/maps/place/'
-                + cake.location | address"
+                + searchCafe(product.shop_id).address | address"
                 target="_blank"
               >
-                <div class="cake-location-icon"></div>
-                <div class="cake-location-address">{{cake.location | capitalize}}</div>
-              </a>
+                <div class="product-location-icon"></div>
+                <div class="product-location-address">{{product.location | capitalize}}</div>
+              </a> -->
             </div>
           </div>
           <div v-if="selectedCommentIndex ===index && showComment" class="comment-container">
-            <div class="cake-comment">
-              <p>{{cake.createdAt}}</p>
-              <p class="comment">{{cake.comment}}</p>
+            <div class="product-comment">
+              <p>{{product.created_at}}</p>
+              <p class="comment">{{product.comment}}</p>
             </div>
           </div>
         </div>
@@ -126,6 +129,9 @@ export default {
   props: {},
   data () {
     return {
+      shop: {
+        name: ''
+      },
       selectedCommentIndex: '',
       showComment: '',
       sortAsc: {
@@ -200,27 +206,47 @@ export default {
       }, 90)
     },
 
-    rateCake (cake, val) {
-      cake.taste = Number(cake.taste) + Number(val)
+    rateCake (product, val) {
+      product.taste = Number(product.taste) + Number(val)
       const formData = new FormData()
-      formData.append('taste', cake.taste)
-      formData.append('id', cake._id)
+      formData.append('taste', product.taste)
+      formData.append('id', product._id)
       this.$store.dispatch('rateCake', formData)
+    },
+
+    searchCafe: function (shop_id) {
+      //console.log('shop_id', shop_id )
+      const allShops = this.shops.data
+      console.log(allShops)
+      // return allShops
+      for (let i = 0; i < allShops.length; i++) {
+        const foundShop = allShops[i];
+        if (foundShop._id === shop_id) {
+          console.log(foundShop.name)
+          return foundShop.name
+          // this.cafeName = foundShop.name
+        }
+      }
+      // const cafeMatch =  allShops.filter(cafe => cafe._id === shop_id)
+      // const cafeName = cafeMatch[0].name
+      // console.log('cafeName', cafeName)
+      // this.foundShop = cafeName
+      //console.log('cafeMatch', cafeMatch)
+      // return cafeMatch
     }
   },
   computed: {
-    ...mapState(['cakes']),
+    ...mapState(['products', 'shops']),
 
-    sortedCakes: function () {
-      if (this.cakes.length !== 0) {
-        const sortedCakes = this.cakes
-
-        // identify latest created cake
-        sortedCakes[sortedCakes.length - 1].isLast = true
+    sortedProducts: function () {
+      if (this.products.length !== 0) {
+        const sortedProducts = this.products.data
+        // console.log('sortedProducts', sortedProducts)
+        sortedProducts[sortedProducts.length - 1].isLast = true
 
         // toggle sort DESC ASC
         let ascDesc = this.sortAsc.value ? -1 : 1
-        return sortedCakes.sort(
+        return sortedProducts.sort(
           (a, b) =>
             ascDesc *
             (Number(a[this.sortParam]) > Number(b[this.sortParam]) ? 1 : -1)
@@ -232,7 +258,7 @@ export default {
 </script>
 
 <style scoped>
-.cakes-section-wrapper {
+.products-section-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -255,64 +281,64 @@ export default {
 }
 
 /* CAKE */
-.cakes-container {
+.products-container {
   display: flex;
   flex-direction: column;
   min-width: 350px;
 }
-.cake-photo {
+.product-photo {
   background-size: cover;
   height: 50vh;
   border-radius: 20px 20px 0 0;
 }
-.cake-stats {
+.product-stats {
   margin: 12px 0 0;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
   flex-grow: 1;
 }
-.cake-stats > li > p {
+.product-stats > li > p {
   margin: 0 auto 5px;
   font-weight: 500;
   font-size: 1.4rem;
 }
-.cake-description-container {
+.product-description-container {
   display: flex;
   flex-direction: column;
   margin: 24px;
 }
-.cake-price {
+.product-price {
   display: flex;
   align-items: center;
   flex: 1;
   font-size: 1.4rem;
 }
-.cake-description {
+.product-description {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
   margin: 0 0 8px;
 }
-.cake-cafe-name {
+.product-cafe-name {
   display: flex;
 }
-.cake-location {
+.product-location {
   display: flex;
   justify-content: flex-end;
 }
-.cake-location > a {
+.product-location > a {
   display: flex;
   color: midnightblue;
   text-decoration: none;
 }
-.cake-location-address {
+.product-location-address {
   display: flex;
   flex-direction: row;
   margin-left: 12px;
   font-size: 1.1rem;
 }
-.cake-location-icon {
+.product-location-icon {
   background: url(./../assets/location.svg) no-repeat center;
   width: 18px;
   background-size: 18px;
@@ -324,13 +350,13 @@ export default {
   display: flex;
   margin: 0 24px;
 }
-.cake-comment {
+.product-comment {
   display: flex;
   flex-direction: column;
   text-align: left;
   width: 300px;
 }
-.cake-comment-icon {
+.product-comment-icon {
   background: url(./../assets/comment.svg) no-repeat center;
   margin-left: 12px;
   width: 24px;

@@ -35,16 +35,16 @@
 
             <autocomplete
               type="text"
-              :suggestions="getCafeNames"
+              :suggestions="shopNames"
               v-model="shop.name"
-              label="Name"
+              label="Shop Name"
               :required="true"
-              id="cafeName"
+              id="shop.name"
             />
 
             <autocomplete
               type="text"
-              :suggestions="getCafeLocations"
+              :suggestions="shopAddresses"
               v-model="shop.address"
               label="Address"
               :required="true"
@@ -52,9 +52,17 @@
             />
 
             <autocomplete
+              type="text"
+              :suggestions="productNames"
+              v-model="product.name"
+              label="Product Name"
+              :required="true"
+              id="product.name"
+            />
+
+            <textInput
               type="number"
               step="0.01"
-              :suggestions="getCakeprices"
               v-model="product.price"
               label="Price"
               :required="true"
@@ -84,6 +92,7 @@
 import { mapGetters } from 'vuex'
 import store from '../store/store'
 import textArea from './TextareaComponent.vue'
+import textInput from './textInputComponent.vue'
 import rangeSLider from './RangeSliderComponent.vue'
 import autocomplete from './AutocompleteComponent.vue'
 
@@ -116,14 +125,15 @@ export default {
   components: {
     autocomplete: autocomplete,
     textArea: textArea,
-    rangeSLider: rangeSLider
+    rangeSLider: rangeSLider,
+    textInput: textInput
   },
 
   mounted () {},
   created () {},
 
   computed: {
-    ...mapGetters(['getCafeNames', 'getCafeLocations', 'getCakeprices'])
+    ...mapGetters(['shopNames', 'shopAddresses', 'productNames'])
   },
 
   methods: {
@@ -146,7 +156,7 @@ export default {
       this.product.category = ''
       this.product.name = ''
       this.product.price = ''
-      this.feedback.files[0] = ''
+      this.feedback.imageFile = ''
       this.feedback.looks = 0
       this.feedback.taste = 0
       this.feedback.comment = ''
@@ -170,9 +180,9 @@ export default {
       feedback.append('taste', Number(this.feedback.taste))
       feedback.append('comment', this.feedback.comment)
 
+      await this.$store.dispatch('addShop', shop)
       await this.$store.dispatch('addProduct', product)
-      /* await this.$store.dispatch('addShop', shop)
-      await this.$store.dispatch('addFeedback', feedback) */
+      await this.$store.dispatch('addFeedback', feedback)
 
       this.resetFormData()
       this.scrollToLastCake()
@@ -195,6 +205,7 @@ export default {
       for (var i = 0; i < uploadedFiles.length; i++) {
         this.files = uploadedFiles[i]
       }
+      
       // scrolling hack for ios devices
       if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
         window.scrollBy({

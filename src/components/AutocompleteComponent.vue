@@ -69,8 +69,7 @@ export default {
     },
 
     suggestions: {
-      type: Array,
-      required: true
+      type: Array
     },
 
     value: {
@@ -90,15 +89,19 @@ export default {
     },
 
     matches () {
-      return this.suggestions.filter(str => {
-        if (this.selection === '' || this.selection === undefined) {
-          return
-        }
-
-        if (this.selection.length >= 3) {
-          return str.toLowerCase().indexOf(this.selection.toLowerCase()) >= 0
-        }
-      })
+      if (this.suggestions !== undefined && this.selection !== '') {
+        return this.suggestions.filter(str => {
+  
+          if (this.selection.length >= 3) {
+            try {
+              if (typeof str !== 'string') { return }
+              return str.toLowerCase().indexOf(this.selection.toLowerCase()) >= 0
+            } catch (error) {
+              console.log(error)
+            }
+          }
+        })
+      } else { return }
     },
 
     openSuggestion () {

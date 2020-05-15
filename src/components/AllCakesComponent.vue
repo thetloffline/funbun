@@ -3,33 +3,23 @@
     <div class="products-container">
       <h1 class="section-header">Bun stats</h1>
 
-      <div class="mobile-sort">
-        <div class="btn-round"></div>
-      </div>
-
       <section class="sort-controls">
         <ul class="sort-btns">
           <li class="btn-container">
             <button
               class="btn-card btn-transparent btn-sort btn-selected"
               id="data-sort-taste"
-              @click="setSortParam('taste', $event), setActiveClass($event.target)"
+              @click="setSortParam('avgTaste', $event), setActiveClass($event.target)"
             >Taste</button>
           </li>
           <li class="btn-container">
             <button
               class="btn-card btn-transparent btn-sort"
               id="data-sort-looks"
-              @click="setSortParam('looks', $event), setActiveClass($event.target)"
+              @click="setSortParam('avgLooks', $event), setActiveClass($event.target)"
             >Looks</button>
           </li>
-          <li class="btn-container">
-            <button
-              class="btn-card btn-transparent btn-sort"
-              id="data-sort-bun"
-              @click="setSortParam('bun', $event), setActiveClass($event.target)"
-            >Bun</button>
-          </li>
+         
           <li class="btn-container">
             <button
               class="btn-card btn-transparent btn-sort"
@@ -41,6 +31,7 @@
       </section>
 
       <transition-group name="fade">
+        
         <div
           class="product card"
           v-for="(product, index) in sortedProducts"
@@ -48,71 +39,79 @@
           v-bind:id="index"
           v-bind:item="product"
           v-bind:index="index"
-          v-bind:key="product._id"
-          v-bind:ref="product._id"
+          v-bind:key="product.productId"
+          v-bind:ref="product.productId"
         >
-          <div
+        
+          <div v-if="product.feedback.length !== 0"
             class="product-photo"
-            :style="{ backgroundImage: `url('${getImagePath(product.imageFile)}')` }"
+            :style="{ backgroundImage: `url('${getImagePath(product.feedback[product.feedback.length-1].productImage)}')` }"
           ></div>
-
-          <button class="btn-card btn-card-delete" v-on:click="deleteCake(product._id)">Delete</button>
+        
+          <button class="btn-card btn-card-delete" v-on:click="deleteCake(product.productId)">Delete</button>
 
           <ul class="product-stats">
             <li>
               <h5>TASTE</h5>
-              <p class>{{product.taste}}</p>
-            </li>
-            <li>
-              <h5>BUN</h5>
-              <p class>{{product.bun}}</p>
+              <p class>{{product.avgTaste}}</p>
             </li>
             <li>
               <h5>LOOKS</h5>
-              <p class>{{product.looks}}</p>
+              <p class>{{product.avgLooks}}</p>
+            </li>
+            <li>
+              <h5>€</h5>
+              <p class>{{product.price}}</p>
             </li>
 
-            <!-- <p class='date' v-if='product.modified'>{{product.modified}}</p>
-            <p class='date' v-else-if='product.createdAt'>{{product.createdAt}}</p>-->
           </ul>
 
-          <div class="container-rating-btns">
+          <div v-if="product.feedback.length !== 0" class="container-rating-btns">
             <div class="btn-container">
-              <button class="btn-card btn-dislike" v-on:click.once="rateCake(product, -1)">Buns down!</button>
+              <button class="btn-card btn-dislike" v-on:click.once="rateProduct(product, -1)">Buns down!</button>
             </div>
             <div class="btn-container">
-              <button class="btn-card btn-like" v-on:click.once="rateCake(product, 1)">Buns up!</button>
+              <button class="btn-card btn-like" v-on:click.once="rateProduct(product, 1)">Buns up!</button>
             </div>
           </div>
 
           <div class="product-description-container">
             <div class="product-description">
+             
               <div v-if="product.price" class="product-price">{{product.price}} €</div>
-              <h3 v-if="searchCafe(shop.shop_id)">{{shop.name | capitalize}}</h3>
-              <!-- <h3 v-if="product.shop_id === searchCafe[0]._id">{{searchCafe[0].name}}</h3> -->
+             
+              <h3> {{ product.shop.name | capitalize }} </h3>
+
               <div
-                v-if="product.comment"
+                v-if="product.feedback.length !== 0"
                 v-on:click.prevent="toggleSelectedCommentId(index)"
                 class="product-comment-icon"
               ></div>
+
             </div>
-            <div class="product-location">
-              <!-- <a
+            <div
+              class="product-location"
+              v-if="product.shop.address !== ''">
+              
+              <a
                 :href="'https://www.google.com/maps/place/'
-                + searchCafe(product.shop_id).address | address"
+                + product.shop.address | address"
                 target="_blank"
               >
                 <div class="product-location-icon"></div>
-                <div class="product-location-address">{{product.location | capitalize}}</div>
-              </a> -->
+                <div class="product-location-address">{{product.shop.address | capitalize}}</div>
+              </a>
+
             </div>
           </div>
-          <div v-if="selectedCommentIndex ===index && showComment" class="comment-container">
+          
+          <div v-if="selectedCommentIndex === index && showComment" class="comment-container">
             <div class="product-comment">
-              <p>{{product.created_at}}</p>
-              <p class="comment">{{product.comment}}</p>
+              <p>{{product.feedback[0].created_at}}</p>
+              <p class="comment">{{product.feedback[0].comment}}</p>
             </div>
           </div>
+
         </div>
       </transition-group>
     </div>
@@ -121,6 +120,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 import store from '../store/store'
 
 export default {
@@ -159,7 +159,7 @@ export default {
 
     getImagePath (path) {
       try {
-        return require('./../assets/' + path)
+        return 'http://localhost:3000/static/images' + '/' + path
       } catch (error) {
         console.log('image replaced with placeholder. ', error.message)
         return require('./../assets/tuuletasku.jpg')
@@ -177,15 +177,18 @@ export default {
 
     setSortParam (sortParam, e) {
       this.sortParam = sortParam
+      
       // check if the same sort button is pressed
       if (this.selectedBtn === e.target.id) {
         this.sortAsc.value = !this.sortAsc.value
       }
+      
       this.selectedBtn = e.target.id
     },
 
     toggleSelectedCommentId (id) {
       const selector = document.querySelector('#' + CSS.escape(id))
+
       if (this.selectedCommentIndex === id) {
         this.selectedCommentIndex = ''
         this.showComment = false
@@ -206,42 +209,36 @@ export default {
       }, 90)
     },
 
-    rateCake (product, val) {
-      product.taste = Number(product.taste) + Number(val)
-      const formData = new FormData()
-      formData.append('taste', product.taste)
-      formData.append('id', product._id)
-      this.$store.dispatch('rateCake', formData)
+    rateProduct (product, val) {
+
+      if (product.feedback[0] !== undefined) {
+      try {    
+        product.feedback[0].taste = Number(product.avgTaste) + Number(val)
+        if (product.feedback[0].taste >= 100) {product.feedback[0].taste = 100}
+
+        const formData = new FormData()
+        formData.append('taste', product.feedback[0].taste)
+        formData.append('id', product.feedback[0]._id)
+        this.$store.dispatch('rateProduct', formData)
+      } catch (error) {
+        console.log(error)
+      }
+      } else {
+        console.log('mida??', product.feedback[0])
+      }
     },
 
-    searchCafe: function (shop_id) {
-      //console.log('shop_id', shop_id )
-      const allShops = this.shops.data
-      console.log(allShops)
-      // return allShops
-      for (let i = 0; i < allShops.length; i++) {
-        const foundShop = allShops[i];
-        if (foundShop._id === shop_id) {
-          console.log(foundShop.name)
-          return foundShop.name
-          // this.cafeName = foundShop.name
-        }
-      }
-      // const cafeMatch =  allShops.filter(cafe => cafe._id === shop_id)
-      // const cafeName = cafeMatch[0].name
-      // console.log('cafeName', cafeName)
-      // this.foundShop = cafeName
-      //console.log('cafeMatch', cafeMatch)
-      // return cafeMatch
-    }
   },
+
   computed: {
-    ...mapState(['products', 'shops']),
+    // ...mapState(['products', 'shops', 'feedback']),
+    ...mapGetters(['aggregatedFeedback']),
 
     sortedProducts: function () {
-      if (this.products.length !== 0) {
-        const sortedProducts = this.products.data
-        // console.log('sortedProducts', sortedProducts)
+
+      if (this.aggregatedFeedback.length !== 0) {
+        const sortedProducts = this.aggregatedFeedback
+
         sortedProducts[sortedProducts.length - 1].isLast = true
 
         // toggle sort DESC ASC
@@ -365,9 +362,6 @@ export default {
 }
 
 /* SORT */
-.mobile-sort {
-  display: none;
-}
 .sort-btns {
   display: flex;
   flex-direction: row;

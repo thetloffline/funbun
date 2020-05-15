@@ -3,23 +3,27 @@ import Vuex from 'vuex'
 import axios from 'axios'
 
 Vue.use(Vuex, axios)
-
 const url = 'http://localhost:3000/api'
 export default new Vuex.Store({
   state: {
+    shops: [],
     products: [],
-    shops: []
+    feedback: [],
+    productId: '',
+    shopId: ''
   },
 
   mutations: {
     SET_PRODUCTS (state, productData) {
       state.products = productData
-      console.log(productData)
     },
 
     SET_SHOPS (state, shopData) {
       state.shops = shopData
-      console.log(shopData)
+    },
+
+    SET_FEEDBACK (state, feedbackData) {
+      state.feedback = feedbackData
     }
   },
 
@@ -27,7 +31,7 @@ export default new Vuex.Store({
     async loadProducts ({ commit }) {
       try {
         const response = await axios.get(url + '/products')
-        const productData = response.data
+        const productData = response.data.data
         commit('SET_PRODUCTS', productData)
       } catch (err) {
         console.log(err)
@@ -37,27 +41,82 @@ export default new Vuex.Store({
     async loadShops ({ commit }) {
       try {
         const response = await axios.get(url + '/shops')
-        const shopData = response.data
+        const shopData = response.data.data
         commit('SET_SHOPS', shopData)
       } catch (err) {
         console.log(err)
       }
     },
 
-    async addProduct ({ commit }, payload) {
-      for (var pair of payload.entries()) {
-        console.log(pair[0] + ', ' + pair[1])
-      }
+    async loadFeedback ({ commit }) {
       try {
-        const response = await axios.post(url + '/products', payload, {
+        const response = await axios.get(url + '/feedback')
+        const feedbackData = response.data.data
+        commit('SET_FEEDBACK', feedbackData)
+      } catch (err) {
+        console.log(err)
+      }
+    },
+
+    async addShop ({ commit }, payload) {
+      const foundShop = await this.state.shops.find(shop => (shop.name === payload.get('name') && shop.address === payload.get('address')))
+
+      if (foundShop === undefined || foundShop === '') {
+        try {
+          const response = await axios.post(url + '/shops',
+            payload, {
+              headers: {
+                'Content-Type': 'multipart/form-data'
+              }
+            })
+          this.shopId = response.data.data._id
+          this.state.shops.push(response.data.data)
+          // this.dispatch('loadShops')
+        } catch (error) {
+          console.log(error)
+        }
+      } else {
+        this.shopId = foundShop._id
+      }
+    },
+
+    async addProduct ({ commit }, payload) {
+      const foundProduct = await this.state.products.find(product => (product.name === payload.get('name') && Number(product.price) === Number(payload.get('price')) && product.shopId === this.shopId))
+
+      if (foundProduct === undefined || foundProduct === '') {
+        try {
+          payload.set('shopId', this.shopId)
+          const response = await axios.post(url + '/products', payload, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          })
+          this.productId = response.data.data._id
+          this.state.products.push(response.data.data)
+          // this.dispatch('loadProducts')
+        } catch (error) {
+          console.log('addProduct error', error)
+        }
+      } else {
+        this.productId = foundProduct._id
+      }
+    },
+
+    async addFeedback ({ commit }, payload) {
+      if (this.productId !== '' || this.productId !== undefined) {
+        payload.set('productId', this.productId)
+      }
+
+      try {
+        const response = await axios.post(url + '/feedback', payload, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
         })
-        this.dispatch('loadProducts')
-        console.log(response.data)
+
+        this.state.feedback.push(response.data.data)
       } catch (error) {
-        console.log('addProduct error', error)
+        console.log(error)
       }
     },
 
@@ -65,40 +124,65 @@ export default new Vuex.Store({
       try {
         const response = await axios.delete(url + id)
         this.dispatch('loadProducts')
-        // console.log(response)
       } catch (err) {
         console.log('deleteOne error', err)
       }
     },
 
-    async rateCake ({ commit }, payload) {
+    async rateProduct ({ commit }, payload) {
       try {
-        const urlId = url + payload.get('id')
+        const urlId = url + '/feedback/' + payload.get('id')
         const config = {
           headers: {
             'Content-Type': `text/plain; boundary=${payload._boundary}`
           }
         }
         const response = await axios.put(urlId, payload, config)
-        this.dispatch('loadProducts')
-        // console.log(response)
+        this.state.feedback.push(response.data.data)
       } catch (err) {
-        console.log('rateCake', err)
+        console.log('rateProduct', err)
       }
     }
   },
 
   getters: {
-    getCafeNames (state) {
-      return [...new Set(state.products.map(cake => cake.cafeName))]
+    shopNames (state) {
+      return [...new Set(state.shops.map(shop => shop.name))]
     },
 
-    getCafeLocations (state) {
-      return [...new Set(state.products.map(cake => cake.location))]
+    shopAddresses (state) {
+      return [...new Set(state.shops.map(shop => shop.address))]
     },
 
-    getCakeprices (state) {
-      return [...new Set(state.products.map(cake => cake.price))]
+    productNames (state) {
+      return [...new Set(state.products.map(product => product.name))]
+    },
+
+    aggregatedFeedback (state) {
+      const arr = []
+      for (let i = 0; i < state.products.length; i++) {
+        const cardData = {}
+        const product = state.products[i]
+        cardData.product = product
+        cardData.productId = product._id
+
+        const foundShop = state.shops.find(shop => (shop._id === product.shopId))
+        cardData.shop = foundShop
+
+        const foundFeedback = state.feedback.filter(f => f.productId === product._id)
+        cardData.feedback = foundFeedback
+
+        const calcTasteAvg = foundFeedback.map(f => f.taste).reduce((acc, current) => acc + Number(current), 0) / foundFeedback.length
+
+        const calcLooksAvg = foundFeedback.map(f => f.looks).reduce((acc, current) => acc + Number(current), 0) / foundFeedback.length
+
+        cardData.price = product.price
+        cardData.avgTaste = Math.round(calcTasteAvg * 10) / 10
+        cardData.avgLooks = Math.round(calcLooksAvg * 10) / 10
+
+        arr.push(cardData)
+      }
+      return arr
     }
   }
 })

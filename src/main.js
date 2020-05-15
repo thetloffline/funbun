@@ -54,7 +54,8 @@ new Vue({
   template: '<App/>',
 
   created () {
-    this.$store.dispatch('loadProducts')
     this.$store.dispatch('loadShops')
+    this.$store.dispatch('loadProducts')
+    this.$store.dispatch('loadFeedback')
   }
 })

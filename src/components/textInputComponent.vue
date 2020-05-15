@@ -1,15 +1,23 @@
 <template>
   <div class="card">
     <div class="field">
+       <div id="error"
+        v-bind:class="isValid ? '' : 'error'">
+        {{error}}
+      </div>
+
       <input
         class="input"
-        type="text"
+        :type="type"
         required
         :name="label"
         :id="label"
         :placeholder="label"
         :value="value"
-        v-on:input="updateValue($event.target.value)"
+        v-model="updatedValue"
+
+        @blur="blur()"
+        @focus="disableValidationError()"
       />
       <label :for="label">{{ label }}</label>
     </div>
@@ -19,27 +27,71 @@
 <script>
 export default {
   name: 'textInputComponent',
+  data () {
+    return {
+      isValid: true,
+      error: ''
+    }
+  },
+
   props: {
     id: {
       type: String
     },
+
+    type: {
+      type: String
+    },
+
     label: {
       type: String,
       required: true
     },
+
     value: {
       type: String
     }
   },
+  
   methods: {
-    updateValue: function (value) {
-      this.$emit('input', value)
+
+     validateField () {
+      setTimeout(() => {
+        if (this.updatedValue === '') {
+          this.isValid = false
+          this.error = `Please enter ${this.label}`
+        } else {
+          this.isValid = true
+        }
+      }, 50)
+    },
+
+      blur () {
+      this.validateField()
+    },
+
+    disableValidationError () {
+      this.error = ''
+      this.isValid = true
     }
+  },
+
+  computed: {
+      updatedValue: {
+        get () {
+          return this.value
+        },
+
+        set (value) {
+          this.$emit('input', value)
+        }
+      }
   }
 }
 </script>
 
 <style scoped>
+/* INPUT */
 .field {
   display: flex;
   flex-direction: column-reverse;
@@ -67,14 +119,20 @@ input:focus::-webkit-input-placeholder {
   opacity: 0;
   color: rgba(0, 0, 0, 0);
 }
-input[type="text"] {
+input[type="text"]:focus,
+input[type="number"]:focus {
+  background-color: #F7F7FA;
+}
+input[type="text"],
+input[type="number"] {
   cursor: text;
-  width: 100%;
+  width: 96%;
   height: 40px;
-  margin: 4px auto 10px;
-  padding: 4px;
+  margin-bottom: 10px;
+  margin-top: 4px;
+  padding: 4px 0 4px 4%;
   border: 0;
-  border-bottom: 2px solid midnightblue;
+  border-bottom: 2px solid #ABABCB;
   outline: none;
   font-size: 18px;
   color: midnightblue;
@@ -85,5 +143,15 @@ input:focus + label {
   transform: translate(0, 0) scale(1);
   font-size: 14px;
   cursor: pointer;
+}
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
 }
 </style>

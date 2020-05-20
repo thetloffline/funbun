@@ -7,18 +7,16 @@
       </div>
 
       <input
-        class="input"
+        :id="label"
+        v-model="updatedValue"
+        :value="value"
+        :placeholder="label"
+        :name="label"
         :type="type"
         required
-        :name="label"
-        :id="label"
-        :placeholder="label"
-        :value="value"
-        v-model="updatedValue"
-
+        class="input"
         @blur="blur()"
-        @focus="disableValidationError()"
-      />
+        @focus="disableValidationError()"/>
       <label :for="label">{{ label }}</label>
     </div>
   </div>
@@ -26,7 +24,26 @@
 
 <script>
 export default {
-  name: 'textInputComponent',
+  name: 'TextInputComponent',
+  props: {
+    id: {
+      type: String,
+      value: ''
+    },
+    type: {
+      type: String,
+      value: ''
+    },
+    label: {
+      type: String,
+      required: true
+    },
+    value: {
+      type: String,
+      value: ''
+    }
+  },
+
   data () {
     return {
       isValid: true,
@@ -34,28 +51,21 @@ export default {
     }
   },
 
-  props: {
-    id: {
-      type: String
-    },
+  computed: {
+    updatedValue: {
+      get () {
+        return this.value
+      },
 
-    type: {
-      type: String
-    },
-
-    label: {
-      type: String,
-      required: true
-    },
-
-    value: {
-      type: String
+      set (value) {
+        this.$emit('input', value)
+      }
     }
   },
-  
+
   methods: {
 
-     validateField () {
+    validateField () {
       setTimeout(() => {
         if (this.updatedValue === '') {
           this.isValid = false
@@ -66,7 +76,7 @@ export default {
       }, 50)
     },
 
-      blur () {
+    blur () {
       this.validateField()
     },
 
@@ -74,18 +84,6 @@ export default {
       this.error = ''
       this.isValid = true
     }
-  },
-
-  computed: {
-      updatedValue: {
-        get () {
-          return this.value
-        },
-
-        set (value) {
-          this.$emit('input', value)
-        }
-      }
   }
 }
 </script>

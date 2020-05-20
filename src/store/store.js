@@ -9,8 +9,15 @@ export default new Vuex.Store({
     shops: [],
     products: [],
     feedback: [],
-    productId: '',
-    shopId: ''
+    productId: {
+      type: String,
+      value: false
+    },
+    shopId: {
+      type: String,
+      value: false
+    },
+    inlineFormId: ''
   },
 
   mutations: {
@@ -24,6 +31,9 @@ export default new Vuex.Store({
 
     SET_FEEDBACK (state, feedbackData) {
       state.feedback = feedbackData
+    },
+    SET_INLINEFORM (state, formClicked) {
+      state.inlineFormId = formClicked
     }
   },
 
@@ -103,7 +113,8 @@ export default new Vuex.Store({
     },
 
     async addFeedback ({ commit }, payload) {
-      if (this.productId !== '' || this.productId !== undefined) {
+      console.log(payload.get('productImage'))
+      if (payload.get('productId') === '' || payload.get('productId') === null || payload.get('productId') === undefined) {
         payload.set('productId', this.productId)
       }
 
@@ -142,6 +153,10 @@ export default new Vuex.Store({
       } catch (err) {
         console.log('rateProduct', err)
       }
+    },
+
+    async toggleInlineForm ({ commit }, payload) {
+      commit('SET_INLINEFORM', payload)
     }
   },
 
@@ -156,6 +171,10 @@ export default new Vuex.Store({
 
     productNames (state) {
       return [...new Set(state.products.map(product => product.name))]
+    },
+
+    isFormOpen (state) {
+      return state.inlineFormId
     },
 
     aggregatedFeedback (state) {

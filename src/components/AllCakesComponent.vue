@@ -1,117 +1,156 @@
 <template>
+
   <section class="products-section-wrapper">
     <div class="products-container">
-      <h1 class="section-header">Bun stats</h1>
-
+      <!-- <h1 class="section-header">Products</h1> -->
       <section class="sort-controls">
-        <ul class="sort-btns">
+         <div class="filter-container field">
+          <input 
+            v-model="filterString"
+            type="text"
+            name="filter"
+            placeholder="Filter products"
+            id=""
+            class="filter"/>
+            <label for="filter">Filter products</label>
+        </div>
+        <ul class="sort-btns-container">
           <li class="btn-container">
             <button
-              class="btn-card btn-transparent btn-sort btn-selected"
               id="data-sort-taste"
+              class="btn-card btn-sort btn-selected"
               @click="setSortParam('avgTaste', $event), setActiveClass($event.target)"
             >Taste</button>
           </li>
+
           <li class="btn-container">
             <button
-              class="btn-card btn-transparent btn-sort"
               id="data-sort-looks"
+              class="btn-card btn-sort"
               @click="setSortParam('avgLooks', $event), setActiveClass($event.target)"
             >Looks</button>
           </li>
-         
+
           <li class="btn-container">
             <button
-              class="btn-card btn-transparent btn-sort"
               id="data-sort-price"
+              class="btn-card btn-sort"
               @click="setSortParam('price', $event), setActiveClass($event.target)"
             >€</button>
           </li>
         </ul>
+       
       </section>
 
-      <transition-group name="fade">
+      <transition-group
+        id="product-cards"
+        name="fade">
         
         <div
-          class="product card"
-          v-for="(product, index) in sortedProducts"
-          v-bind:class="{lastCake : product.isLast === true}"
-          v-bind:id="index"
-          v-bind:item="product"
-          v-bind:index="index"
-          v-bind:key="product.productId"
-          v-bind:ref="product.productId"
-        >
-        
-          <div v-if="product.feedback.length !== 0"
-            class="product-photo"
+          v-if="filteredProducts.length === 0"
+          key="no-products"
+          class="no-products-found">
+            <h3>No products found</h3>        
+          </div>
+        <div v-else
+          v-for="(product, index) in filteredProducts"
+          :class="{lastCake : product.isLast === true}"
+          :id="index"
+          :item="product"
+          :index="index"
+          :key="product.productId"
+          :ref="product.productId"
+          class="product card round-corners">
+         
+          <div
+            v-if="product.feedback.length !== 0"
             :style="{ backgroundImage: `url('${getImagePath(product.feedback[product.feedback.length-1].productImage)}')` }"
-          ></div>
-        
-          <button class="btn-card btn-card-delete" v-on:click="deleteCake(product.productId)">Delete</button>
+            class="product-photo"/>
 
-          <ul class="product-stats">
-            <li>
-              <h5>TASTE</h5>
-              <p class>{{product.avgTaste}}</p>
-            </li>
-            <li>
-              <h5>LOOKS</h5>
-              <p class>{{product.avgLooks}}</p>
-            </li>
-            <li>
-              <h5>€</h5>
-              <p class>{{product.price}}</p>
-            </li>
+          <div class="icon-btns-container">
+            <!--  <button class="btn-card btn-card-delete" 
+              @click="deleteCake(product.productId)">
+              Delete
+            </button> -->
 
-          </ul>
-
-          <div v-if="product.feedback.length !== 0" class="container-rating-btns">
-            <div class="btn-container">
-              <button class="btn-card btn-dislike" v-on:click.once="rateProduct(product, -1)">Buns down!</button>
-            </div>
-            <div class="btn-container">
-              <button class="btn-card btn-like" v-on:click.once="rateProduct(product, 1)">Buns up!</button>
+            <div
+              v-if="product.price"
+              class="product-price">
+              {{ product.price }} €
             </div>
           </div>
 
-          <div class="product-description-container">
-            <div class="product-description">
-             
-              <div v-if="product.price" class="product-price">{{product.price}} €</div>
-             
-              <h3> {{ product.shop.name | capitalize }} </h3>
+          <div class="product-info">
+
+            <div class="product-description-container">
+              <div class="shop-name">
+                <h3> {{ product.shop.name | capitalize }} </h3>
+              </div>
 
               <div
-                v-if="product.feedback.length !== 0"
-                v-on:click.prevent="toggleSelectedCommentId(index)"
-                class="product-comment-icon"
-              ></div>
+                v-if="product.shop.address !== ''"
+                class="product-location">
+                <a
+                  :href="'https://www.google.com/maps/place/'
+                  + product.shop.address | address"
+                  target="_blank">
+                  <div class="product-location-icon"/>
+                  <!-- <div class="product-location-address">{{product.shop.address | capitalize}}</div> -->
+                </a>
+              </div>
 
             </div>
+
+
+            <div id="product-name">
+              <h2 class="product-name">
+                {{ product.product.name | capitalize }}
+              </h2>
+            </div>
+
+            <transition name="fade">
+
+              <ul class="product-stats">
+                <li>
+                  <h5>TASTE</h5>
+                  <p>{{ product.avgTaste }}</p>
+                </li>
+
+                <li>
+                  <h5>LOOKS</h5>
+                  <p>{{ product.avgLooks }}</p>
+                </li>
+
+                <li>
+                  <div
+                    v-if="product.feedback.length !== 0"
+                    class="product-comment-icon"
+                    @click.prevent="toggleSelectedCommentId(index)"/>
+                </li>
+              </ul>
+            </transition>
+
+              <inlineForm
+                :product="product.feedback"
+                :index="index"
+                />
+
             <div
-              class="product-location"
-              v-if="product.shop.address !== ''">
-              
-              <a
-                :href="'https://www.google.com/maps/place/'
-                + product.shop.address | address"
-                target="_blank"
-              >
-                <div class="product-location-icon"></div>
-                <div class="product-location-address">{{product.shop.address | capitalize}}</div>
-              </a>
-
+              v-if="selectedCommentIndex === index && showComment"
+              class="comment-container">
+              <div
+                v-for="(element) in product.feedback"
+                :key="element._id">
+                <div 
+                  v-if="element.comment"
+                  class="product-comment">
+                  <p class="date"> {{ element.created_at | formatDate }} </p>
+                  <p class="comment"> {{ element.comment }} </p>
+                </div>
+              </div>
             </div>
-          </div>
-          
-          <div v-if="selectedCommentIndex === index && showComment" class="comment-container">
-            <div class="product-comment">
-              <p>{{product.feedback[0].created_at}}</p>
-              <p class="comment">{{product.feedback[0].comment}}</p>
-            </div>
-          </div>
 
+          </div>
         </div>
       </transition-group>
     </div>
@@ -119,13 +158,23 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import { mapGetters } from 'vuex'
 import store from '../store/store'
+/* import { mapState } from 'vuex' */
+import { mapGetters } from 'vuex'
+import rangeSLider from './RangeSliderComponent.vue'
+import textArea from './TextareaComponent.vue'
+import autocomplete from './AutocompleteComponent.vue'
+import ProductFormInlineComponent from './ProductFormInlineComponent.vue'
 
 export default {
   store,
-  name: 'allCakesComponent',
+  name: 'AllCakesComponent',
+  components: {
+    rangeSLider: rangeSLider,
+    textArea: textArea,
+    autocomplete: autocomplete,
+    inlineForm: ProductFormInlineComponent
+  },
   props: {},
   data () {
     return {
@@ -138,8 +187,9 @@ export default {
         type: Boolean,
         value: true
       },
-      selectedBtn: null,
       sortParam: 'taste',
+      filterValue: '',
+      selectedBtn: null,
       isLast: {
         type: Boolean,
         value: false
@@ -147,15 +197,59 @@ export default {
     }
   },
 
-  mounted () {},
-  created () {
-    const sortButtons = document.querySelectorAll('.btn-sort')
+  computed: {
+    // ...mapState(['products', 'shops', 'feedback']),
+    ...mapGetters(['aggregatedFeedback', 'productNames']),
+    
+    filterString: {
+      get () {
+        return this.filterValue
+      },
+
+      set (filterValue) {
+        this.filterValue = filterValue.trim()
+      }
+    },
+
+    filteredProducts () {
+      if (this.aggregatedFeedback.length !== 0) {
+
+        return this.aggregatedFeedback.filter(product => {     
+          const productName = product.product.name.trim()
+          return productName.toLowerCase().indexOf(this.filterValue.toLowerCase()) >= 0
+          })
+      } else {
+        return []
+      }
+      
+    },
+
+    sortedProducts () {
+      console.log(this.filteredProducts)
+      if (this.aggregatedFeedback.length !== 0) {
+        const sortedProducts = this.aggregatedFeedback
+
+        sortedProducts[sortedProducts.length - 1].isLast = true
+
+        // toggle sort DESC ASC
+        let ascDesc = this.sortAsc.value ? -1 : 1
+        return sortedProducts.sort(
+          (a, b) =>
+            ascDesc *
+            (Number(a[this.sortParam]) > Number(b[this.sortParam]) ? 1 : -1)
+        )
+      }
+    }
   },
 
+  mounted () {},
+  created () {},
+
   methods: {
-    async deleteCake (id) {
+   
+ /*    async deleteCake (id) {
       await this.$store.dispatch('deleteOne', id)
-    },
+    }, */
 
     getImagePath (path) {
       try {
@@ -177,17 +271,17 @@ export default {
 
     setSortParam (sortParam, e) {
       this.sortParam = sortParam
-      
+
       // check if the same sort button is pressed
       if (this.selectedBtn === e.target.id) {
         this.sortAsc.value = !this.sortAsc.value
       }
-      
+
       this.selectedBtn = e.target.id
     },
 
     toggleSelectedCommentId (id) {
-      const selector = document.querySelector('#' + CSS.escape(id))
+      // const selector = document.querySelector('#' + CSS.escape(id))
 
       if (this.selectedCommentIndex === id) {
         this.selectedCommentIndex = ''
@@ -207,54 +301,32 @@ export default {
           block: 'end'
         })
       }, 90)
-    },
+    }/* ,
 
     rateProduct (product, val) {
-
       if (product.feedback[0] !== undefined) {
-      try {    
-        product.feedback[0].taste = Number(product.avgTaste) + Number(val)
-        if (product.feedback[0].taste >= 100) {product.feedback[0].taste = 100}
+        try {
+          product.feedback[0].taste = Number(product.avgTaste) + Number(val)
 
-        const formData = new FormData()
-        formData.append('taste', product.feedback[0].taste)
-        formData.append('id', product.feedback[0]._id)
-        this.$store.dispatch('rateProduct', formData)
-      } catch (error) {
-        console.log(error)
+          if (product.feedback[0].taste >= 100) {
+            product.feedback[0].taste = 100
+          }
+          const formData = new FormData()
+          formData.append('taste', product.feedback[0].taste)
+          formData.append('id', product.feedback[0]._id)
+          this.$store.dispatch('rateProduct', formData)
+        } catch (error) {
+          console.log(error)
+        }
       }
-      } else {
-        console.log('mida??', product.feedback[0])
-      }
-    },
-
-  },
-
-  computed: {
-    // ...mapState(['products', 'shops', 'feedback']),
-    ...mapGetters(['aggregatedFeedback']),
-
-    sortedProducts: function () {
-
-      if (this.aggregatedFeedback.length !== 0) {
-        const sortedProducts = this.aggregatedFeedback
-
-        sortedProducts[sortedProducts.length - 1].isLast = true
-
-        // toggle sort DESC ASC
-        let ascDesc = this.sortAsc.value ? -1 : 1
-        return sortedProducts.sort(
-          (a, b) =>
-            ascDesc *
-            (Number(a[this.sortParam]) > Number(b[this.sortParam]) ? 1 : -1)
-        )
-      }
-    }
+    } */
   }
 }
 </script>
 
 <style scoped>
+ 
+
 .products-section-wrapper {
   display: flex;
   flex-direction: column;
@@ -268,13 +340,15 @@ export default {
   display: flex;
   flex-direction: column;
   margin: 20px 0;
-  border-radius: 20px;
   box-shadow: 0 2px 7px rgba(0, 0, 0, 0.1);
   background-color: white;
   transition: 0.5s all;
 }
 .card:hover {
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+.round-corners {
+  border-radius: 20px;
 }
 
 /* CAKE */
@@ -285,15 +359,30 @@ export default {
 }
 .product-photo {
   background-size: cover;
-  height: 50vh;
+  height: 45vh;
   border-radius: 20px 20px 0 0;
 }
-.product-stats {
-  margin: 12px 0 0;
+.icon-btns-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  position: absolute;
+  margin: 12px 0 0 278px;
+}
+.product-name {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  flex-grow: 1;
+  margin: 22px 12px;
+}
+.product-stats {
+  margin: 12px 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
 }
 .product-stats > li > p {
   margin: 0 auto 5px;
@@ -302,27 +391,27 @@ export default {
 }
 .product-description-container {
   display: flex;
-  flex-direction: column;
-  margin: 24px;
+  flex-direction: row;
+  justify-content: center;
+  margin: 18px;
 }
 .product-price {
-  display: flex;
-  align-items: center;
-  flex: 1;
-  font-size: 1.4rem;
+  padding: .8rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: midnightblue;
+  background-color: white;
+  border-radius: 2em;
+  box-shadow: 0px 0px 6px rgba(5,5,5, .25);
 }
-.product-description {
+.shop-name {
   display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  margin: 0 0 8px;
-}
-.product-cafe-name {
-  display: flex;
+  margin: 0 12px;
 }
 .product-location {
   display: flex;
   justify-content: flex-end;
+  margin: 0 12px;
 }
 .product-location > a {
   display: flex;
@@ -336,74 +425,64 @@ export default {
   font-size: 1.1rem;
 }
 .product-location-icon {
+  margin: auto;
   background: url(./../assets/location.svg) no-repeat center;
-  width: 18px;
-  background-size: 18px;
-}
-.date {
-  font-size: 1em;
+  width: 16px;
+  height: 22px;
+  background-size: 16px;
 }
 .comment-container {
   display: flex;
-  margin: 0 24px;
+  flex-direction: column;
+  margin: 24px;
 }
 .product-comment {
   display: flex;
   flex-direction: column;
   text-align: left;
   width: 300px;
+  margin: 8px 0;
+}
+.date {
+  margin: 0;
+  font-size: .8em;
+  color: #b2b2cc;
+}
+.comment {
+  margin: 2px 0;
 }
 .product-comment-icon {
   background: url(./../assets/comment.svg) no-repeat center;
-  margin-left: 12px;
-  width: 24px;
-  background-size: 24px;
+  width: 32px;
+  height: 32px;
+  background-size: cover;
   cursor: pointer;
 }
 
 /* SORT */
-.sort-btns {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  justify-content: space-around;
-  margin: auto;
+.sort-controls {
+  margin: 42px 0 0;
 }
-
-/* CONTAINER */
-.container-rating-btns {
+.sort-btns-container {
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: flex-end;
+  margin: auto;
 }
 
 /* BUTTON */
 
-.btn-card {
-  padding: 12px 18px;
-  color: midnightblue;
-  font-size: 1rem;
-  transition: 0.2s all;
-}
+
 .btn-selected {
-  background-color: white;
-  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.075);
+  color: white !important;
+  background-color: midnightblue;
 }
-.btn-selected:active {
-  box-shadow: -3px 4px 0 #6c6ca4;
-}
+
 .btn-card-delete {
   position: absolute;
   margin: 12px;
   color: #00000099;
   background-color: rgba(255, 255, 255, 0.7);
-}
-.btn-like {
-  color: white;
-  background-color: midnightblue;
-}
-.btn-like:active {
-  background-color: #6c6ca4;
 }
 .btn-dislike {
   color: white;
@@ -413,19 +492,39 @@ export default {
 .btn-sort {
   flex-grow: 1;
   justify-content: center;
-  margin: 0;
-  font-size: 1.1rem !important;
-  color: midnightblue;
+  margin: 0 0 0 18px;
+  border: none;
   transition: 0.2s all;
   outline: 0;
+  box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.02);
+}
+.btn-sort:hover {
+  background-color: midnightblue;
+  color: white !important;
+
 }
 
-/* FADE TRANSITION */
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s;
+/* FILTER */
+.filter-container>label {
+  margin: 0 0 0 4%;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  opacity: 0;
+.filter-container {
+  flex-direction: column-reverse;
+  margin: 0;
+}
+.filter {
+    /* border: solid 1px midnightblue ; */
+    border: none;
+    border-radius: 26px;
+    box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.02);
+}
+.filter:focus {
+  background-color: midnightblue;
+  color: white;
+}
+.no-products-found {
+  display: flex;
+  justify-content: center;
+  margin: 42px;
 }
 </style>

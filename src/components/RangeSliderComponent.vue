@@ -4,16 +4,15 @@
       <label>{{ label }}</label>
     </div>
     <input
-      type="range"
       :id="id"
       :value="value"
       :placeholder="label"
+      type="range"
       min="0"
       max="100"
       step="1"
-      v-on:input="getValue($event)"
-      v-on:change="change($event)"
-    />
+      @input="getValue($event)"
+      @change="change($event)"/>
   </div>
 </template>
 
@@ -22,21 +21,22 @@ export default {
   name: 'rangeSliderComponent',
   props: {
     id: {
-      type: String
+      type: String,
+      value: ''
     },
     label: {
-      type: String
+      type: String,
+      value: ''
     },
     value: {
       type: Number,
+      value: 0,
       required: true
     }
   },
   data () {
     return {
-      rangeValue: {
-        type: Number
-      },
+      rangeValue: 0,
       error: ''
     }
   },
@@ -59,6 +59,7 @@ export default {
 </script>
 
 <style scoped>
+
 label {
   display: flex;
 }
@@ -82,7 +83,7 @@ input[type="range"]::-webkit-slider-runnable-track {
   cursor: pointer;
   animate: 0.2s;
   /*   box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d; */
-  background: midnightblue;
+  background: #BAAFD4;
 }
 input[type="range"]::-webkit-slider-thumb {
   /*   box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d; */
@@ -96,7 +97,7 @@ input[type="range"]::-webkit-slider-thumb {
   margin-top: -13px;
 }
 input[type="range"]:focus::-webkit-slider-runnable-track {
-  background: midnightblue;
+  background: #BAAFD4;
   border-color: midnightblue;
 }
 input[type="range"]::-moz-range-track {

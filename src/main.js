@@ -8,6 +8,7 @@ import fixedCover from './components/FixedCoverComponent.vue'
 import landingPage from './components/LandingPageComponent.vue'
 import fileUpload from './components/FileUploadComponent.vue'
 import allCakes from './components/AllCakesComponent.vue'
+import ProductFormInlineComponent from './components/ProductFormInlineComponent.vue'
 
 Vue.config.productionTip = false
 Vue.mixin({
@@ -39,6 +40,11 @@ Vue.filter('address', function (value) {
   return value.replace(' ', '+')
 })
 
+Vue.filter('formatDate', function (isoDate) {
+  const date = new Date(isoDate)
+  return date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear()
+})
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
@@ -49,13 +55,13 @@ new Vue({
     fixedCover,
     landingPage,
     fileUpload,
-    allCakes
+    allCakes,
+    ProductFormInlineComponent
   },
-  template: '<App/>',
-
   created () {
     this.$store.dispatch('loadShops')
     this.$store.dispatch('loadProducts')
     this.$store.dispatch('loadFeedback')
-  }
+  },
+  template: '<App/>'
 })

@@ -49,6 +49,7 @@ label {
   height: 1.4rem;
   transition: all 0.2s;
   touch-action: manipulation;
+  pointer-events: none;
 }
 textarea:placeholder-shown + label {
   cursor: text;
@@ -72,10 +73,8 @@ textarea:focus::-webkit-textarea-placeholder {
 }
 textarea {
   cursor: text;
-  width: 100%;
   height: 40px;
-  margin-bottom: 10px;
-  margin-top: 4px;
+  margin: 4px 0 10px 0;
   padding: 4px;
   border: 0;
   border-bottom: 2px solid #ABABCB;
@@ -88,6 +87,6 @@ textarea:not(:placeholder-shown) + label,
 textarea:focus + label {
   transform: translate(0, 0) scale(1);
   font-size: 14px;
-  cursor: pointer;
+  pointer-events: none;
 }
 </style>

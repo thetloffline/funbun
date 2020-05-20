@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: "App"
+  name: 'App'
 };
 </script>
 
@@ -44,7 +44,7 @@ h3 {
   margin: 0;
 }
 h5 {
-  font-size: 1rem;
+  font-size: .9rem;
   font-weight: 400;
   margin: 0;
 }
@@ -99,6 +99,7 @@ button {
 .btn-transparent {
   background-color: rgba(0, 0, 0, 0);
   color: midnightblue;
+  border: none !important;
 }
 .btn-transparent:active,
 .btn-sort:active,
@@ -125,6 +126,28 @@ button {
 .btn-round:active {
   background-color: #42428a;
 }
+.container-card-btns {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: 16px 0;
+}
+.btn-card {
+  padding: 12px 18px;
+  color: midnightblue;
+  background-color: white;
+  border: solid 1px midnightblue;
+  font-size: 1rem;
+}
+.btn-card:hover {
+  border: solid 1px #5063F7;
+  color: #5063F7;
+}
+.btn-card:active {
+  /* box-shadow: -1px 2px 0 midnightblue; */
+  transition: 0.2s all;
+  outline: none;
+}
 .error {
   color: #746216;
   /* margin-top: -4px; */
@@ -133,6 +156,72 @@ button {
   transition: all 0.2s;
 }
 
+/* INPUT */
+.field {
+  display: flex;
+  flex-direction: column-reverse;
+}
+label {
+  display: flex;
+  height: 1.4rem;
+  transition: all 0.2s;
+  touch-action: manipulation;
+  pointer-events: none;
+}
+input:placeholder-shown + label {
+  cursor: text;
+  max-width: 66.66%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transform-origin: left bottom;
+  transform: translate(0, 2.5rem);
+}
+input::placeholder {
+  opacity: 0;
+  transition: inherit;
+}
+input:focus::-webkit-input-placeholder {
+  opacity: 0;
+  color: rgba(0, 0, 0, 0);
+}
+input[type="text"]:focus,
+input[type="number"]:focus {
+  background-color: #F7F7FA;
+}
+input[type="text"],
+input[type="number"] {
+  cursor: text;
+  width: 96%;
+  height: 40px;
+  margin-bottom: 10px;
+  margin-top: 4px;
+  padding: 4px 0 4px 4%;
+  border: 0;
+  border-bottom: 2px solid #ABABCB;
+  outline: none;
+  font-size: 18px;
+  color: midnightblue;
+  transition: all 0.2s;
+}
+input:not(:placeholder-shown) + label,
+input:focus + label {
+  transform: translate(0, 0) scale(1);
+  font-size: 14px;
+  cursor: pointer;
+}
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+/* ANIMATION */
 @keyframes slide-right {
   0% {
     opacity: 0;
@@ -144,4 +233,14 @@ button {
   }
 }
 
+/* FADE TRANSITION */
+.fade-enter-active {
+  transition: opacity .75s;
+}
+.fade-leave-active {
+  transition: opacity 0.0s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
 </style>

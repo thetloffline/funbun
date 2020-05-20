@@ -4,10 +4,10 @@
     <div class="content-center">
       <div class="sm-content">
         <div class="slogan">
-          <h1>{{msg}}</h1>
+          <h1>{{ msg }}</h1>
         </div>
       </div>
-      <fileUpload />
+      <!-- <fileUpload /> -->
       <allCakes />
     </div>
   </section>
@@ -20,15 +20,15 @@ import fixedCover from './FixedCoverComponent.vue'
 
 export default {
   name: 'LandingPageComponent',
-  data () {
-    return {
-      msg: 'All work and no fun makes Jack want to have some bun!'
-    }
-  },
   components: {
     fixedCover: fixedCover,
     allCakes: allCakes,
     fileUpload: fileUpload
+  },
+  data () {
+    return {
+      msg: 'All work and no fun makes Jack want to have some bun!'
+    }
   }
 }
 </script>

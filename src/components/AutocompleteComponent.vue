@@ -1,49 +1,80 @@
 <template>
+
   <div class="card">
     <div class="field">
-      <ul class="dropdown-menu" v-bind:class="{open : openSuggestion, hide : !openSuggestion}">
+      <ul
+        :class="{open : openSuggestion, hide : !openSuggestion}"
+        class="dropdown-menu">
+
         <li
           v-for="(suggestion, index) in matches"
           :key="index"
-          v-bind:class="{'active': isActive(index)}"
+          :class="{'active': isActive(index)}"
           @click="suggestionClick(index)"
-          @mousedown.prevent
-        >
-          <span class="suggestion">{{ suggestion }}</span>
+          @mousedown.prevent>
+          <span class="suggestion">
+            {{ suggestion }}
+          </span>
         </li>
+
       </ul>
 
-      <div id="error"
-        v-bind:class="isValid ? '' : 'error'">
-        {{error}}
+      <div
+        id="error"
+        :class="isValid ? '' : 'error'">
+        {{ error }}
       </div>
 
       <input
-        class="input"
-        :type="type"
-        required
-        :name="label"
-        :id="label"
-        :placeholder="label"
         v-model="selection"
+        :type="type"
+        :id="label"
+        :name="label"
+        :placeholder="label"
+        required
+        class="input"
         @keydown.enter="enter()"
-        @keydown.down="down"
-        @keydown.up="up"
-        @keydown.esc="blur"
-        @input="change"
+        @keydown.down="down()"
+        @keydown.up="up()"
+        @keydown.esc="blur()"
+        @input="change()"
         @blur="blur()"
-        @focus="disableValidationError()"
+        @focus="disableValidationError()"/>
 
-      />
-      <label :for="label">{{ label }}</label>
+      <label 
+        :for="label">
+        {{ label }}
+      </label>
+
     </div>
   </div>
 </template>
 
 <script>
-import Vue from 'vue'
-
 export default {
+  props: {
+    id: {
+      type: String,
+      value: ''
+    },
+    type: {
+      type: String,
+      value: ''
+    },
+    label: {
+      type: String,
+      required: true
+    },
+    suggestions: {
+      type: Array,
+      value: ''
+    },
+    value: {
+      type: String,
+      value: ''
+    }
+  },
+
   data () {
     return {
       open: false,
@@ -51,29 +82,6 @@ export default {
       current: -1,
       isValid: true,
       error: ''
-    }
-  },
-
-  props: {
-    id: {
-      type: String
-    },
-
-    type: {
-      type: String
-    },
-
-    label: {
-      type: String,
-      required: true
-    },
-
-    suggestions: {
-      type: Array
-    },
-
-    value: {
-      type: String
     }
   },
 
@@ -91,7 +99,6 @@ export default {
     matches () {
       if (this.suggestions !== undefined && this.selection !== '') {
         return this.suggestions.filter(str => {
-  
           if (this.selection.length >= 3) {
             try {
               if (typeof str !== 'string') { return }
@@ -101,12 +108,12 @@ export default {
             }
           }
         })
-      } else { return }
+      }
     },
 
     openSuggestion () {
       return (
-        this.selection !== '' && this.matches.length != 0 && this.open === true
+        this.selection !== '' && this.matches.length !== 0 && this.open === true
       )
     }
   },
@@ -154,7 +161,7 @@ export default {
     },
 
     down () {
-      if (this.open == true) {
+      if (this.open === true) {
         this.startedSelecting = true
       }
 
@@ -170,7 +177,7 @@ export default {
     },
 
     change () {
-      if (this.open == false) {
+      if (this.open === false) {
         this.open = true
         this.current = -1
       }
@@ -207,7 +214,7 @@ li:active {
   color: white;
 }
 .active {
-  background-color: midnightblue;
+  background-color: midnightblue !important;
   color: white;
 }
 .suggestion {
@@ -220,67 +227,5 @@ ul {
   color: midnightblue;
 }
 
-/* INPUT */
-.field {
-  display: flex;
-  flex-direction: column-reverse;
-}
-label {
-  display: flex;
-  height: 1.4rem;
-  transition: all 0.2s;
-  touch-action: manipulation;
-}
-input:placeholder-shown + label {
-  cursor: text;
-  max-width: 66.66%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  transform-origin: left bottom;
-  transform: translate(0, 2.5rem);
-}
-input::placeholder {
-  opacity: 0;
-  transition: inherit;
-}
-input:focus::-webkit-input-placeholder {
-  opacity: 0;
-  color: rgba(0, 0, 0, 0);
-}
-input[type="text"]:focus,
-input[type="number"]:focus {
-  background-color: #F7F7FA;
-}
-input[type="text"],
-input[type="number"] {
-  cursor: text;
-  width: 96%;
-  height: 40px;
-  margin-bottom: 10px;
-  margin-top: 4px;
-  padding: 4px 0 4px 4%;
-  border: 0;
-  border-bottom: 2px solid #ABABCB;
-  outline: none;
-  font-size: 18px;
-  color: midnightblue;
-  transition: all 0.2s;
-}
-input:not(:placeholder-shown) + label,
-input:focus + label {
-  transform: translate(0, 0) scale(1);
-  font-size: 14px;
-  cursor: pointer;
-}
-/* Chrome, Safari, Edge, Opera */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-/* Firefox */
-input[type=number] {
-  -moz-appearance: textfield;
-}
+
 </style>

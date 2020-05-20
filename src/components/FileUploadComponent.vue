@@ -1,86 +1,134 @@
 <template>
   <section id="form">
     <div class="content-center">
+
       <div class="add-bun">
-        <transition name="fade" mode="out-in">
-          <div v-if="!clickToShowContent" class="form-bun" key="addBuns">
+
+        <transition 
+          name="fade"
+          mode="out-in">
+
+          <div
+            v-if="!clickToShowContent"
+            key="addBuns"
+            class="form-bun">
             <h1 class="section-header">Nam-Nam Add a bun</h1>
-            <div class="btn-round" v-on:click="showFormContent($event)">+</div>
+            <div
+              class="btn-round"
+              @click="showFormContent($event)">
+              +
+            </div>
           </div>
 
-          <div v-else class="container" key="showBuns">
+          <div 
+            v-else
+            key="showBuns"
+            class="container">
+
             <h1 class="section-header">Nam-Nam Add a bun</h1>
-            <div class="upload-area card" v-on:click="addFiles()">
+            <div
+              class="upload-area card"
+              @click="addFiles()">
               <div class="upload-text">Add a photo</div>
               <div class="btn-round">+</div>
             </div>
 
             <div>
               <input
-                type="file"
                 id="files"
                 ref="fileInput"
+                type="file"
                 accept=".jpg, jpeg"
-                v-on:change="handleFilesUpload()"
                 name="files"
-              />
+                @change="handleFilesUpload()"/>
             </div>
 
-            <transition name="fade">
-              <div class="file-listing" v-if="files">
-                <span class="file-name">{{ files.name }}</span>
-                <span class="remove-file" v-on:click="removeFile()">Remove</span>
+            <transition
+              name="fade">
+
+              <div
+                v-if="files"
+                class="file-listing">
+
+                <span
+                  class="file-name">
+                  {{ files.name }}
+                </span>
+
+                <span
+                  class="remove-file" 
+                  @click="removeFile()">
+                  Remove
+                </span>
+
               </div>
             </transition>
 
             <autocomplete
-              type="text"
-              :suggestions="shopNames"
-              v-model="shop.name"
-              label="Shop Name"
-              :required="true"
               id="shop.name"
-            />
+              v-model="shop.name"
+              :suggestions="shopNames"
+              :required="true"
+              type="text"
+              label="Shop Name"/>
 
             <autocomplete
-              type="text"
-              :suggestions="shopAddresses"
-              v-model="shop.address"
-              label="Address"
-              :required="true"
               id="address"
-            />
+              v-model="shop.address"
+              :suggestions="shopAddresses"
+              :required="true"
+              type="text"
+              label="Address"/>
 
             <autocomplete
-              type="text"
-              :suggestions="productNames"
-              v-model="product.name"
-              label="Product Name"
-              :required="true"
               id="product.name"
-            />
+              v-model="product.name"
+              :suggestions="productNames"
+              :required="true"
+              type="text"
+              label="Product Name"/>
 
             <textInput
+              id="price"
+              v-model="product.price"
+              :required="true"
               type="number"
               step="0.01"
-              v-model="product.price"
-              label="Price"
+              label="Price"/>
+
+            <rangeSLider
+              id="looks"
+              v-model="feedback.looks"
               :required="true"
-              id="price"
-            />
+              label="Looks"/>
 
-            <rangeSLider v-model="feedback.looks" label="Looks" :required="true" id="looks" />
+            <rangeSLider
+              id="taste"
+              v-model="feedback.taste"
+              :required="true"
+              label="Taste"/>
 
-            <rangeSLider v-model="feedback.taste" label="Taste" :required="true" id="taste" />
-
-            <textArea v-model="feedback.comment" label="Comment" id="comment" />
+            <textArea
+              id="comment"
+              v-model="feedback.comment"
+              label="Comment"/>
 
             <div class="btn-container">
-              <button class="btn-form btn-primary" v-on:click="submitFiles()">Submit</button>
+              <button
+                class="btn-form btn-primary" 
+                @click="submitFiles()">
+                Submit
+              </button>
             </div>
+
             <div class="btn-container">
-              <button class="btn-form btn-transparent" v-on:click="cancelForm($event)">Cancel</button>
+              <button
+                class="btn-form btn-transparent"
+                @click="cancelForm($event)">
+                Cancel
+              </button>
             </div>
+
           </div>
         </transition>
       </div>
@@ -97,14 +145,21 @@ import rangeSLider from './RangeSliderComponent.vue'
 import autocomplete from './AutocompleteComponent.vue'
 
 export default {
-  name: 'fileUploadComponent',
+  name: 'FileUploadComponent',
+  components: {
+    autocomplete: autocomplete,
+    textArea: textArea,
+    rangeSLider: rangeSLider,
+    textInput: textInput
+  },
+
   data () {
     return {
       files: '',
       imageFile: '',
       shop: {
         name: '',
-        address: '',
+        address: ''
       },
       product: {
         category: '',
@@ -114,7 +169,7 @@ export default {
       feedback: {
         looks: 0,
         taste: 0,
-        comment: '',
+        comment: ''
       },
       clickToShowContent: false,
       formData: '',
@@ -122,19 +177,13 @@ export default {
       error: ''
     }
   },
-  components: {
-    autocomplete: autocomplete,
-    textArea: textArea,
-    rangeSLider: rangeSLider,
-    textInput: textInput
-  },
-
-  mounted () {},
-  created () {},
 
   computed: {
     ...mapGetters(['shopNames', 'shopAddresses', 'productNames'])
   },
+
+  mounted () {},
+  created () {},
 
   methods: {
     addFiles () {
@@ -341,16 +390,5 @@ input[type="file"] {
   flex-direction: column;
   margin: auto;
   color: midnightblue;
-}
-.fade-enter-active {
-  transition: opacity 1.5s;
-  /* transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0); */
-}
-.fade-leave-active {
-  transition: opacity 0.5s;
-  /* transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0); */
-}
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  opacity: 0;
 }
 </style>

@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div class="sticky sticky-cover"></div>
+    <div class="sticky sticky-cover"/>
     <div class="sticky overlay">
       <div class="flex">
         <div class="sticky-slogan">
-          <h1>{{msg}}</h1>
+          <h1>{{ msg }}</h1>
         </div>
       </div>
     </div>
@@ -13,7 +13,7 @@
 
 <script>
 export default {
-  name: 'fixedCoverComponent',
+  name: 'FixedCoverComponent',
   data () {
     return {
       msg: 'All work and no fun makes Jack want to have some bun!'

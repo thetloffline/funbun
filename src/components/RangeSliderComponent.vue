@@ -106,13 +106,13 @@ input[type="range"]::-moz-range-track {
   cursor: pointer;
   animate: 0.2s;
   /*   box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d; */
-  background: midnightblue;
+  background: #BAAFD4;
 }
 input[type="range"]::-moz-range-thumb {
   /*   box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d; */
   border: 4px solid #ffffff;
-  height: 20px;
-  width: 20px;
+  height: 18px;
+  width: 18px;
   border-radius: 15px;
   background: midnightblue;
   cursor: pointer;

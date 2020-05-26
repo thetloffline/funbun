@@ -130,7 +130,7 @@ button {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  margin: 16px 0;
+  margin: 12px 0;
 }
 .btn-card {
   padding: 12px 18px;
@@ -140,8 +140,10 @@ button {
   font-size: 1rem;
 }
 .btn-card:hover {
-  border: solid 1px #5063F7;
-  color: #5063F7;
+  color: white;
+  background-color: midnightblue;
+  /* border: solid 1px #5063F7;
+  color: #5063F7; */
 }
 .btn-card:active {
   /* box-shadow: -1px 2px 0 midnightblue; */

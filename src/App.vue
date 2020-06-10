@@ -17,7 +17,6 @@ export default {
 <style>
 html {
   background-image: linear-gradient(to right, #f6f9fc , #f6f3fc);
-  /* background: #f6f9fc; */
   margin: auto;
 }
 #app {

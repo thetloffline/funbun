@@ -9,15 +9,11 @@ export default new Vuex.Store({
     shops: [],
     products: [],
     feedback: [],
-    productId: {
-      type: String,
-      value: false
-    },
-    shopId: {
-      type: String,
-      value: false
-    },
-    inlineFormId: ''
+    productId: '',
+    shopId: '',
+    inlineFormId: '',
+    selectedButton: '',
+    sortDirection: ''
   },
 
   mutations: {
@@ -32,8 +28,17 @@ export default new Vuex.Store({
     SET_FEEDBACK (state, feedbackData) {
       state.feedback = feedbackData
     },
-    SET_INLINEFORM (state, formClicked) {
+
+    SET_INLINEFORM_ID (state, formClicked) {
       state.inlineFormId = formClicked
+    },
+
+    SET_SORT_DIRECTION (state, sortDirectionUpdated) {
+      state.sortDirection = sortDirectionUpdated
+    },
+
+    SET_SORT_BUTTON (state, selectedButton) {
+      state.selectedButton = selectedButton
     }
   },
 
@@ -81,7 +86,6 @@ export default new Vuex.Store({
             })
           this.shopId = response.data.data._id
           this.state.shops.push(response.data.data)
-          // this.dispatch('loadShops')
         } catch (error) {
           console.log(error)
         }
@@ -103,7 +107,6 @@ export default new Vuex.Store({
           })
           this.productId = response.data.data._id
           this.state.products.push(response.data.data)
-          // this.dispatch('loadProducts')
         } catch (error) {
           console.log('addProduct error', error)
         }
@@ -156,8 +159,17 @@ export default new Vuex.Store({
     },
 
     async toggleInlineForm ({ commit }, payload) {
-      commit('SET_INLINEFORM', payload)
+      commit('SET_INLINEFORM_ID', payload)
+    },
+
+    async setSelectedButton ({ commit }, payload) {
+      commit('SET_SORT_BUTTON', payload)
+    },
+
+    async setSortDirection ({ commit }, payload) {
+      commit('SET_SORT_DIRECTION', payload)
     }
+
   },
 
   getters: {
@@ -180,28 +192,37 @@ export default new Vuex.Store({
     aggregatedFeedback (state) {
       const arr = []
       for (let i = 0; i < state.products.length; i++) {
-        const cardData = {}
+        const aggregate = {}
         const product = state.products[i]
-        cardData.product = product
-        cardData.productId = product._id
+        aggregate.isLast = false
+        aggregate.product = product
+        aggregate.productId = product._id
 
         const foundShop = state.shops.find(shop => (shop._id === product.shopId))
-        cardData.shop = foundShop
+        aggregate.shop = foundShop
 
         const foundFeedback = state.feedback.filter(f => f.productId === product._id)
-        cardData.feedback = foundFeedback
+        aggregate.feedback = foundFeedback
 
         const calcTasteAvg = foundFeedback.map(f => f.taste).reduce((acc, current) => acc + Number(current), 0) / foundFeedback.length
+        aggregate.avgTaste = Math.round(calcTasteAvg * 10) / 10
 
         const calcLooksAvg = foundFeedback.map(f => f.looks).reduce((acc, current) => acc + Number(current), 0) / foundFeedback.length
+        aggregate.avgLooks = Math.round(calcLooksAvg * 10) / 10
 
-        cardData.price = product.price
-        cardData.avgTaste = Math.round(calcTasteAvg * 10) / 10
-        cardData.avgLooks = Math.round(calcLooksAvg * 10) / 10
+        aggregate.price = product.price
 
-        arr.push(cardData)
+        arr.push(aggregate)
       }
       return arr
+    },
+
+    sortDirection (state) {
+      return state.sortDirection
+    },
+
+    selectedSortButton (state) {
+      return state.selectedButton
     }
   }
 })

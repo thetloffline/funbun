@@ -1,79 +1,72 @@
 <template>
-  <div class="form-inline">
-      <div class="">
-        <transition name="slide">
-          <div
-            v-if="index === isFormOpen.id"
-            :id="index"
-            class="inline-form">
+<div>
+<!-- <transition name="slide"> -->
+    <transition-group
+      name="fade"
+      mode="out-in"
+      >
 
-            <rangeSLider
-              id="taste"
-              v-model="feedback.taste"
-              :required="true"
-              label="Taste"
-              class="inline-range-slider"/>
+      <div
+        v-if="index === isFormOpen.id"
+        :id="index"
+        :key="productId">
+        <div 
+          v-if="showFormContent"
+          key="inlineForm"
+          class="inline-form">
 
-            <rangeSLider
-              id="looks"
-              v-model="feedback.looks"
-              :required="true"
-              label="Looks"
-              class="inline-range-slider"/>
+          <rangeSLider
+            id="taste"
+            v-model="feedback.taste"
+            :required="true"
+            label="Taste"
+            class="inline-range-slider"/>
 
-            <textArea
-              id="comment"
-              v-model="feedback.comment"
-              label="Comment"
-              class="inline-comment"/>
+          <rangeSLider
+            id="looks"
+            v-model="feedback.looks"
+            :required="true"
+            label="Looks"
+            class="inline-range-slider"/>
 
-            <div 
-              v-if="index === isFormOpen.id"
-              class="container-card-btns">
+          <textArea
+            id="comment"
+            v-model="feedback.comment"
+            label="Comment"
+            class="inline-comment"/>
 
-              <div
-                class="btn-container">
-                <button
-                  :id="index"
-                  class="btn-card btn-transparent"
-                  @click="discardInlineForm($event, product, index)">
-                  Cancel
-                </button>
-              </div>
-
-              <div
-                class="btn-container">
-                <button
-                  :id="index"
-                  class="btn-card"
-                  @click="submitInlineForm($event, product, index)">
-                  Submit Feedback
-                </button>
-              </div>
-
-            </div>
-          </div>
-
+        </div>
+        
+        <transition
+          name="slide"
+          mode="out-in">
           <div
             v-if="formSubmitted === true"
             class="success">
             <h3>Great Success</h3>
           </div>
-          
+
           <div
             v-if="formCancelled === true"
-            class="cancelForm">
+            class="cancel-form">
             <h3>Feedback Cancelled</h3>
           </div>
-
         </transition>
       </div>
-
       
 
-    <transition name="fade">
+ <!--    <transition 
+      name="fade"
+      mode="out-in"> -->
+    <!-- </transition> -->
+  </transition-group>
+
+    <transition 
+      name="fade" 
+      mode="out-in">
+      
       <div
-        v-if="index !== isFormOpen.id && showButtons === true"
+        v-if="index !== isFormOpen.id  && showButtons === true"
         class="container-card-btns">
         <div class="btn-container">
           <button
@@ -84,9 +77,34 @@
           </button>
         </div>
       </div>
-    </transition>
+       
+      <div 
+        v-if="index === isFormOpen.id && showFormContent"
+        :key="feedback.id"
+        class="container-card-btns">
 
-  </div>
+        <div class="btn-container">
+          <button
+            :id="index"
+            class="btn-card btn-transparent"
+            @click="discardInlineForm($event, product, index)">
+            Cancel
+          </button>
+        </div>
+
+        <div class="btn-container">
+          <button
+            :id="index"
+            class="btn-card"
+            @click="submitInlineForm($event, product, index)">
+            Submit Feedback
+          </button>
+        </div>
+
+      </div>
+    </transition>   
+</div>
+  <!-- </transition> -->
 </template>
 
 <script>
@@ -101,8 +119,15 @@ export default {
     textArea: textArea
   },
   props: {
-    product: '',
-    index: 0
+    product: {
+      type: Array,
+      value: ''
+    },
+    index: {
+      type: Number,
+      value: 0
+    },
+    productId: ''
   },
   data () {
     return {
@@ -112,22 +137,67 @@ export default {
         looks: 0,
         comment: ''
       },
-      showButtons: true,
       formSubmitted: false,
-      formCancelled: false
+      formCancelled: false,
+      showFormContent: false
     }
   },
   mounted () {},
   created () {},
+  computed: {
+
+      ...mapGetters([
+        'isFormOpen'
+        ]),
+
+      showButtons : {
+        get () {
+          return this.isFormOpen.id !== this.index
+        },
+        set (show) {
+          return show
+        } 
+      }
+  },
+
   methods: {
-   
-   async showInlineForm (e, product, index) {
-     this.showButtons = false
-        const clickedForm = {
-          'id' : this.index
-        }
-        await this.$store.dispatch('toggleInlineForm', clickedForm)
+    
+    getFormHeight(e) {
+     this.formHeight = document.querySelector('.inline-form').clientHeight + 4 +'px'
+   },
+
+    async toggleInlineForm (id) {
+      if (id) {
+         await this.$store.dispatch('toggleInlineForm', {'id':this.index})
+      } else {
+        await this.$store.dispatch('toggleInlineForm', '')
+      }
+    },
+
+     showInlineForm (e, product, index) {
+      setTimeout(() => {
+        this.showButtons = false
+      }, 1500);
+      
+      this.toggleInlineForm({'id':this.index})
+      this.showFormContent = true
       this.resetInlineForm()
+    },
+    
+    async discardInlineForm () {
+      setTimeout(() => {
+        this.resetInlineForm()
+        this.showFormContent = false
+        this.formCancelled = true
+      }, 100);
+      
+      setTimeout(() => {
+        this.formCancelled = false
+      }, 1600)
+      
+      setTimeout(() => {
+        this.toggleInlineForm()
+      }, 2500)
     },
 
     async submitInlineForm (e, product, index) {
@@ -137,36 +207,28 @@ export default {
       inlineForm.append('looks', Number(this.feedback.looks))
       inlineForm.append('taste', Number(this.feedback.taste))
       inlineForm.append('productImage', product[0].productImage)
-
       await this.$store.dispatch('addFeedback', inlineForm)
-      await this.$store.dispatch('toggleInlineForm', '')
       
-      this.resetInlineForm()
-      this.formSubmitted = true
+      setTimeout(() => {
+        this.resetInlineForm()
+        this.showFormContent = false
+        this.formSubmitted = true
+      }, 100);
+      
       setTimeout(() => {
         this.formSubmitted = false
-      }, 1500);
-    },
+      }, 1600)
 
-    async discardInlineForm () {
-      await this.$store.dispatch('toggleInlineForm', '')
-      this.resetInlineForm()
-      this.formCancelled = true
-      this.showButtons = true
       setTimeout(() => {
-        this.formCancelled = false
-      }, 1500)
+        this.toggleInlineForm()
+      }, 3100)
     },
 
     resetInlineForm () {
       this.feedback.looks = 0
       this.feedback.taste = 0
       this.feedback.comment = ''
-    },
-
-  },
-  computed: {
-      ...mapGetters(['aggregatedFeedback', 'isFormOpen'])
+    }
   }
 }
 </script>
@@ -176,7 +238,9 @@ export default {
 .inline-form {
   display: flex;
   flex-direction: column;
-  margin: 18px 0 0;
+  margin: 12px 0 0;
+  /* transition: all .5s; */
+    transition: max-height 0.5s;
 }
 .inline-comment {
     border-radius: 0px;
@@ -188,17 +252,19 @@ export default {
   margin: 10px 24px !important;
   box-shadow: none !important ;
 }
-.success, .cancelForm {
+.success, .cancel-form {
   display: flex;
   flex-direction: column ;
   justify-content: center;
-  height: 313px;
+  /* height: 410px; */
   align-items: center;
 }
-.cancelForm>h3 {
+.cancel-form>h3 {
+  margin : 8% 0;
   color: red;
 }
 .success>h3 {
+  margin : 8% 0;
   color: green ;
 }
 
@@ -206,7 +272,6 @@ export default {
 .fadeHeight-enter-active,
 .fadeHeight-leave-active {
   transition: all .4s ease-out;
-  max-height: 410px;
   opacity: 1;
 }
 .fadeHeight-enter,
@@ -214,22 +279,6 @@ export default {
 {
   opacity: 0;
   max-height: 0px;
-}
-
-/* SLIDE */
-.slide-enter {
-  opacity: 0;
-  transform: scale3d(.8, 1, 1) translate3d(100px, 0, 0);
-}
-
-.slide-enter-to { transform: scale3d(1, 1, 1); }
-.slide-enter-active,
-.slide-leave-active { transition: 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
-.slide-leave { transform: scale3d(1, 1, 1); }
-
-.slide-leave-to {
-  opacity: 0;
-  transform: scale3d(1, 1, 1) translate3d(-180px, 0, 0);
 }
 
 </style>

@@ -8,7 +8,9 @@ import fixedCover from './components/FixedCoverComponent.vue'
 import landingPage from './components/LandingPageComponent.vue'
 import fileUpload from './components/FileUploadComponent.vue'
 import allCakes from './components/AllCakesComponent.vue'
-import ProductFormInlineComponent from './components/ProductFormInlineComponent.vue'
+import ProductCard from './components/ProductCardComponent.vue'
+import SortButton from './components/SortButtonComponent.vue'
+import ProductFormInline from './components/ProductFormInlineComponent.vue'
 
 Vue.config.productionTip = false
 Vue.mixin({
@@ -45,6 +47,21 @@ Vue.filter('formatDate', function (isoDate) {
   return date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear()
 })
 
+Vue.filter('sortArray', function (array, sortParam, sortAsc) {
+  const newArr = array.slice()
+  if (newArr.length > 0) {
+    const ascDesc = sortAsc.value ? -1 : 1
+    const sortedArray = newArr.sort(
+      (a, b) =>
+        ascDesc *
+        (Number(a[sortParam]) > Number(b[sortParam]) ? 1 : -1)
+    )
+    return sortedArray
+  } else {
+    return []
+  }
+})
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
@@ -56,7 +73,9 @@ new Vue({
     landingPage,
     fileUpload,
     allCakes,
-    ProductFormInlineComponent
+    ProductCard,
+    SortButton,
+    ProductFormInline
   },
   created () {
     this.$store.dispatch('loadShops')

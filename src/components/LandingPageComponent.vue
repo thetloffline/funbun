@@ -7,7 +7,7 @@
           <h1>{{ msg }}</h1>
         </div>
       </div>
-      <!-- <fileUpload /> -->
+      <fileUpload />
       <allCakes />
     </div>
   </section>

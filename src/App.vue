@@ -16,7 +16,8 @@ export default {
 
 <style>
 html {
-  background: #f6f9fc;
+  background-image: linear-gradient(to right, #f6f9fc , #f6f3fc);
+  /* background: #f6f9fc; */
   margin: auto;
 }
 #app {
@@ -78,6 +79,7 @@ button {
 .btn-container {
   display: flex;
   margin: 10px 0 10px 0;
+  transition: .5s all;
 }
 .btn-form {
   margin: 0;
@@ -101,13 +103,15 @@ button {
   color: midnightblue;
   border: none !important;
 }
+.btn-transparent:hover {
+  background-color: white !important;
+  color: #42428a !important;
+}
+button:active,
 .btn-transparent:active,
 .btn-sort:active,
 .btn-card:active {
-  outline: 0;
-}
-.btn-transparent:hover {
-  background-color: white;
+  outline: none;
 }
 .btn-round {
   display: flex;
@@ -133,6 +137,8 @@ button {
   margin: 12px 0;
 }
 .btn-card {
+  display: flex;
+  flex-direction: row;
   padding: 12px 18px;
   color: midnightblue;
   background-color: white;
@@ -144,11 +150,6 @@ button {
   background-color: midnightblue;
   /* border: solid 1px #5063F7;
   color: #5063F7; */
-}
-.btn-card:active {
-  /* box-shadow: -1px 2px 0 midnightblue; */
-  transition: 0.2s all;
-  outline: none;
 }
 .error {
   color: #746216;
@@ -237,7 +238,8 @@ input[type=number] {
 
 /* FADE TRANSITION */
 .fade-enter-active {
-  transition: opacity .75s;
+  transition: opacity 1.75s;
+  /* transition-delay: .25s; */
 }
 .fade-leave-active {
   transition: opacity 0.0s;
@@ -245,4 +247,28 @@ input[type=number] {
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
 }
+
+/* SLIDE TRANSITION*/
+.slide-enter {
+  opacity: 0;
+  transform: scale3d(.8, 1, 1) translate3d(100px, 0, 0);
+}
+
+.slide-enter-to { transform: scale3d(1, 1, 1); }
+.slide-enter-active { 
+  transition: 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); 
+  transition-delay: .15s;
+   }
+.slide-leave-active {
+  transition: 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  transition-delay: .15s;
+
+}
+.slide-leave { transform: scale3d(1, 1, 1); }
+
+.slide-leave-to {
+  opacity: 0;
+  transform: scale3d(1, 1, 1) translate3d(-180px, 0, 0);
+}
+
 </style>

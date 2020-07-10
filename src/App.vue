@@ -17,6 +17,7 @@ export default {
 <style>
 html {
   background-image: linear-gradient(to right, #f6f9fc , #f6f3fc);
+  /* background-image: linear-gradient(#2828B8, #3E3EAD); */
   margin: auto;
 }
 #app {
@@ -25,27 +26,28 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: midnightblue;
+  color: darkslategray;
+  /* color: midnightblue; */
 }
-h1,
-h2 {
+h1 {
   font-family: "Poppins";
   font-size: 2.8rem;
-  line-height: 3rem;
+  line-height: 3.4rem;
 }
 h2 {
-  font-size: 2.4rem;
+  font-family: "Poppins";
+  font-size: 2rem;
+  line-height: 2.8rem;
 }
 h3 {
   display: flex;
-  font-size: 1.5em;
+  font-size: 1.2rem;
   font-weight: 700;
-  color: midnightblue;
   margin: 0;
 }
 h5 {
-  font-size: .9rem;
-  font-weight: 400;
+  font-size: .7rem;
+  font-weight: 700;
   margin: 0;
 }
 ul {
@@ -53,7 +55,7 @@ ul {
   padding: 0;
 }
 li {
-  margin: 0 10px;
+  margin: 0 1rem;
 }
 a {
   color: #ff715b;
@@ -69,7 +71,7 @@ button {
   border-radius: 3rem;
   padding: 18px;
   color: white;
-  font-size: 1.4rem;
+  font-size: 1.1rem;
   font-weight: 500;
   transition: 0.1s all;
   cursor: pointer;
@@ -77,8 +79,10 @@ button {
 }
 .btn-container {
   display: flex;
-  margin: 10px 0 10px 0;
+  margin: .4rem 0;
   transition: .5s all;
+  width: 100%;
+  justify-content: center;
 }
 .btn-form {
   margin: 0;
@@ -86,25 +90,28 @@ button {
   width: 100%;
 }
 .btn-primary {
-  background-color: midnightblue;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  background-image: linear-gradient(#fd5088, #fe515c);
+  /* background-image: linear-gradient(#2828B8, #3E3EAD); */
+  box-shadow: 0 10px 20px rgba(254, 81, 9, 0.3);
+  color: white;
   outline: 0;
 }
 .btn-primary:hover {
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 1px 2px rgba(254, 81, 9, 0.3);
 }
 .btn-primary:active {
   background-color: #42428a;
-  box-shadow: 0 0 0 rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 0 rgba(254, 81, 9, 0.3);
 }
 .btn-transparent {
+  font-size: 1.1rem;
   background-color: rgba(0, 0, 0, 0);
-  color: midnightblue;
+  color: darkslategray;
   border: none !important;
 }
 .btn-transparent:hover {
-  background-color: white !important;
-  color: #42428a !important;
+  background-image: none !important;
+  /* color: #42428a !important; */
 }
 button:active,
 .btn-transparent:active,
@@ -121,39 +128,37 @@ button:active,
   width: 60px;
   height: 60px;
   border-radius: 30px;
-  background-color: midnightblue;
+  background-image: linear-gradient(#fd505d);
+  /* background-image: linear-gradient(#2828B8, #3E3EAD); */
   color: white;
   font-size: 3rem;
   font-weight: 400;
 }
 .btn-round:active {
-  background-color: #42428a;
+  background-color: #fd505d;
 }
 .container-card-btns {
   display: flex;
-  flex-direction: row;
-  justify-content: center;
-  margin: 12px 0;
+  flex-direction: column;
+  align-items: center;
+  margin: -.6rem 0 1rem ;
 }
 .btn-card {
   display: flex;
   flex-direction: row;
-  padding: 12px 18px;
-  color: midnightblue;
-  background-color: white;
-  border: solid 1px midnightblue;
-  font-size: 1rem;
+  width: 100%;
+  margin: 0 1.6rem;
+  justify-content: center;
 }
 .btn-card:hover {
-  color: white;
-  background-color: midnightblue;
-  /* border: solid 1px #5063F7;
-  color: #5063F7; */
+  color: white !important;
+  background-image: linear-gradient(#fe515c);
 }
 .error {
-  color: #746216;
-  /* margin-top: -4px; */
-  background-color: #FFE47B;
+  /* color: midnightblue; */
+  /* color: #746216; */
+  margin: 0 8px;
+  border-radius: 2rem;
   animation: slide-right 0.2s ease;
   transition: all 0.2s;
 }
@@ -166,6 +171,7 @@ button:active,
 label {
   display: flex;
   height: 1.4rem;
+  padding-left: 12px;
   transition: all 0.2s;
   touch-action: manipulation;
   pointer-events: none;
@@ -189,21 +195,21 @@ input:focus::-webkit-input-placeholder {
 }
 input[type="text"]:focus,
 input[type="number"]:focus {
-  background-color: #F7F7FA;
+  background-image: linear-gradient( #fe515c);
+  color: white;
 }
 input[type="text"],
 input[type="number"] {
   cursor: text;
   width: 96%;
   height: 40px;
-  margin-bottom: 10px;
-  margin-top: 4px;
-  padding: 4px 0 4px 4%;
+  margin: 4px auto 10px;
+  padding: 4px 0 4px 5%;
   border: 0;
-  border-bottom: 2px solid #ABABCB;
+  background: #E6E6F0;
+  border-radius: 2rem;
   outline: none;
   font-size: 18px;
-  color: midnightblue;
   transition: all 0.2s;
 }
 input:not(:placeholder-shown) + label,

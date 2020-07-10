@@ -82,39 +82,36 @@ input[type="range"]::-webkit-slider-runnable-track {
   height: 2px;
   cursor: pointer;
   animate: 0.2s;
-  /*   box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d; */
-  background: #BAAFD4;
+  background: lavender;
+
 }
 input[type="range"]::-webkit-slider-thumb {
-  /*   box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d; */
   border: 4px solid #ffffff;
   height: 26px;
   width: 26px;
   border-radius: 13px;
-  background: midnightblue;
+  background: #fe515c;
   cursor: pointer;
   -webkit-appearance: none;
   margin-top: -13px;
 }
 input[type="range"]:focus::-webkit-slider-runnable-track {
-  background: #BAAFD4;
-  border-color: midnightblue;
+  background: lavender;
+  border-color: #fe515c;
 }
 input[type="range"]::-moz-range-track {
   width: 100%;
   height: 2px;
   cursor: pointer;
   animate: 0.2s;
-  /*   box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d; */
-  background: #BAAFD4;
+  background: lavender;
 }
 input[type="range"]::-moz-range-thumb {
-  /*   box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d; */
   border: 4px solid #ffffff;
   height: 18px;
   width: 18px;
   border-radius: 15px;
-  background: midnightblue;
+  background: #fe515c;
   cursor: pointer;
 }
 input[type="range"]::-ms-track {
@@ -128,30 +125,27 @@ input[type="range"]::-ms-track {
   color: transparent;
 }
 input[type="range"]::-ms-fill-lower {
-  background: #2a6495;
+  background: #fe515c;
   border: 0.2px solid #010101;
   border-radius: 2.6px;
-  /*   box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d; */
 }
 input[type="range"]::-ms-fill-upper {
   background: darkgrey;
   border: 0.2px solid #010101;
   border-radius: 2.6px;
-  /*   box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d; */
 }
 input[type="range"]::-ms-thumb {
-  /*   box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d; */
   border: 1px solid #ffffff;
   height: 18px;
   width: 18px;
   border-radius: 9px;
-  background: midnightblue;
+  background: #fe515c;
   cursor: pointer;
 }
 input[type="range"]:focus::-ms-fill-lower {
-  background: midnightblue;
+  background: #fe515c;
 }
 input[type="range"]:focus::-ms-fill-upper {
-  background: midnightblue;
+  background: #fe515c;
 }
 </style>

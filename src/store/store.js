@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 import axios from 'axios'
 
 Vue.use(Vuex, axios)
-const url = 'http://localhost:3000/api'
+const url = 'http://arvuti.local:3000/api'
 export default new Vuex.Store({
   state: {
     shops: [],
@@ -11,14 +11,19 @@ export default new Vuex.Store({
     feedback: [],
     productId: '',
     shopId: '',
+    productName: '',
     inlineFormId: '',
-    selectedButton: '',
-    sortDirection: ''
+    selectedButton: 'avgTaste',
+    sortDirection: 1
   },
 
   mutations: {
     SET_PRODUCTS (state, productData) {
       state.products = productData
+    },
+
+    SET_PRODUCT_NAME (state, name) {
+      state.productName = name
     },
 
     SET_SHOPS (state, shopData) {
@@ -115,8 +120,11 @@ export default new Vuex.Store({
       }
     },
 
+    async setProductName ({ commit }, payload) {
+      commit('SET_PRODUCT_NAME', payload)
+    },
+
     async addFeedback ({ commit }, payload) {
-      console.log(payload.get('productImage'))
       if (payload.get('productId') === '' || payload.get('productId') === null || payload.get('productId') === undefined) {
         payload.set('productId', this.productId)
       }
@@ -143,18 +151,20 @@ export default new Vuex.Store({
       }
     },
 
-    async rateProduct ({ commit }, payload) {
+    async updateProductPrice ({ commit }, payload) {
       try {
-        const urlId = url + '/feedback/' + payload.get('id')
-        const config = {
-          headers: {
-            'Content-Type': `text/plain; boundary=${payload._boundary}`
-          }
-        }
-        const response = await axios.put(urlId, payload, config)
-        this.state.feedback.push(response.data.data)
+        const urlId = url + '/product/' + payload.id
+        const response = await axios.put(urlId, { price: payload.price })
+
+        const foundProduct = await this.state.products.findIndex(product => (product._id === response.data.data._id))
+
+        const updatedProducts = this.state.products.slice()
+        updatedProducts[foundProduct] = response.data.data
+        commit('SET_PRODUCTS', updatedProducts)
+
+        /* this.state.feedback.push(response.data.data) */
       } catch (err) {
-        console.log('rateProduct', err)
+        console.log('updateProductPrice', err)
       }
     },
 
@@ -185,6 +195,10 @@ export default new Vuex.Store({
       return [...new Set(state.products.map(product => product.name))]
     },
 
+    productName (state) {
+      return state.productName
+    },
+
     isFormOpen (state) {
       return state.inlineFormId
     },
@@ -204,13 +218,13 @@ export default new Vuex.Store({
         const foundFeedback = state.feedback.filter(f => f.productId === product._id)
         aggregate.feedback = foundFeedback
 
-        const calcTasteAvg = foundFeedback.map(f => f.taste).reduce((acc, current) => acc + Number(current), 0) / foundFeedback.length
-        aggregate.avgTaste = Math.round(calcTasteAvg * 10) / 10
+        const calcTasteAvg = foundFeedback.filter(f => f.taste !== 0).map(f => f.taste).reduce((acc, current) => acc + Number(current), 0) / foundFeedback.length
+        aggregate.avgTaste = Math.round(calcTasteAvg * 1) / 10
 
-        const calcLooksAvg = foundFeedback.map(f => f.looks).reduce((acc, current) => acc + Number(current), 0) / foundFeedback.length
-        aggregate.avgLooks = Math.round(calcLooksAvg * 10) / 10
+        const calcLooksAvg = foundFeedback.filter(f => f.looks !== 0).map(f => f.looks).reduce((acc, current) => acc + Number(current), 0) / foundFeedback.length
+        aggregate.avgLooks = Math.round(calcLooksAvg * 1) / 10
 
-        aggregate.price = product.price
+        aggregate.price = product.price[product.price.length - 1]
 
         arr.push(aggregate)
       }

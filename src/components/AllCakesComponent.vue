@@ -1,49 +1,92 @@
 <template>
   <section class="products-section-wrapper">
     <div class="products-container">
-      <!-- <h1 class="section-header">Products</h1> -->
-      <section class="sort-controls">
-        <div class="filter-container field">
-          <input
-            v-model="filterString"
-            type="text"
-            name="filter"
-            placeholder="Filter products"
-            id=""
-            class="filter"
-          />
-          <label for="filter">Filter products</label>
-        </div>
 
-        <ul class="sort-btns-container">
-          <li class="btn-container">
-            <sortButton key="taste" id="avgTaste" label="Taste"> </sortButton>
-          </li>
-          <li class="btn-container">
-            <sortButton key="looks" id="avgLooks" label="Looks"> </sortButton>
-          </li>
-          <li class="btn-container">
-            <sortButton key="price" id="price" label="Price"> </sortButton>
-          </li>
-        </ul>
+      <section class="sort-controls">
+          <span v-if="filterValue"
+              @click="clearFilter()"
+              class="filter-clear">
+            </span>
+        <div class="filter-container field">
+          <transition name="fade">
+            <div
+              v-if="filterValue"
+              id="filter-tooltip">
+            </div>
+          </transition>
+          
+          <transition name="slide">
+            <span 
+              v-if="filterValue"
+              id="found-products">
+              Found {{ filteredProducts.length }} products
+            </span>
+          </transition>
+          
+          <autocomplete
+            id="filterShop"
+            v-model="filterString"
+            :suggestions="productNames"
+            :inputValidation="false"
+            type="text"
+            label="Find Products"/>
+        </div>
+        <transition-group 
+          name="slide"
+          mode="out-in">
+          <div
+            v-if="filteredProducts.length === 0"
+            key="no-products"
+            class="form-filter content-center"
+          >
+            <!-- <h3>No products found</h3> -->
+            <fileUpload />
+          </div>
+
+          <div 
+            key="sortBtns"
+            class="container-sort-btns-outer">
+            <ul class="container-sort-btns-inner">
+              <li class="btn-container">
+                <sortButton key="taste" id="avgTaste" label="Taste"> </sortButton>
+              </li>
+              <li class="btn-container">
+                <sortButton key="looks" id="avgLooks" label="Looks"> </sortButton>
+              </li>
+              <li class="btn-container">
+                <sortButton key="price" id="price" label="Price"> </sortButton>
+              </li>
+              <li class="btn-container">
+                <sortButton key="name" id="name" label="Name"> </sortButton>
+              </li>
+            </ul>
+          </div>
+        </transition-group>
+      
       </section>
 
-      <div
-        v-if="filteredProducts.length === 0"
-        key="no-products"
-        class="no-products-found"
-      >
-        <h3>No products found</h3>
-      </div>
+     
+      <transition
+        name="fade"
+        mode="out-in">
+        <section 
+          v-if="filteredProducts.length > 0">
+          <productCard
+            v-for="(product, index) in filteredProducts"
+            :product="product"
+            :index="index"
+            :key="product.productId"
+          />
+          <div id="feedback">
+          <h1>
+            Didn't find the best for You?
+          </h1>
+          <fileUpload
+            class="form-footer"/>
+          </div>
+        </section>
+      </transition>
 
-      <div v-else>
-        <productCard
-          v-for="(product, index) in filteredProducts"
-          :product="product"
-          :index="index"
-          :key="product.productId"
-        />
-      </div>
     </div>
   </section>
 </template>
@@ -52,6 +95,7 @@
 import store from '../store/store'
 /* import { mapState } from 'vuex' */
 import { mapGetters } from 'vuex'
+import fileUpload from './FileUploadComponent.vue'
 import RangeSLider from './RangeSliderComponent.vue'
 import TextArea from './TextareaComponent.vue'
 import Autocomplete from './AutocompleteComponent.vue'
@@ -62,6 +106,7 @@ export default {
   store,
   name: 'AllCakesComponent',
   components: {
+    fileUpload: fileUpload,
     rangeSLider: RangeSLider,
     textArea: TextArea,
     autocomplete: Autocomplete,
@@ -84,6 +129,7 @@ export default {
     ...mapGetters([
       'aggregatedFeedback',
       'productNames',
+      'shopNames',
       'sortDirection',
       'selectedSortButton'
     ]),
@@ -95,6 +141,7 @@ export default {
 
       set (filterValue) {
         this.filterValue = filterValue.trim()
+        this.$store.dispatch('setProductName', this.filterValue)
       }
     },
 
@@ -136,6 +183,10 @@ export default {
 
   methods: {
 
+    clearFilter() {
+      this.filterValue = ''
+    },
+
     scrollToComment (selector) {
       setTimeout(() => {
         selector.scrollIntoView({
@@ -152,47 +203,98 @@ export default {
 .products-section-wrapper {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  margin: 25vh auto;
+  /* align-items: center; */
+  margin: auto;
 }
 .products-container {
   display: flex;
   flex-direction: column;
-  min-width: 350px;
+  min-width: 20rem;
 }
+.form-filter {
+  flex-direction: column;
+  background-color: white;
+  display: flex;
+  justify-content: center;  
+  padding: 3px 12px;
+  margin: 0px 1rem 3rem;
+  border-radius: 3rem;
+  box-shadow: 3px 12px 24px rgba(0, 0, 0, .15);
+  }
 
 /* SORT */
 .sort-controls {
-  margin: 42px 0 0;
+  margin: 0 -8px 2rem;
+  padding: 1rem 0;
+  background-image: linear-gradient(to right, #f6f9fc , #f6f3fc);
 }
-.sort-btns-container {
+.container-sort-btns-outer {
+  overflow: scroll;
+  margin: 0 0 -3rem;
+}
+.container-sort-btns-inner {
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
-  margin: auto;
+  margin: auto 1.2rem 2.4rem;
 }
 
 /* FILTER */
-.filter-container > label {
-  margin: 0 0 0 4%;
-}
 .filter-container {
   flex-direction: column-reverse;
-  margin: 0 0 6px;
+  margin: 1.2rem;
 }
 .filter {
   border: none;
-  border-radius: 26px;
-  box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.02);
+  border-radius: 2rem;
+  box-shadow: 0px 0px 18px rgba(0, 0, 0, .02);
 }
-.filter:focus {
-  background-color: midnightblue;
+.filter:focus, .filter:active {
+  /* background-color: midnightblue; */
   color: white;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
 }
-.no-products-found {
+input:not(:placeholder-shown) + label,
+input:focus + label {
+  font-size: 14px !important;
+  cursor: pointer;
+}
+#filter-tooltip {
   display: flex;
-  justify-content: center;
-  margin: 42px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  height: 0;
+}
+#found-products {
+  font-weight: 700;
+}
+.filter-clear {
+  padding: 1rem 1.2rem;
+  position: relative;
+  background: url(./../assets/close-x.svg) no-repeat center;
+  background-size: 1rem;
+  height: 1rem;
+  width: 1rem;
+  right: -8.5rem;
+  top: 5rem;
+  z-index: 1;
+}
+/* FOOTER */
+#feedback {
+  background-image: linear-gradient(#fe515c, deeppink);
+  /* background-image: linear-gradient(#2828B8, #3E3EAD); */
+  margin: 6rem -8px -8px;
+  padding: 6rem 0 2rem;
+}
+section>#feedback>h1 {
+  margin: 0rem 4rem;
+  color: white !important;
+  
+}
+.form-footer {
+  margin: 8rem 1.6rem;
+  padding: 3px 12px;
+  background: white;
+  border-radius: 3rem;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, .15);
 }
 </style>

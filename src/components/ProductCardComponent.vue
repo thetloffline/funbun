@@ -16,9 +16,28 @@
       />
 
       <div class="icon-btns-container">
-        <div v-if="product.price" 
-          class="product-price">
-            {{ product.price }} €
+      
+          <div>
+          <ul class="product-stats">
+            <li>
+              <h5>TASTE</h5>
+              <p class="product-price">{{ product.avgTaste }}</p>
+            </li>
+
+            <li>
+              <h5>LOOKS</h5>
+              <p class="product-price">{{ product.avgLooks }}</p>
+            </li>
+
+            <li v-if="product.price" 
+              >
+              <h5>PRICE</h5>
+              <p class="product-price">
+
+              {{ product.price }} €
+              </p>
+            </li>
+          </ul>
         </div>
       </div>
 
@@ -30,45 +49,42 @@
               target="_blank"
             >
               <div class="product-location-icon" />
-              <div class="shop-name">
-                <h3>{{ product.shop.name | capitalize }}</h3>
-              </div>
+                <h5 class="shop-name">{{ product.shop.name | capitalize }}</h5>
+                <h5 class="shop-name">{{ product.shop.address | capitalize }} </h5>
             </a>
           </div>
         </div>
 
-        <div id="product-name">
-          <h2 class="product-name">{{ product.product.name | capitalize }}</h2>
+        <div class="product-name">
+          <h2 >{{ product.product.name | capitalize }}</h2>
+
+          <div v-if="hasComment"
+            @click.prevent="toggleSelectedCommentId(index, $event)"
+            class="product-comment-icon"/>
         </div>
 
-        <div>
-          <ul class="product-stats">
-            <li>
-              <h5>TASTE</h5>
-              <p>{{ product.avgTaste }}</p>
-            </li>
-
-            <li>
-              <h5>LOOKS</h5>
-              <p>{{ product.avgLooks }}</p>
-            </li>
-
-            <li v-if="product.feedback.length !== 0">
-              <div class="product-comment-icon" @click.prevent="toggleSelectedCommentId(index)" />
-            </li>
-          </ul>
-        </div>
-
-        <inlineForm :product="product.feedback" :index="index" :productId="product.productId" />
-
-        <div v-if="selectedCommentIndex === index && showComment" class="comment-container">
-          <div v-for="element in product.feedback" :key="element._id">
-            <div v-if="element.comment" class="product-comment">
+      
+        
+        <div
+          v-if="selectedCommentIndex === index && showComment"
+           @click.prevent="toggleSelectedCommentId(index)"
+          class="comment-container">
+          <div
+            v-for="element in product.feedback"
+            :key="element._id">
+            <div v-if="element.comment"
+              class="product-comment">
               <p class="date">{{ element.created_at | formatDate }}</p>
               <p class="comment">{{ element.comment }}</p>
             </div>
           </div>
         </div>
+
+        <inlineForm
+          :product="product.feedback"
+          :index="index"
+          :productId="product.productId"/>
+
       </div>
     </div>
   </transition-group>
@@ -92,7 +108,11 @@ export default {
     };
   },
 
-  computed: {},
+  computed: {
+    hasComment() {
+      return this.product.feedback.map(f => f.comment !== '').includes(true)
+    }
+  },
 
   mounted() {},
   created() {},
@@ -100,14 +120,14 @@ export default {
   methods: {
     getImagePath(path) {
       try {
-        return "http://localhost:3000/static/images" + "/" + path;
+        return "http://arvuti.local:3000/static/images" + "/" + path;
       } catch (error) {
         console.log("image replaced with placeholder. ", error.message);
         return require("./../assets/tuuletasku.jpg");
       }
     },
 
-    toggleSelectedCommentId(id) {
+    toggleSelectedCommentId(id, e) {
       if (this.selectedCommentIndex === id) {
         this.selectedCommentIndex = "";
         this.showComment = false;
@@ -128,23 +148,26 @@ export default {
   display: flex;
   flex-direction: column;
   position: relative;
-  margin: 36px 0;
-  /* box-shadow: 0 2px 7px rgba(0, 0, 0, 0.1); 
-  background-color: white; */
-  background-image: linear-gradient(45deg, white, #f6f9fc);
+  margin: 2rem .4rem;
+  box-shadow: 0 18px 24px rgba(0, 0, 0, 0.05); 
+  /* background-image: linear-gradient(to right, #f6f9fc , #f6f3fc); */
+  background-image: linear-gradient( rgba(255, 255, 255, 0), 10rem, rgba(255, 255, 255, 1));
   transition: 0.5s all;
 }
 .product-card:hover {
-  box-shadow: 0 10px 36px rgba(0, 0, 0, 0.2);
+  box-shadow: 3px 42px 42px rgba(0, 0, 0, 0.15);
 }
 .round-corners {
-  border-radius: 60px;
+  border-radius: 5rem;
 }
 .product-photo {
   background-size: cover;
-  height: 45vh;
-  border-radius: 60px;
-  box-shadow: 3px 3px 20px rgba(0,0,0, .2);
+  background-blend-mode: multiply;
+  background-color: rgba(0, 0, 0, .25);
+  height: 17.5rem;
+  width: 100%;
+  margin: 1.8rem auto 0;
+  border-radius: 5rem 5rem 1.4rem 1.4rem;
 }
 .icon-btns-container {
   display: flex;
@@ -153,27 +176,31 @@ export default {
   align-items: center;
   flex: 1;
   position: absolute;
-  /* margin: 12px 0 0 278px; */
-  bottom: 18.5rem;
-  right: 2rem;
+  width: 100%;
+  top: 15.4rem;
 }
 .product-name {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
-  margin: 6px 12px 22px;
+  justify-content: center;
+  align-items: center;
+  margin: 6px 12px 2px;
+}
+.product-name>h2 {
+  margin: .2rem .5rem .2rem 0;
 }
 .product-stats {
-  margin: 12px 0;
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
   align-items: center;
+  color: white;
+  margin: 0.3rem;
 }
 .product-stats > li > p {
-  margin: 0 auto 5px;
-  font-weight: 500;
-  font-size: 1.4rem;
+  margin: .1rem auto;
+  font-weight: 600;
+  font-size: 1rem;
 }
 .product-description-container {
   display: flex;
@@ -182,17 +209,18 @@ export default {
   margin: 18px 12px 6px;
 }
 .product-price {
-  padding: .4rem 0.6rem;
+  padding: .2rem 0.6rem;
   font-size: 1rem;
   font-weight: 900;
-  color: midnightblue;
-  background-color: #fcfdfe;
+  color: darkslategray;
+  background-color: rgba(255, 255, 255, 0.9);
   border-radius: 2em;
   box-shadow: 3px 3px 12px rgba(5, 5, 5, 0.15);
 }
 .shop-name {
   display: flex;
   margin: 0 12px;
+  font-size: .85rem;
 }
 .product-location {
   display: flex;
@@ -201,7 +229,8 @@ export default {
 }
 .product-location > a {
   display: flex;
-  color: midnightblue;
+  align-items: center;
+  color: darkslategray;
   text-decoration: none;
 }
 .product-location-address {
@@ -220,13 +249,12 @@ export default {
 .comment-container {
   display: flex;
   flex-direction: column;
-  margin: 24px;
+  margin: 24px 24px 30px;
 }
 .product-comment {
   display: flex;
   flex-direction: column;
   text-align: left;
-  width: 300px;
   margin: 8px 0;
 }
 .date {
@@ -239,8 +267,8 @@ export default {
 }
 .product-comment-icon {
   background: url(./../assets/comment.svg) no-repeat center;
-  width: 32px;
-  height: 32px;
+  width: 22px;
+  height: 22px;
   background-size: cover;
   cursor: pointer;
 }

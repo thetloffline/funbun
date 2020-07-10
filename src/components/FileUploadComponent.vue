@@ -11,11 +11,10 @@
           <div
             v-if="!clickToShowContent"
             key="addBuns"
-            class="form-bun">
-            <h1 class="section-header">Nam-Nam Add a bun</h1>
-            <div
-              class="btn-round"
-              @click="showFormContent($event)">
+            class="form-add-bun"
+            @click="showFormContent($event)">
+            <div class="btn-transparent"> {{ addMsg }} </div>
+            <div class="btn-icon">
               +
             </div>
           </div>
@@ -25,12 +24,11 @@
             key="showBuns"
             class="container">
 
-            <h1 class="section-header">Nam-Nam Add a bun</h1>
             <div
               class="upload-area card"
               @click="addFiles()">
-              <div class="upload-text">Add a photo</div>
               <div class="btn-round">+</div>
+              <div class="upload-text">Add a photo</div>
             </div>
 
             <div>
@@ -44,7 +42,8 @@
             </div>
 
             <transition
-              name="fade">
+              name="fade"
+              mode="out-in">
 
               <div
                 v-if="files"
@@ -65,9 +64,19 @@
             </transition>
 
             <autocomplete
+              id="product.name"
+              v-model="product.name"
+              :suggestions="productNames"
+              :inputValidation="true"
+              :required="true"
+              type="text"
+              label="Product Name"/>
+
+            <autocomplete
               id="shop.name"
               v-model="shop.name"
               :suggestions="shopNames"
+              :inputValidation="true"
               :required="true"
               type="text"
               label="Shop Name"/>
@@ -76,17 +85,10 @@
               id="address"
               v-model="shop.address"
               :suggestions="shopAddresses"
+              :inputValidation="true"
               :required="true"
               type="text"
               label="Address"/>
-
-            <autocomplete
-              id="product.name"
-              v-model="product.name"
-              :suggestions="productNames"
-              :required="true"
-              type="text"
-              label="Product Name"/>
 
             <textInput
               id="price"
@@ -111,13 +113,14 @@
             <textArea
               id="comment"
               v-model="feedback.comment"
-              label="Comment"/>
+              label="Comment (optional)"/>
+            <div class="btns-container">
 
             <div class="btn-container">
               <button
                 class="btn-form btn-primary" 
                 @click="submitFiles()">
-                Submit
+                Add Product
               </button>
             </div>
 
@@ -127,6 +130,7 @@
                 @click="cancelForm($event)">
                 Cancel
               </button>
+            </div>
             </div>
 
           </div>
@@ -174,12 +178,13 @@ export default {
       clickToShowContent: false,
       formData: '',
       value: '',
-      error: ''
+      error: '',
+      addMsg: 'Add Product'
     }
   },
 
   computed: {
-    ...mapGetters(['shopNames', 'shopAddresses', 'productNames'])
+    ...mapGetters(['shopNames', 'shopAddresses', 'productNames', 'productName'])
   },
 
   mounted () {},
@@ -209,6 +214,7 @@ export default {
       this.feedback.looks = 0
       this.feedback.taste = 0
       this.feedback.comment = ''
+      this.$store.dispatch('setProductName', '')
     },
 
     async submitFiles () {
@@ -234,7 +240,7 @@ export default {
       await this.$store.dispatch('addFeedback', feedback)
 
       this.resetFormData()
-      this.scrollToLastCake()
+      // this.scrollToLastCake()
       this.toggleShowContent()
     },
 
@@ -283,9 +289,10 @@ export default {
     },
 
     showFormContent (e) {
+      this.product.name = this.productName
       this.toggleShowContent()
       let position = e.target.parentNode.parentNode.className
-      this.scrollToPosition(position)
+      /* this.scrollToPosition(position) */
     },
 
     hideFormContent (e) {
@@ -295,10 +302,10 @@ export default {
       // scrolling hack for ios devices
       if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
         setTimeout(() => {
-          this.scrollToPosition(position)
+          /* this.scrollToPosition(position) */
         }, 500)
       } else {
-        this.scrollToPosition(position)
+        /* this.scrollToPosition(position) */
       }
     },
 
@@ -319,44 +326,58 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  width: 95%;
 }
-.form-bun {
-  margin: 25vh auto;
-  width: 355px;
+.form-add-bun {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem;
 }
 .container {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin: 14vh 0;
+  /* margin: 14vh 0; */
   max-width: 700px;
-  min-width: 335px;
+  /* min-width: 335px; */
+}
+.btns-container {
+  margin: 2rem 0 0;
 }
 .btn-container {
-  margin: 10px 0 10px 0;
+  margin: 10px 0;
 }
-
+.btn-icon {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: slategray;
+  background-image: none;
+  width: 2rem; 
+}
 .card {
   display: flex;
   flex-direction: column;
-  padding: 30px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.1);
+  margin: 14px 0;
+  /* margin-bottom: 20px; */
+  /* box-shadow: 0 2px 7px rgba(0, 0, 0, 0.1); */
   /* border-radius: 1rem;*/
   background-color: white;
   transition: 0.5s all;
 }
 .card:hover {
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  /* box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); */
 }
 input[type="file"] {
+  display: none;
   position: absolute;
   top: -500px;
 }
 .file-listing {
   display: flex;
   justify-content: space-between;
-  padding: 20px 10px 30px;
+  padding: 1.2rem 0;
   font-size: 1rem;
   font-weight: 600;
 }
@@ -371,12 +392,13 @@ input[type="file"] {
 .remove-file {
   padding: 6px 10px;
   border-radius: 10px;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.7);
   color: white;
   cursor: pointer;
   float: right;
 }
 .upload-area {
+  margin: 24px 0 0;
   cursor: pointer;
   font-size: 18px;
   font-weight: 700;
@@ -384,11 +406,9 @@ input[type="file"] {
   cursor: pointer;
 }
 .upload-text {
-  padding-bottom: 5px;
   display: flex;
-  justify-content: center;
   flex-direction: column;
-  margin: auto;
-  color: midnightblue;
+  justify-content: center;
+  margin: 12px;
 }
 </style>

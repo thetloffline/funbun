@@ -72,6 +72,10 @@ export default {
     value: {
       type: String,
       value: ''
+    },
+    inputValidation: {
+      type: Boolean,
+      default: true
     }
   },
 
@@ -99,7 +103,7 @@ export default {
     matches () {
       if (this.suggestions !== undefined && this.selection !== '') {
         return this.suggestions.filter(str => {
-          if (this.selection.length >= 3) {
+          if (this.selection.length >= 2) {
             try {
               if (typeof str !== 'string') { return }
               return str.toLowerCase().indexOf(this.selection.toLowerCase()) >= 0
@@ -119,12 +123,19 @@ export default {
   },
 
   methods: {
+    checkValidation() {
+      if (this.inputValidation === true) {
+        this.validateField()
+      } else {
+        return
+      }
+    },
 
     validateField () {
       setTimeout(() => {
         if (this.selection === '') {
           this.isValid = false
-          this.error = `Please enter ${this.label}`
+          this.error = `Please enter a valid ${this.label}`
         } else {
           this.isValid = true
         }
@@ -139,7 +150,7 @@ export default {
     blur () {
       this.open = false
       this.startedSelecting = false
-      this.validateField()
+      this.checkValidation()
     },
 
     enter () {
@@ -202,20 +213,27 @@ export default {
 }
 li {
   cursor: pointer;
-  margin: 3px 0;
+  margin: 0 .6rem;
+  padding: 3px .3rem;
+}
+li:nth-child(odd) {
+  background-color: rgba(255, 255, 255, .5);
 }
 li:nth-child(even) {
-  background-color: #F7F7FA;
+  background-color: white;
 }
 li:hover,
 li:focus,
 li:active {
-  background-color: midnightblue;
+  background-color: #fe515c;
   color: white;
+  border-radius: .2rem;
 }
 .active {
-  background-color: midnightblue !important;
+  background-color: #fe515c;
   color: white;
+  border-radius: .2rem;
+  z-index: 10;
 }
 .suggestion {
   font-size: 1.2rem;
@@ -224,8 +242,7 @@ li:active {
 }
 ul {
   margin: 0;
-  color: midnightblue;
+  color: darkslategray;
 }
-
 
 </style>

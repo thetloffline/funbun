@@ -7,27 +7,30 @@
           <h1>{{ msg }}</h1>
         </div>
       </div>
-      <fileUpload />
+
       <allCakes />
+      <!-- <footer-comp /> -->
     </div>
   </section>
 </template>
 
 <script>
+import fixedCover from './FixedCoverComponent.vue'
 import allCakes from './AllCakesComponent.vue'
 import fileUpload from './FileUploadComponent.vue'
-import fixedCover from './FixedCoverComponent.vue'
+import footerComp from './footerComponent.vue'
 
 export default {
   name: 'LandingPageComponent',
   components: {
     fixedCover: fixedCover,
     allCakes: allCakes,
-    fileUpload: fileUpload
+    fileUpload: fileUpload,
+    footerComp: footerComp
   },
   data () {
     return {
-      msg: 'All work and no fun makes Jack want to have some bun!'
+      msg: 'The best. For You. By You.'
     }
   }
 }
@@ -49,9 +52,13 @@ export default {
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
-  height: 80vh;
+  background-image: linear-gradient(#fe515c, deeppink);
+  /* background-image: linear-gradient(#2828B8, #3E3EAD); */
+  margin: -12px -8px 12px -8px;
+  padding: 2rem 0;
 }
 .slogan {
   width: 250px;
+  color: white;
 }
 </style>

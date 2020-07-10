@@ -44,13 +44,6 @@ export default {
   display: flex;
   flex-direction: column-reverse;
 }
-label {
-  display: flex;
-  height: 1.4rem;
-  transition: all 0.2s;
-  touch-action: manipulation;
-  pointer-events: none;
-}
 textarea:placeholder-shown + label {
   cursor: text;
   max-width: 66.66%;
@@ -58,14 +51,16 @@ textarea:placeholder-shown + label {
   overflow: hidden;
   text-overflow: ellipsis;
   transform-origin: left bottom;
-  transform: translate(0, 2.5rem);
+  transform: translate(0, 2.6rem);
 }
 textarea::placeholder {
   opacity: 0;
   transition: inherit;
 }
 textarea:focus {
-  background-color: #F7F7FA;
+  
+  background-color: #FE727D;
+  color: white;
 }
 textarea:focus::-webkit-textarea-placeholder {
   opacity: 0;
@@ -73,15 +68,19 @@ textarea:focus::-webkit-textarea-placeholder {
 }
 textarea {
   cursor: text;
-  height: 40px;
+  height: 1.2rem;
   margin: 4px 0 10px 0;
   padding: 4px;
   border: 0;
-  border-bottom: 2px solid #ABABCB;
+  border-radius: 2rem !important;
+  background: #E6E6F0;
+  padding: 14px  18px 18px 18px;
   outline: none;
   resize: vertical;
   font-size: 18px;
-  color: midnightblue;
+  font-weight: 500;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  border-radius: .2rem;
 }
 textarea:not(:placeholder-shown) + label,
 textarea:focus + label {
